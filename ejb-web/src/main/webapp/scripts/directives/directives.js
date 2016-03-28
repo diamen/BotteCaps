@@ -1,5 +1,5 @@
 angular.module('bcDirectives', [])
-	.directive("photoBox", function($window) {
+	.directive("photoBox", ['$window', 'randomPhotoService', function($window, randomPhotoService) {
 		return {
 			link : function(scope, element, attrs) {
 				
@@ -9,8 +9,6 @@ angular.module('bcDirectives', [])
 				});
 				
 				var resize = function() {
-					var imgSrc = "http://localhost:8080//ejb-web//resources//gfx//albania//1.jpg";
-						
 					var elemWidth = element[0].offsetWidth - 30;	// 30 - padding
 					var photoWidth = Math.floor(0.95 * elemWidth / 3);
 					
@@ -24,10 +22,12 @@ angular.module('bcDirectives', [])
 					scope.size = photoWidth;
 					scope.photos = [];
 					
-					for(var i = 0; i < photoCount; i++) {
-						scope.photos.push(imgSrc);
-					}
+					randomPhotoService.execute(photoCount, updateView);
 				}
+				
+				var updateView = function(photo) {
+					scope.photos.push(photo);				
+				};
 				
 				resize();
 				
@@ -38,4 +38,4 @@ angular.module('bcDirectives', [])
 					"height=\"{{size}}\" width=\"{{size}}\">" +
 					"</a></div>"
 		}
-	});
+	}]);

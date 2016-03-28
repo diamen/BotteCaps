@@ -8,8 +8,11 @@ head.load(
     /* Controllers */
     { file: '/' + appName + '/scripts/controllers/photoCtrl.js' },
     
-    /* Controllers */
+    /* Directives */
     { file: '/' + appName + '/scripts/directives/directives.js' },
+    
+    /* Services */
+    { file: '/' + appName + '/scripts/services/services.js' },
     
     /* Main */
     { file: '/' + appName + '/scripts/app.js' }
