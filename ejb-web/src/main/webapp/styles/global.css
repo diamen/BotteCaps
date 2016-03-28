@@ -1,0 +1,9 @@
+.full {
+	height: 100%;
+}
+
+.vmiddle {
+	position: relative;
+	top: 50%;
+	transform: translateY(-50%);
+}
