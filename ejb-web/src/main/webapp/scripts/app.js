@@ -1,7 +1,8 @@
-var bcModule = angular.module('bcApp',
+angular.module('bcApp',
     [
         'ngRoute',
         'bcControllers',
         'bcDirectives',
+        'bcRouters',
         'bcServices'
     ]);

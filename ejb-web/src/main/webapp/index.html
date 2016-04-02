@@ -1,18 +1,15 @@
 <html ng-app="bcApp">
 	<head>
-		<link rel="stylesheet" href="styles/global.css">
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet"></link>
+		<link rel="stylesheet" href="/ejb-web/styles/global.css">
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+		
+		<script src="/ejb-web/libraries/head/head.load.min.js"></script>
+        <script src="/ejb-web/scripts/glue.js"></script>
 	</head>
 
-	<body>
-		<div>
-			<div class="col-md-8 full" style="background-color : darkslategrey;"></div>
-	        <photo-box ng-controller="photoCtrl" class="col-md-4 full" style="background-color : steelblue;"></photo-box>
+	<body ng-controller="mainCtrl">
+		<div ng-view>
 		</div>
-		
-		<script src="libraries/head/head.load.min.js"></script>
-        <script src="scripts/glue.js"></script>
-		
 	</body>
 
 </html>

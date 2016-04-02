@@ -14,11 +14,12 @@ angular.module('bcServices', [])
 
 			$http.get("./rest/photo/countries").success(function(data) {
 				_countries = data;
-			});
-	
-			$http.get("./rest/photo/count").success(function(pair) {
-				_pair = pair;
-				logic();
+				
+				$http.get("./rest/photo/count").success(function(pair) {
+					_pair = pair;
+					logic();
+				});
+				
 			});
 			
 			function logic() {
