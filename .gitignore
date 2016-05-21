@@ -26,3 +26,5 @@ ejb-web/src/main/webapp/libraries/
 ejb-web/src/main/webapp/resources/gfx/
 external_jars/
 ejb-web/target/classes/
+ejb-web/src/main/webapp/WEB-INF/jboss-web.xml
+flagi/

@@ -1,9 +1,6 @@
-.full {
-	height: 100%;
-}
-
-.vmiddle {
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
-}
+@import "common/common.css";
+@import "common/footer.css";
+@import "common/navibar.css";
+@import "collect/caps.css";
+@import "collect/countrylist.css";
+@import "news/news.css";

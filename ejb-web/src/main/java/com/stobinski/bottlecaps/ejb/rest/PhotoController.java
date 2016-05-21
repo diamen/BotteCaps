@@ -5,14 +5,25 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import javax.inject.Inject;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import com.stobinski.bottlecaps.ejb.common.DaoService;
+import com.stobinski.bottlecaps.ejb.entities.Caps;
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 
 @Path("/photo/")
 public class PhotoController {
+	
+	@Inject
+	private DaoService dao;
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -21,6 +32,36 @@ public class PhotoController {
 		String basePath = "C:\\Users\\user\\workspace\\ejb\\ejb-web\\src\\main\\webapp\\resources\\gfx";
 		File file = new File(basePath);
 		return Arrays.asList(file.list());
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("bycountry")
+	public List<Caps> photosByCountry(String country) {
+		Countries countries = (Countries) dao
+				.getSingle(Countries.class, new String[] {Countries.NAME_NAME}, new Object[] {country} );
+		
+		return dao.getFilteredList(Caps.class, Caps.COUNTRY_ID_NAME, countries.getId())
+			.stream().map(e -> (Caps) e).collect(Collectors.toList());
+	}
+	
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("idbycountry")
+	public Integer idByCountry(String country) {
+		Countries countries = (Countries) dao
+				.getSingle(Countries.class, new String[] {Countries.NAME_NAME}, new Object[] {country} );
+		return countries.getId();
+	}	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("singlecap")
+	public Caps getSingleCap(@QueryParam("countryId") Integer countryId, @QueryParam("id") Integer id) {
+		return (Caps) dao
+				.getSingle(Caps.class, new String[] {Caps.COUNTRY_ID_NAME, Caps.ID_NAME},
+						new Object[] {countryId, id});
+		
 	}
 	
 	@GET

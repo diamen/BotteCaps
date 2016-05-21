@@ -1,0 +1,32 @@
+@CHARSET "UTF-8";
+
+.news {
+	padding: 8px;
+	margin-bottom: 3px;
+	
+	border: 1px solid cadetblue;
+	box-shadow: 0px 0px 4px darkgrey;
+}
+
+.newsfont {
+	font-family: sans-serif; 
+}
+
+.newsdate {
+	float: right;
+}
+
+.newstitle {
+	text-indent: 10px;
+	font-weight: bold;
+}
+
+.newscontent {
+	text-indent: 10px;
+	text-align: justify;
+}
+
+.newspage {
+	font-weight: bold;
+	background-color: lightgoldenrodyellow !important;
+}

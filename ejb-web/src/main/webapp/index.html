@@ -9,8 +9,18 @@
 	</head>
 
 	<body ng-controller="mainCtrl">
-		<div ng-view>
+	
+		<div class="navibar">
+			<div class="navicol col-md-3">NEWS</div>
+			<div class="navicol col-md-3"><a href="" ng-click="redirectCollect()" class="disabled">KOLEKCJA</a></div>
+			<div class="navicol col-md-3">WYMIANA</div>
+			<div class="navicol col-md-3">O MNIE</div>
 		</div>
+	
+		<div ng-view class="full"></div>
+		
+		<div class="cfooter">Wykonanie: Micha³ Stobiñski. 2016</div>
+		
 	</body>
 
 </html>

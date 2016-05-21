@@ -2,6 +2,7 @@ package com.stobinski.bottlecaps.ejb.user;
 
 import javax.ejb.EJBException;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -16,7 +17,8 @@ public class UserLoginValidator {
 	@PersistenceContext(unitName = "bottlecaps")
 	private EntityManager entityManager;
 	
-	private Logger log = Logger.getLogger(getClass());
+	@Inject
+	private Logger log;
 	
 	public boolean validate(Login login) {
 		String formPassword = login.getPassword();

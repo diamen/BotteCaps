@@ -1,4 +1,4 @@
 angular.module('bcControllers')
-	.controller('adminCtrl', function($scope, $window) {
+	.controller('adminCtrl', function($scope) {
 		
 	});

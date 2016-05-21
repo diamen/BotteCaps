@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+.cfooter {
+	height: 20px;
+	width: 100%;
+	
+	text-align: center;
+	
+	border-top: 1px solid black;
+	border-right: 1px solid cadetblue;
+	border-left: 1px solid cadetblue;
+	border-bottom: 1px solid cadetblue;
+	box-shadow: inset 0px 0px 5px darkgrey;
+	background-color: snow;
+}
