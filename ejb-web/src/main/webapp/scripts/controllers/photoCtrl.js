@@ -1,8 +1,8 @@
 angular.module('bcControllers')
-	.controller('photoCtrl', function($scope, $window) {
+	.controller('photoCtrl', function($scope, $location) {
 
 		$scope.redirect = function() {
-			$window.location.href = '/ejb-web/admin/login';
+			$location.path('/admin/login');
 		}
 		
 	});

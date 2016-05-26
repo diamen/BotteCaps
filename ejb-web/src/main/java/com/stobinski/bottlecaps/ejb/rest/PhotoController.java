@@ -66,6 +66,22 @@ public class PhotoController {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("filtercap")
+	public List<Caps> getFilteredCaps(@QueryParam("searchText") String searchText) {
+		return dao.getListLike(Caps.class, Caps.CAP_TEXT_NAME, searchText)
+			.stream().map(e -> (Caps) e).collect(Collectors.toList());
+	}	
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("flag")
+	public Countries getFlag(@QueryParam("countryName") String countryName) {
+		return (Countries) dao
+				.getSingle(Countries.class, new String[] { Countries.NAME_NAME }, new Object[] { countryName });
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("count")
 	public Map<String, Integer> countPhotos() {
 		String basePath = "C:\\Users\\user\\workspace\\ejb\\ejb-web\\src\\main\\webapp\\resources\\gfx";

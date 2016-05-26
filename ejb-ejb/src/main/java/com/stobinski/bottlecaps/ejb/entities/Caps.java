@@ -12,6 +12,7 @@ public class Caps implements Serializable {
 
 	private static final long serialVersionUID = -4314012675133787319L;
 	
+	public static final String CAP_TEXT_NAME = "cap_text";
 	public static final String EXTENSION_NAME = "extension";
 	public static final String FILE_NAME_NAME = "file_name";
 	public static final String PATH_NAME = "path";
@@ -20,6 +21,9 @@ public class Caps implements Serializable {
 	public static final String BRAND_ID_NAME = "brand_id";
 	public static final String COUNTRY_ID_NAME = "country_id";
 	public static final String ID_NAME = "id";
+	
+	@Column(name=CAP_TEXT_NAME)
+	private String cap_text;
 	
 	@Column(name=EXTENSION_NAME, nullable=false)
 	private String extension;
@@ -46,6 +50,14 @@ public class Caps implements Serializable {
 	@Column(name=ID_NAME, nullable=false, unique=true)
 	private int id;
 
+	public String getCap_text() {
+		return cap_text;
+	}
+
+	public void setCap_text(String cap_text) {
+		this.cap_text = cap_text;
+	}
+	
 	public String getExtension() {
 		return extension;
 	}

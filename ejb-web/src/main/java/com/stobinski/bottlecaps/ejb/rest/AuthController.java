@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.inject.Inject;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -16,7 +17,7 @@ import org.jboss.security.Base64Utils;
 import com.stobinski.bottlecaps.ejb.user.UserLoginValidator;
 import com.stobinski.bottlecaps.ejb.wrappers.Login;
 
-@Path("/api/")
+@Path("/auth/")
 public class AuthController {
 	
 	@Inject
@@ -27,10 +28,11 @@ public class AuthController {
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("auth")
-	public Response.Status.Family login(Login login) {
-
-		String password = login.getPassword();
+	@Path("login")
+	public Response.Status.Family login(
+			@FormParam("j_username") String username, 
+			@FormParam("j_password") String password) {
+		
 		MessageDigest messageDigest = null;
 		
 		try {
@@ -41,6 +43,8 @@ public class AuthController {
 		
 		byte[] hash = messageDigest.digest(password.getBytes());
 		String passwordHash = Base64Utils.tob64(hash);
+		Login login = new Login();
+		login.setUsername(username);
 		login.setPassword(passwordHash);
 		
 		if(loginValidator.validate(login))

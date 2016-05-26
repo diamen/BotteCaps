@@ -3,12 +3,11 @@
 .navibar {
 	height: 50px;
 	width: 100%;
-	
-	border-top: 1px solid cadetblue;
-	border-right: 1px solid cadetblue;
+	margin-bottom: 15px;
+	s
 	border-left: 1px solid cadetblue;
 	border-bottom: 2px solid #555;
-	box-shadow: inset 0px 0px 8px darkgrey;
+	box-shadow: 0px 4px 6px dimgrey, inset 0px 0px 8px darkgrey;
 	background-color: snow;
 }
 

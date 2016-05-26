@@ -1,4 +1,38 @@
 <div ng-controller="countryCtrl">
-	<span class="row">{{country}}</span>
-	<img ng-repeat="cousrc in cousrcs" ng-src="{{cousrc}}" ng-click="openCap($index)" class="imgcap"></img>
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#">{{country}}</a>
+				<img class="img-rounded" ng-src="{{flag}}"></img>
+			</div>
+						
+			<form class="navbar-form navbar-right" role="select">
+				<div class="form-group">
+					<label for="sortCaps">Sortuj:</label>
+					<select class="form-control" id="sortCaps"
+						ng-model="orderCaps"
+						ng-options="option.value as option.name for option in orderCapsOptions track by option.value">
+					</select>
+				</div>
+			</form>
+			
+			<form class="navbar-form navbar-right" role="search">
+				<div class="form-group">
+					<input id="capsSearcher" class="form-control" ng-model="searchText"/>
+					<button type="submit" class="btn btn-primary" ng-click="filterCaps(searchText)">Wyszukaj</button>
+				</div>
+			</form>
+		
+			<div class="navbar-right">
+				<ul class="nav navbar-nav">
+					<li><a href="#" class="counttext">Razem [0]</a></li>
+        			<li><a href="#" class="counttext">Piwne [0]</a></li>
+        			<li><a href="#" class="counttext">Niepiwne [0]</a></li>
+        		</ul>
+			</div>
+		
+		</div>
+	</nav>
+	<img ng-repeat="couphoto in couphotos | orderBy : orderCaps" ng-src="{{couphoto.cousrc}}"
+		ng-click="openCap($index)" class="imgcap img-rounded"></img>
 </div>

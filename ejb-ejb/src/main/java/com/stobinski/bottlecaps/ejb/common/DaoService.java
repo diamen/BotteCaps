@@ -63,6 +63,17 @@ public class DaoService {
 		return list;	
 	}
  	
+	@SuppressWarnings("unchecked")
+	public List<Serializable> getListLike(Class<? extends Serializable> serial, String field, String value) {
+		value = value.replace('*', '%');
+		Query query = entityManager.createQuery("SELECT e FROM " + serial.getSimpleName() + " e WHERE e." + field + " LIKE :likeValue")
+				.setParameter("likeValue", "%" + value + "%");
+		
+		List<Serializable> list = query.getResultList();
+		
+		return list;
+	}
+	
 	public Serializable getSingle(Class<? extends Serializable> serial, String[] field, Object[] value) {
 		
 		StringBuilder sb = new StringBuilder("SELECT e FROM " + serial.getSimpleName() + " e WHERE ");

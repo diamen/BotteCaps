@@ -12,7 +12,6 @@ angular.module('bcControllers')
 			.success(function(data) {
 				$scope.cap = data;
 				$scope.capsrc = ngsrcConvertService.convert(data);
-				console.log($scope.capsrc);
 			});
 			
 		});
