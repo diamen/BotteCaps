@@ -6,6 +6,7 @@ angular.module('bcRouters', [])
 		$routeProvider
 			.when("/", { templateUrl: "/ejb-web/views/photo.html", controller: "photoCtrl" } )
 			.when("/admin/login", { templateUrl: "/ejb-web/views/login.html", controller: "loginCtrl" } )
+			.when("/admin/secure", { templateUrl: "/ejb-web/views/admin.html", controller: "adminCtrl" } )
 			.when("/news/:id", { templateUrl: "/ejb-web/views/anews.html" } )
 			
 			.when("/collect", { templateUrl: "/ejb-web/views/collect.html", controller: "collectCtrl" } )

@@ -3,6 +3,6 @@ angular.module('bcControllers')
 
 		$scope.redirect = function() {
 			$location.path('/admin/login');
-		}
+		};
 		
 	});

@@ -2,6 +2,7 @@ package com.stobinski.bottlecaps.ejb.servlets;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -11,35 +12,33 @@ import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
-import com.google.common.cache.Cache;
+import com.stobinski.bottlecaps.ejb.security.SessionCache;
+import com.stobinski.bottlecaps.ejb.security.iSessionCache;
 
 @WebFilter(filterName = "validateSaltFilter", urlPatterns = { "/rest/auth/*" } )
 public class ValidateSaltFilter implements Filter  {
 
-    @SuppressWarnings("unchecked")
+	@Inject
+	@SessionCache(SessionCache.Type.CSRF)
+	private iSessionCache sessionCache;
+	
 	@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
         throws IOException, ServletException {
 
-        // Assume its HTTP
         HttpServletRequest httpReq = (HttpServletRequest) request;
-
-        // Get the salt sent with the request
-        String salt = (String) httpReq.getParameter("csrfPreventionSalt");
-
-        // Validate that the salt is in the cache
-        Cache<String, Boolean> csrfPreventionSaltCache = (Cache<String, Boolean>)
-            httpReq.getSession().getAttribute("csrfPreventionSaltCache");
         
-        if (csrfPreventionSaltCache != null &&
-                salt != null &&
-                csrfPreventionSaltCache.getIfPresent(salt) != null){
-
-            // If the salt is in the cache, we move on
-            chain.doFilter(request, response);
+        if(!"application/x-www-form-urlencoded".equals(httpReq.getContentType())) {
+        	chain.doFilter(request, response);
         } else {
-            // Otherwise we throw an exception aborting the request flow
-            throw new ServletException("Potential CSRF detected!! Inform a scary sysadmin ASAP.");
+        	sessionCache.init(httpReq);
+        	String salt = (String) httpReq.getParameter("csrfPreventionSalt");
+
+	        if(sessionCache.match(salt, httpReq.getSession())) {
+	            chain.doFilter(request, response);
+	        } else {
+	            throw new ServletException("Potential CSRF detected!! Inform a scary sysadmin ASAP.");
+	        }
         }
     }
 

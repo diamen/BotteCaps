@@ -9,7 +9,6 @@ angular.module('bcControllers')
 		$http.get("./rest/photo/flag/", { params: {"countryName" : $scope.country } } )
 			.success(function(data) {
 				$scope.flag = data.flag;
-				console.log($scope.flag);
 			});
 		
 		if($scope.country === undefined)

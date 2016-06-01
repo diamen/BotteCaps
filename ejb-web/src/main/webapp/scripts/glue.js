@@ -7,6 +7,7 @@ head.load(
     { file: '/' + appName + '/libraries/angular-route/angular-route.js' },
     { file: '/' + appName + '/libraries/angular-cookies/angular-cookies.min.js' },
     { file: '/' + appName + '/libraries/angular-locale/angular-locale_pl-pl.js' },
+    { file: '/' + appName + '/libraries/ngStorage-master/ngStorage.js' },
     
     /* Main */
     { file: '/' + appName + '/scripts/app.js' },
@@ -22,6 +23,7 @@ head.load(
     { file: '/' + appName + '/scripts/controllers/loginCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/newsCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/photoCtrl.js' },
+    { file: '/' + appName + '/scripts/controllers/userStripCtrl.js' },
     
     /* Directives */
     { file: '/' + appName + '/scripts/directives/directives.js' },

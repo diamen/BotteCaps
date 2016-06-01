@@ -1,5 +1,21 @@
 angular.module('bcServices', [])
 
+	.service("restService", ['$http', '$sessionStorage', function($http, $sessionStorage) {
+		return {
+			authController: function() {
+				return {
+					logout: function() {
+						return $http({
+							method: "POST",
+							url: "./rest/auth/secure/logout",
+							headers: {'AUTH-TOKEN': $sessionStorage.authToken }
+							});
+					}
+				}
+			}
+		}
+	}])
+
 	.service("ngsrcConvertService", function () {
 		return {
 			convert: function (cap) {
