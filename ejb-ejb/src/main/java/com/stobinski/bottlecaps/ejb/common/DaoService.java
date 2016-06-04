@@ -2,6 +2,7 @@ package com.stobinski.bottlecaps.ejb.common;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -9,6 +10,8 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import org.jboss.logging.Logger;
+
+import com.stobinski.bottlecaps.ejb.entities.Caps;
 
 public class DaoService {
 
@@ -72,6 +75,14 @@ public class DaoService {
 		List<Serializable> list = query.getResultList();
 		
 		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Integer getLastFileName() {
+		String sQuery = "SELECT e.file_name FROM " + Caps.class.getSimpleName() + " e";
+		Query query = entityManager.createQuery(sQuery);
+		List<String> list = query.getResultList();
+		return list.stream().mapToInt(e -> Integer.valueOf(e)).max().getAsInt();
 	}
 	
 	public Serializable getSingle(Class<? extends Serializable> serial, String[] field, Object[] value) {

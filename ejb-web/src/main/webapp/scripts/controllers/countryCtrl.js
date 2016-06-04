@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('countryCtrl', function($scope, $routeParams, $location, $http, ngsrcConvertService) {
+	.controller('countryCtrl', function($scope, $routeParams, $location, $http, ngsrcConvertService, restService, base64Service) {
 		
 		$scope.country = $routeParams.country || 'Albania';
 		
@@ -36,6 +36,15 @@ angular.module('bcControllers')
 						}
 						$scope.couphotos = data;
 				});
+		};
+		
+		$scope.uploadImage = function() {
+			console.log("upload!");
+			base64Service.imgToBase64('http://localhost:8080/ejb-web/resources/gfx/ALBANIA/11.jpg', 'image/jpeg', function(base64) {
+				console.log(base64);
+				restService.adminController().imageUpload(base64);
+			});
+
 		};
 		
 	});

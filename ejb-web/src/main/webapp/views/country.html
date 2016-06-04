@@ -1,5 +1,5 @@
 <div ng-controller="countryCtrl">
-	<nav class="navbar navbar-default">
+	<nav class="navbar navbar-default" style="margin-bottom: 4px !important;">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#">{{country}}</a>
@@ -30,9 +30,15 @@
         			<li><a href="#" class="counttext">Niepiwne [0]</a></li>
         		</ul>
 			</div>
-		
+			
 		</div>
 	</nav>
+	
+	<div is-admin class="row" style="margin-left: 0px !important; margin-right: 0px !important;">
+		<button is-admin type="button" class="btn btn-default btn-sm" ng-click="uploadImage()">Dodaj</button>
+		<button is-admin type="button" class="btn btn-default btn-sm">Usun</button>
+	</div>
+	
 	<img ng-repeat="couphoto in couphotos | orderBy : orderCaps" ng-src="{{couphoto.cousrc}}"
 		ng-click="openCap($index)" class="imgcap img-rounded"></img>
 </div>

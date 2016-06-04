@@ -1,5 +1,26 @@
 angular.module('bcServices', [])
 
+	.service("base64Service", [function() {
+		return {
+			imgToBase64: function(url, outputFormat, callback){
+		    var img = new Image();
+		    img.crossOrigin = 'Anonymous';
+		    img.onload = function(){
+		        var canvas = document.createElement('CANVAS');
+		        var ctx = canvas.getContext('2d');
+		        var dataURL;
+		        canvas.height = this.height;
+		        canvas.width = this.width;
+		        ctx.drawImage(this, 0, 0);
+		        dataURL = canvas.toDataURL(outputFormat, 1);
+		        callback(dataURL);
+		        canvas = null; 
+		    };
+		    img.src = url;
+		}
+		}
+	}])
+
 	.service("restService", ['$http', '$sessionStorage', function($http, $sessionStorage) {
 		return {
 			authController: function() {
@@ -11,9 +32,21 @@ angular.module('bcServices', [])
 							headers: {'AUTH-TOKEN': $sessionStorage.authToken }
 							});
 					}
-				}
+				};
+			},
+			adminController: function() {
+				return {
+					imageUpload: function(base64) {
+						return $http({
+							method: "POST",
+							url: "./rest/admin/image/upload",
+							headers: {'AUTH-TOKEN': $sessionStorage.authToken },
+							data: {baseimage: base64}
+							});
+					}
+				};
 			}
-		}
+		};
 	}])
 
 	.service("ngsrcConvertService", function () {

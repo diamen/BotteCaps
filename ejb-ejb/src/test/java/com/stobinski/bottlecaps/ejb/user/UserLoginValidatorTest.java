@@ -1,3 +1,4 @@
+package com.stobinski.bottlecaps.ejb.user;
 import javax.persistence.EntityManager;
 
 import static org.mockito.Mockito.*;
