@@ -38,8 +38,8 @@ angular.module('bcControllers')
 				});
 		};
 		
-		$scope.uploadImage = function() {
-			console.log("upload!");
+		$scope.uploadImage = function(img) {
+			console.log(img);
 			base64Service.imgToBase64('http://localhost:8080/ejb-web/resources/gfx/ALBANIA/11.jpg', 'image/jpeg', function(base64) {
 				console.log(base64);
 				restService.adminController().imageUpload(base64);

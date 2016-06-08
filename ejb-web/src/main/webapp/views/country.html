@@ -35,7 +35,9 @@
 	</nav>
 	
 	<div is-admin class="row" style="margin-left: 0px !important; margin-right: 0px !important;">
-		<button is-admin type="button" class="btn btn-default btn-sm" ng-click="uploadImage()">Dodaj</button>
+		<label is-admin class="btn btn-default btn-sm btn-file">
+			Dodaj <input fileread="img" type="file" style="display: none;" accept="image/*" multiple>
+		</label>
 		<button is-admin type="button" class="btn btn-default btn-sm">Usun</button>
 	</div>
 	

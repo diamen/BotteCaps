@@ -27,12 +27,11 @@ public class AdminController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("image/upload")
 	public void uploadImage(String baseimage) {
-
+		log.debug(baseimage);
 		try {
 			imageManager.saveImage(baseimage);
 		} catch (IOException e) {
 			log.error(e);
-			e.printStackTrace();
 		}
 	}
 	

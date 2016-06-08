@@ -1,5 +1,39 @@
 angular.module('bcDirectives', [])
 
+	.directive("fileread", ['restService', 'base64Service', '$q', function (restService, base64Service, $q) {
+	    return {
+	        scope: {
+	            fileread: "="
+	        },
+	        link: function (scope, element, attributes) {
+	            element.bind("change", function (changeEvent) {
+	            	
+	            	var asyncRequests = [];
+	            	
+	                angular.forEach(changeEvent.target.files, function(value, key) {
+		                var reader = new FileReader();
+		                reader.onload = function (loadEvent) {
+		                    scope.$apply(function () {
+		                        scope.fileread = loadEvent.target.result;
+		                      
+		            			base64Service.imgToBase64(scope.fileread, 'image/jpeg', function(base64) {
+		            				console.log("BASE64 " + base64);
+		            				var promise = restService.adminController().imageUpload(base64);
+		            				asyncRequests.push(promise);
+		            				console.log("PROMISE " + promise);
+		            			});
+		            			
+		                    });
+		                }
+	                	reader.readAsDataURL(value);
+	                });
+	                
+	                $q.all(asyncRequests);
+	            });
+	        }
+	    }
+	}])
+
 	.directive("isAdmin", ['$http', '$sessionStorage', '$rootScope', function($http, $sessionStorage, $rootScope) {
 		return {
 			restrict: 'A',

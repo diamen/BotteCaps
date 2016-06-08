@@ -2,11 +2,13 @@ package com.stobinski.bottlecaps.ejb.common;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 
 import org.jboss.logging.Logger;
@@ -15,7 +17,7 @@ import com.stobinski.bottlecaps.ejb.entities.Caps;
 
 public class DaoService {
 
-	@PersistenceContext(unitName = "bottlecaps")
+	@PersistenceContext(type = PersistenceContextType.EXTENDED, unitName = "bottlecaps")
 	private EntityManager entityManager;
 	
 	@Inject
@@ -107,6 +109,38 @@ public class DaoService {
 		log.debug(singleResult);
 		
 		return singleResult;	
+	}
+	
+	public void persist(Object object) {
+		entityManager.persist(object);
+	}
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void insert(Class<? extends Serializable> serial, String[] field, Object[] value) {
+		StringBuilder sb1 = new StringBuilder("INSERT INTO " + serial.getSimpleName() + " (");
+		StringBuilder sb2 = new StringBuilder(") VALUES (");
+		
+		for(int i = 1; i <= field.length; i++) {
+			sb1.append("" + field[i - 1]);
+			sb2.append("?");
+			
+			if(i != field.length) {
+				sb1.append(",");
+				sb2.append(",");
+			} else {
+				sb2.append(")");
+			}
+		}
+		
+		String sQuery = sb1.toString() + sb2.toString();
+		log.debug(sQuery);
+		Query query = entityManager.createNativeQuery(sQuery);
+		
+		for(int i = 1; i <= field.length; i++) {
+			query.setParameter(i, value[i - 1]);
+		}
+		
+		query.executeUpdate();	
 	}
 	
 }
