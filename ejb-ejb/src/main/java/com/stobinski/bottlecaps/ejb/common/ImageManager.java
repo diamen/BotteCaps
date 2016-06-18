@@ -24,6 +24,7 @@ import org.jboss.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 
 @Singleton
@@ -43,13 +44,12 @@ public class ImageManager {
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void saveImage(String base64) throws IOException {
-		log.debug(base64);
 		Integer oldFileName = getLastFileNameNumber();
-		log.debug("OLD FILE NAME: " + oldFileName);
 		Integer newFileName = getNewFileNameNumber(oldFileName);
-		log.debug("NEW FILE NAME: " + newFileName);
-		saveFile(base64ToByteArray(base64), generateFileNamePath(newFileName));
+		saveFile(base64ToByteArray(base64), generateFilePath(newFileName));
 		insertDBEntry(String.valueOf(newFileName));
+		
+		log.debug(String.format("File {0} added to database", newFileName));
 	}
 
 	protected byte[] base64ToByteArray(String base64) {
@@ -69,8 +69,8 @@ public class ImageManager {
 		return oldFileName + 1;
 	}
 	
-	protected String generateFileNamePath(Integer newFileName) {
-		return ImageManager.PATH + "\\" + newFileName + "." + ImageManager.EXT;
+	protected String generateFilePath(Integer newFileName) {
+		return ImageManager.PATH + File.separatorChar + newFileName + "." + ImageManager.EXT;
 	}
 	
 	private void saveFile(byte[] image, String path) throws IOException {

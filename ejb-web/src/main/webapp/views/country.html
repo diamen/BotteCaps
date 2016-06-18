@@ -34,11 +34,11 @@
 		</div>
 	</nav>
 	
-	<div is-admin class="row" style="margin-left: 0px !important; margin-right: 0px !important;">
-		<label is-admin class="btn btn-default btn-sm btn-file">
+	<div class="row" style="margin-left: 0px !important; margin-right: 0px !important;">
+		<label class="btn btn-default btn-sm btn-file">
 			Dodaj <input fileread="img" type="file" style="display: none;" accept="image/*" multiple>
 		</label>
-		<button is-admin type="button" class="btn btn-default btn-sm">Usun</button>
+		<button type="button" class="btn btn-default btn-sm">Usun</button>
 	</div>
 	
 	<img ng-repeat="couphoto in couphotos | orderBy : orderCaps" ng-src="{{couphoto.cousrc}}"

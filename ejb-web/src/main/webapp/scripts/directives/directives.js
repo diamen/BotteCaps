@@ -8,30 +8,37 @@ angular.module('bcDirectives', [])
 	        link: function (scope, element, attributes) {
 	            element.bind("change", function (changeEvent) {
 	            	
-	            	var asyncRequests = [];
+	            	var files = changeEvent.target.files;
+	            	var numberOfFiles = files.length;
+	            	var i = 0;
 	            	
-	                angular.forEach(changeEvent.target.files, function(value, key) {
-		                var reader = new FileReader();
+	            	var uploadFile = function(file) {
+	                    var reader = new FileReader();
 		                reader.onload = function (loadEvent) {
 		                    scope.$apply(function () {
 		                        scope.fileread = loadEvent.target.result;
 		                      
 		            			base64Service.imgToBase64(scope.fileread, 'image/jpeg', function(base64) {
-		            				console.log("BASE64 " + base64);
-		            				var promise = restService.adminController().imageUpload(base64);
-		            				asyncRequests.push(promise);
-		            				console.log("PROMISE " + promise);
+		            				restService.adminController().imageUpload(base64).success(function(data) {
+		            					console.log(data);
+		            					if(i + 1 < numberOfFiles) {
+		            						i += 1;
+		            						uploadFile(files[i]);
+		            					}
+		            				});
 		            			});
 		            			
 		                    });
-		                }
-	                	reader.readAsDataURL(value);
-	                });
-	                
-	                $q.all(asyncRequests);
+		                };
+		                console.log(file);
+	                	reader.readAsDataURL(file);
+	            	};
+	            	
+	            	uploadFile(files[0]);
+	            	
 	            });
 	        }
-	    }
+	    };
 	}])
 
 	.directive("isAdmin", ['$http', '$sessionStorage', '$rootScope', function($http, $sessionStorage, $rootScope) {
@@ -40,7 +47,6 @@ angular.module('bcDirectives', [])
 			link: function(scope, element, attrs) {
 				
 				$rootScope.$watch('$storage.authToken', function() {
-					console.log($rootScope.$storage.authToken);
 					
 					if($sessionStorage.authToken === undefined) {
 						element.css('display', 'none');
