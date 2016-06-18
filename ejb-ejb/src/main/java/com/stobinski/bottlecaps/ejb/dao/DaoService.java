@@ -1,4 +1,4 @@
-package com.stobinski.bottlecaps.ejb.common;
+package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.Serializable;
 import java.util.List;
@@ -113,6 +113,7 @@ public class DaoService {
 	
 	public void persist(Object object) {
 		entityManager.persist(object);
+		entityManager.flush();
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)

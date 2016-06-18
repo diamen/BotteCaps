@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jboss.logging.Logger;
 
-import com.stobinski.bottlecaps.ejb.common.DaoService;
+import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.entities.News;
 
 @Path("/news/")
