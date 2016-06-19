@@ -11,16 +11,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.jboss.logging.Logger;
-
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
+import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.entities.News;
 
 @Path("/news/")
 public class NewsController {
-
-	@Inject
-	private Logger log;
 	
 	@Inject
 	private DaoService dao;
@@ -29,7 +25,7 @@ public class NewsController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("all")
 	public List<News> getAllTheNews() {
-		return dao.retrieveAllData(News.class)
+		return dao.retrieveData(new QueryBuilder().select().from(News.class).build())
 				.stream().map(e -> (News) e).collect(Collectors.toList());
 	}
 	
@@ -39,7 +35,7 @@ public class NewsController {
 	public List<News> getPageNews(@PathParam("no") int no) {
 		int offset = (no - 1) * 10;
 		
-		return dao.retrieveDataWithLimit(News.class, 10, offset)
+		return dao.retrieveData(new QueryBuilder().select().from(News.class).build(), 10, offset)
 				.stream().map(e -> (News) e).collect(Collectors.toList());
 	}
 	
@@ -47,14 +43,14 @@ public class NewsController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("{id}")
 	public News getNews(@PathParam("id") int id) {
-		return (News) dao.getSingle(News.class, new String[] {News.ID_NAME}, new String[] {String.valueOf(id)} );
+		return (News) dao.retrieveSingleData(new QueryBuilder().select().from(News.class).where(News.ID_NAME).eq(id).build());
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("count")
 	public Long getNewsCount() {
-		return dao.getCount(News.class);
+		return (Long) dao.retrieveSingleData(new QueryBuilder().count().from(News.class).build());
 	}
 	
 }

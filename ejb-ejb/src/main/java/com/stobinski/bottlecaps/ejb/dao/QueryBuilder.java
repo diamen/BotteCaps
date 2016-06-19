@@ -2,6 +2,11 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.Serializable;
 
+import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
+import com.stobinski.bottlecaps.ejb.dao.functions.Count;
+import com.stobinski.bottlecaps.ejb.dao.functions.Select;
+import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
+
 public class QueryBuilder {
 
 	private SqlFunction sqlFunction;
@@ -11,18 +16,26 @@ public class QueryBuilder {
 	private Object[] values;
 	private String[] likeValues;
 	
-	public Query build() {
-		return new Query(this);
+	public StringQuery build() {
+		return new StringQuery(this);
 	}
 	
 	public QueryBuilder select() {
 		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
 			
-		this.sqlFunction = SqlFunction.SELECT;
+		this.sqlFunction = new Select();
 		return this;
 	}
 
+	public QueryBuilder count() {
+		if(this.sqlFunction != null)
+			throw new MultipleInvocationException();
+			
+		this.sqlFunction = new Count();
+		return this;	
+	}
+	
 	public QueryBuilder from(Class<? extends Serializable> entity) {
 		if(this.entity != null)
 			throw new MultipleInvocationException();
@@ -58,7 +71,7 @@ public class QueryBuilder {
 	public boolean isWhere() {
 		return where;
 	}
-
+	
 	public String[] getColumns() {
 		return columns;
 	}

@@ -1,4 +1,4 @@
-package com.stobinski.bottlecaps.ejb.dao;
+package com.stobinski.bottlecaps.ejb.dao.exceptions;
 
 public class MultipleInvocationException extends RuntimeException {
 

@@ -2,11 +2,16 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.spy;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.FromClassLackException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 
 public class QueryBuilderTest {
@@ -47,7 +52,7 @@ public class QueryBuilderTest {
 		// given
 		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e";
 		// when
-		Query query = queryBuilder.select().from(Caps.class).build();
+		StringQuery query = queryBuilder.select().from(Caps.class).build();
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
@@ -68,11 +73,9 @@ public class QueryBuilderTest {
 	public void shouldContainsWhereWhenInvokedWhereMethod() {
 		// given
 		QueryBuilder queryBuilderSpy = spy(queryBuilder);
-		
 		// when
 		doReturn(new Object[] {"spy", "spy"}).when(queryBuilderSpy).getValues();
 		doReturn(new String[] {"spy", "spy"}).when(queryBuilderSpy).getColumns();
-		
 		// then
 		assertThat(queryBuilderSpy.select().from(Caps.class).where().build().toString()).contains("WHERE");
 	}
@@ -81,10 +84,8 @@ public class QueryBuilderTest {
 	public void shouldContainsColumnsNames() {
 		// given
 		QueryBuilder queryBuilderSpy = spy(queryBuilder);
-		
 		// when
 		doReturn(new Object[] {"spy", "spy"}).when(queryBuilderSpy).getValues();
-		
 		// then
 		assertThat(queryBuilderSpy.select().from(Caps.class).where(Caps.BEER_NAME, Caps.CAP_TEXT_NAME).build().toString()).contains(Caps.BEER_NAME, Caps.CAP_TEXT_NAME);
 	}
@@ -94,7 +95,7 @@ public class QueryBuilderTest {
 		// given
 		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e WHERE e." + Caps.BEER_NAME + "=?1 AND e." + Caps.CAP_TEXT_NAME + "=?2";
 		// when
-		Query query = queryBuilder.select().from(Caps.class).where(Caps.BEER_NAME, Caps.CAP_TEXT_NAME).eq(1, "Karlovacko").build();
+		StringQuery query = queryBuilder.select().from(Caps.class).where(Caps.BEER_NAME, Caps.CAP_TEXT_NAME).eq(1, "Karlovacko").build();
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
@@ -108,9 +109,9 @@ public class QueryBuilderTest {
 	@Test
 	public void shouldAppendLikeToQuery() {
 		// given
-		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e WHERE e." + Caps.BEER_NAME + " LIKE :likeValue";
+		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e WHERE e." + Caps.BEER_NAME + " LIKE :likeValue1";
 		// when
-		Query query = queryBuilder.select().from(Caps.class).where(Caps.BEER_NAME).like("Karlovacko").build();
+		StringQuery query = queryBuilder.select().from(Caps.class).where(Caps.BEER_NAME).like("Karlovacko").build();
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
@@ -119,6 +120,16 @@ public class QueryBuilderTest {
 	public void shouldThrowExceptionWhenNumberOfColumnsAndLikeValuesDontMatch() {
 		// expected
 		assertThatThrownBy(() -> { queryBuilder.select().from(Caps.class).where(Caps.BEER_NAME).like("OK", "OK").build(); } ).isInstanceOf(ColumnsValuesNotMatchException.class);
+	}
+	
+	@Test
+	public void shouldBuildProperCountQuery() {
+		// given
+		String expectedQuery = "SELECT COUNT(e) FROM " + Caps.class.getSimpleName() + " e";
+		// when
+		StringQuery query = queryBuilder.count().from(Caps.class).build();
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
 	
 }

@@ -25,6 +25,7 @@ import org.jboss.logging.Logger;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
+import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 
 @Singleton
@@ -49,7 +50,7 @@ public class ImageManager {
 		saveFile(base64ToByteArray(base64), generateFilePath(newFileName));
 		insertDBEntry(String.valueOf(newFileName));
 		
-		log.debug(String.format("File {0} added to database", newFileName));
+		log.debug("File {" + newFileName + "} added to database");
 	}
 
 	protected byte[] base64ToByteArray(String base64) {
@@ -62,7 +63,9 @@ public class ImageManager {
 	}
 	
 	protected Integer getLastFileNameNumber() {
-		return daoService.getLastFileName();
+		return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).build())
+			.stream().map(e -> (Caps) e).map(e -> e.getFile_name())	// List<Serializable> -> List<Caps> -> List<Caps.getFile_name()>
+			.mapToInt(e -> Integer.valueOf(e)).max().getAsInt();
 	}
 	
 	protected Integer getNewFileNameNumber(Integer oldFileName) {

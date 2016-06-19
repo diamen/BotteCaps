@@ -16,6 +16,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
+import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.Countries;
 
@@ -39,18 +40,19 @@ public class PhotoController {
 	@Path("bycountry")
 	public List<Caps> photosByCountry(String country) {
 		Countries countries = (Countries) dao
-				.getSingle(Countries.class, new String[] {Countries.NAME_NAME}, new Object[] {country} );
+				.retrieveSingleData(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build());
 		
-		return dao.getFilteredList(Caps.class, Caps.COUNTRY_ID_NAME, countries.getId())
-			.stream().map(e -> (Caps) e).collect(Collectors.toList());
+		return dao.retrieveData(
+				new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countries.getId()).build())
+				.stream().map(e -> (Caps) e).collect(Collectors.toList());
 	}
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("idbycountry")
 	public Integer idByCountry(String country) {
-		Countries countries = (Countries) dao
-				.getSingle(Countries.class, new String[] {Countries.NAME_NAME}, new Object[] {country} );
+		Countries countries = (Countries) dao.retrieveSingleData
+				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build());
 		return countries.getId();
 	}	
 	
@@ -58,26 +60,24 @@ public class PhotoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("singlecap")
 	public Caps getSingleCap(@QueryParam("countryId") Integer countryId, @QueryParam("id") Integer id) {
-		return (Caps) dao
-				.getSingle(Caps.class, new String[] {Caps.COUNTRY_ID_NAME, Caps.ID_NAME},
-						new Object[] {countryId, id});
-		
+		return (Caps) dao.retrieveSingleData
+				(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME, Caps.ID_NAME).eq(countryId, id).build());
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("filtercap")
 	public List<Caps> getFilteredCaps(@QueryParam("searchText") String searchText) {
-		return dao.getListLike(Caps.class, Caps.CAP_TEXT_NAME, searchText)
-			.stream().map(e -> (Caps) e).collect(Collectors.toList());
+		return dao.retrieveData(new QueryBuilder().select().from(Caps.class).where(Caps.CAP_TEXT_NAME).like(searchText).build())
+				.stream().map(e -> (Caps) e).collect(Collectors.toList());
 	}	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("flag")
 	public Countries getFlag(@QueryParam("countryName") String countryName) {
-		return (Countries) dao
-				.getSingle(Countries.class, new String[] { Countries.NAME_NAME }, new Object[] { countryName });
+		return (Countries) dao.retrieveSingleData
+				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(countryName).build());
 	}
 	
 	@GET

@@ -2,7 +2,12 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.Serializable;
 
-public class Query {
+import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.FromClassLackException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
+import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
+
+public class StringQuery {
 
 	public static final String LIKE_VALUE = "likeValue";
 	
@@ -16,7 +21,7 @@ public class Query {
 	private static final String WHITESPACE = " ";
 	private static final String AND = "AND";
 	
-	public Query(QueryBuilder queryBuilder) {
+	public StringQuery(QueryBuilder queryBuilder) {
 		handleSqlFunction(queryBuilder.getSqlFunction());
 		handleFrom(queryBuilder.getEntity());
 		this.where = queryBuilder.isWhere();
@@ -43,8 +48,8 @@ public class Query {
 	
 	@Override
 	public String toString() {
-		String query = sqlFunction.name() + " e FROM " + entity.getSimpleName() + " e";
-		
+		String query = sqlFunction.getFunctionQuery() + " FROM " + entity.getSimpleName() + " e";
+			
 		query = where && this.values != null ? 
 				appendColumnsToWhereEq(query + " WHERE ", this.columns): 
 				where && this.likeValues != null ?
@@ -52,6 +57,14 @@ public class Query {
 				query;
 		
 		return query;
+	}
+	
+	public Object[] getValues() {
+		return values;
+	}
+	
+	public Object[] getLikeValues() {
+		return likeValues;
 	}
 	
 	private void handleSqlFunction(SqlFunction sqlFunction) {
@@ -85,8 +98,8 @@ public class Query {
 	private String appendColumnsToWhereLike(String query, String[] columns) {
 		StringBuilder sb = new StringBuilder(query);
 		
-		for(int i = 0; i < columns.length; i++)
-			sb.append("e." + columns[i] + " LIKE :" + LIKE_VALUE);
+		for(int i = 1; i <= columns.length; i++)
+			sb.append("e." + columns[i - 1] + " LIKE :" + LIKE_VALUE + i);
 		
 		return sb.toString();
 	}
