@@ -1,5 +1,33 @@
 angular.module('bcDirectives', [])
 
+	.directive("uploadfile", function () {
+	    return {
+	        scope: false,
+	        link: function (scope, element, attributes) {
+	            element.bind("change", function (changeEvent) {
+	            	
+	            	var files = changeEvent.target.files;
+	            	var numberOfFiles = files.length;
+	            	scope.files = [];
+	            	
+	            	var uploadFile = function(file, i) {
+	                    var reader = new FileReader();
+		                reader.onload = function (loadEvent) {
+		                    scope.$apply(function () {
+		                    	scope.files[i] = { src: loadEvent.target.result, captext: "", capbrand: "", beer: 0 };
+		                    });
+		                };
+	                	reader.readAsDataURL(file);
+	            	};
+	            	
+	            	for(var i = 0; i < numberOfFiles; i++)
+	            		uploadFile(files[i], i);
+	            	
+	            });
+	        }
+	    };
+	})
+
 	.directive("fileread", ['restService', 'base64Service', '$q', function (restService, base64Service, $q) {
 	    return {
 	        scope: {

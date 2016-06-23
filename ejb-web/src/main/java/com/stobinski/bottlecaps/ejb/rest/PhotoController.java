@@ -50,7 +50,7 @@ public class PhotoController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("idbycountry")
-	public Integer idByCountry(String country) {
+	public Long idByCountry(String country) {
 		Countries countries = (Countries) dao.retrieveSingleData
 				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build());
 		return countries.getId();

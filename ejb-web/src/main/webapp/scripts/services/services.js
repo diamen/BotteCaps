@@ -36,13 +36,14 @@ angular.module('bcServices', [])
 			},
 			adminController: function() {
 				return {
-					imageUpload: function(base64) {
+					imageUpload: function(base64, capt, capb, beer, country) {
 						return $http({
 							method: "POST",
 							url: "./rest/admin/image/upload",
 							headers: {'AUTH-TOKEN': $sessionStorage.authToken },
-							data: {baseimage: base64}
-							});
+							data: {baseimage: base64},
+							params: {captext: capt, capbrand: capb, beer: beer, country: country}
+						});
 					}
 				};
 			}

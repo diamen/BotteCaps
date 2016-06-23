@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -27,10 +28,13 @@ public class AdminController {
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("image/upload")
-	public Response uploadImage(String baseimage) {
-		log.debug(baseimage);
+	public Response uploadImage(String baseimage, 
+			@QueryParam("captext") String captext, 
+			@QueryParam("capbrand") String capbrand,
+			@QueryParam("beer") Integer beer,
+			@QueryParam("country") String country) {
 		try {
-			imageManager.saveImage(baseimage);
+			imageManager.saveImage(baseimage, captext, capbrand, beer == 1, country);
 		} catch (IOException e) {
 			log.error(e);
 			return Response.serverError().status(Status.INTERNAL_SERVER_ERROR).build();

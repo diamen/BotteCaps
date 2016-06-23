@@ -41,14 +41,14 @@ public class Caps implements Serializable {
 	private int beer;
 	
 	@Column(name=BRAND_ID_NAME, nullable=true)
-	private int brand_id;
+	private long brand_id;
 	
 	@Column(name=COUNTRY_ID_NAME, nullable=false)
-	private int country_id;
+	private long country_id;
 	
 	@Id
 	@Column(name=ID_NAME, nullable=false, unique=true)
-	private int id;
+	private long id;
 
 	public String getCap_text() {
 		return cap_text;
@@ -98,27 +98,27 @@ public class Caps implements Serializable {
 		this.beer = beer;
 	}
 
-	public int getBrand_id() {
+	public long getBrand_id() {
 		return brand_id;
 	}
 
-	public void setBrand_id(int brand_id) {
+	public void setBrand_id(long brand_id) {
 		this.brand_id = brand_id;
 	}
 
-	public int getCountry_id() {
+	public long getCountry_id() {
 		return country_id;
 	}
 
-	public void setCountry_id(int country_id) {
+	public void setCountry_id(long country_id) {
 		this.country_id = country_id;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

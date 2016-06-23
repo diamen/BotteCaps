@@ -1,0 +1,17 @@
+<div ng-controller="addCapCtrl">
+	<div class="row" style="margin-left: 0px !important; margin-right: 0px !important;">
+		<label class="btn btn-default btn-sm btn-file">
+			Dodaj <input uploadfile="img" type="file" style="display: none;" accept="image/*" multiple>
+		</label>
+		<button type="button" class="btn btn-default btn-sm">Usun</button>
+		<button ng-click="uploadFiles(0)" type="button" class="btn btn-default btn-sm">Zaladuj</button>
+	</div>
+	
+	<div class="addcap" ng-repeat="file in files">
+		<img style="display: inherit !important;" ng-src="{{file.src}}" class="imgcap img-rounded"></img>
+		<input ng-model="files[$index].captext" style="width: 100px !important; margin-left: 1px !important;" placeholder="Tekst" type="text" class="form-control">
+		<input ng-model="files[$index].capbrand" style="width: 100px !important; margin-left: 1px !important;" placeholder="Marka" type="text" class="form-control">
+		<select style="width: 100px !important; margin-left: 1px !important;" class="form-control" ng-model="selected[$index]" ng-options="item.key for item in beerOptions"></select>
+	</span>
+	
+</div>

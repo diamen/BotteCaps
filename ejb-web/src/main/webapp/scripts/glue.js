@@ -15,6 +15,7 @@ head.load(
     /* Controllers */
     { file: '/' + appName + '/scripts/controllers/mainCtrl.js' },
     
+    { file: '/' + appName + '/scripts/controllers/addCapCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/adminCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/anewsCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/capCtrl.js' },

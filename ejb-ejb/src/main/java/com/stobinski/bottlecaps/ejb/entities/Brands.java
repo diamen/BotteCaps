@@ -7,19 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Countries implements Serializable {
-
-	private static final long serialVersionUID = -1948795941184625184L;
+public class Brands implements Serializable {
+	
+	private static final long serialVersionUID = -430815667411950690L;
 	
 	public static final String NAME_NAME = "name";
-	public static final String FLAG_NAME = "flag";
 	public static final String ID_NAME = "id";
 	
-	@Column(name=NAME_NAME, nullable=false, unique=true)
+	@Column(name=NAME_NAME, nullable=false)
 	private String name;
-	
-	@Column(name=FLAG_NAME, nullable=false, unique=true)
-	private String flag;
 	
 	@Id
 	@Column(name=ID_NAME, nullable=false, unique=true)
@@ -28,18 +24,15 @@ public class Countries implements Serializable {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getFlag() {
-		return flag;
-	}
-	public void setFlag(String flag) {
-		this.flag = flag;
-	}
+
 	public long getId() {
 		return id;
 	}
+
 	public void setId(long id) {
 		this.id = id;
 	}

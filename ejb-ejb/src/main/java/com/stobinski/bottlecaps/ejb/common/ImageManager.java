@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.ConcurrencyManagementType;
@@ -26,7 +28,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
+import com.stobinski.bottlecaps.ejb.entities.Brands;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
@@ -44,11 +48,12 @@ public class ImageManager {
 	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void saveImage(String base64) throws IOException {
+	public void saveImage(String base64, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
 		Integer oldFileName = getLastFileNameNumber();
 		Integer newFileName = getNewFileNameNumber(oldFileName);
+		Long brandId = getBrandId(capbrand);
 		saveFile(base64ToByteArray(base64), generateFilePath(newFileName));
-		insertDBEntry(String.valueOf(newFileName));
+		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, country);
 		
 		log.debug("File {" + newFileName + "} added to database");
 	}
@@ -72,6 +77,25 @@ public class ImageManager {
 		return oldFileName + 1;
 	}
 	
+	protected long getBrandId(String capbrand) {
+		List<Brands> brands = daoService.retrieveData(new QueryBuilder().select().from(Brands.class).build())
+										.stream().map(e -> (Brands) e).collect(Collectors.toList());
+		boolean exists = brands.stream().map(e -> e.getName()).anyMatch(e -> e.equals(capbrand));
+	
+		if(exists)
+			return brands.stream().filter(e -> e.getName().equals(capbrand)).findFirst().map(e -> e.getId()).get().intValue();
+		
+		Brands brand = new Brands();
+		brand.setName(capbrand);
+		daoService.persist(brand);
+		
+		return brands.stream().map(e -> e.getId()).mapToLong(e -> e).max().getAsLong() + 1;
+	}
+	
+	protected long getCountryId(String country) {
+		return ((Countries) daoService.retrieveSingleData(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build())).getId();
+	}
+	
 	protected String generateFilePath(Integer newFileName) {
 		return ImageManager.PATH + File.separatorChar + newFileName + "." + ImageManager.EXT;
 	}
@@ -83,16 +107,16 @@ public class ImageManager {
 		ImageIO.write(bufferedImage, ImageManager.EXT, new File(path));
 	}
 	
-	protected void insertDBEntry(String fileName) {
+	protected void insertDBEntry(String fileName, String captext, Long brandId, Boolean isBeer, String country) {
 		Caps caps = new Caps();
 		caps.setCountry_id(2);
-		caps.setBrand_id(1);
-		caps.setBeer(1);
+		caps.setBrand_id(brandId);
+		caps.setBeer(isBeer ? 1 : 0);
 		caps.setAdded_date(new Date());
 		caps.setPath("jjj");
 		caps.setFile_name(fileName);
 		caps.setExtension(ImageManager.EXT);
-		caps.setCap_text("TEST");
+		caps.setCap_text(captext);
 		daoService.persist(caps);
 	}
 	
