@@ -52,8 +52,9 @@ public class ImageManager {
 		Integer oldFileName = getLastFileNameNumber();
 		Integer newFileName = getNewFileNameNumber(oldFileName);
 		Long brandId = getBrandId(capbrand);
+		Long countryId = getCountryId(country);
 		saveFile(base64ToByteArray(base64), generateFilePath(newFileName));
-		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, country);
+		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, countryId);
 		
 		log.debug("File {" + newFileName + "} added to database");
 	}
@@ -107,9 +108,9 @@ public class ImageManager {
 		ImageIO.write(bufferedImage, ImageManager.EXT, new File(path));
 	}
 	
-	protected void insertDBEntry(String fileName, String captext, Long brandId, Boolean isBeer, String country) {
+	protected void insertDBEntry(String fileName, String captext, Long brandId, Boolean isBeer, Long countryId) {
 		Caps caps = new Caps();
-		caps.setCountry_id(2);
+		caps.setCountry_id(countryId);
 		caps.setBrand_id(brandId);
 		caps.setBeer(isBeer ? 1 : 0);
 		caps.setAdded_date(new Date());
