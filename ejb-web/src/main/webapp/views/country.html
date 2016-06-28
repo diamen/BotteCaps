@@ -39,6 +39,6 @@
 		<button type="button" class="btn btn-default btn-sm">Usun</button>
 	</div>
 	
-	<img ng-repeat="couphoto in couphotos | orderBy : orderCaps" ng-src="{{couphoto.cousrc}}"
+	<img ng-repeat="cap in caps" ng-src="{{cap.src}}"
 		ng-click="openCap($index)" class="imgcap img-rounded"></img>
 </div>

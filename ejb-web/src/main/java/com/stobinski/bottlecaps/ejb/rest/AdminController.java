@@ -13,6 +13,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jboss.logging.Logger;
 
+import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
 
 @Path("/admin/")
@@ -34,7 +35,7 @@ public class AdminController {
 			@QueryParam("beer") Integer beer,
 			@QueryParam("country") String country) {
 		try {
-			imageManager.saveImage(baseimage, captext, capbrand, beer == 1, country);
+			imageManager.saveImage(Base64Service.fromBase64JsonToByteArray(baseimage), captext, capbrand, beer == 1, country);
 		} catch (IOException e) {
 			log.error(e);
 			return Response.serverError().status(Status.INTERNAL_SERVER_ERROR).build();

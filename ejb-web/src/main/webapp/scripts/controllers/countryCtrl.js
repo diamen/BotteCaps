@@ -14,17 +14,21 @@ angular.module('bcControllers')
 		if($scope.country === undefined)
 			$scope.country = 'Albania';
 		
-		$http.post("./rest/photo/bycountry/", $scope.country).success(function(data) {
+		restService.photoController().getImages('Albania').success(function(data) {
+			console.log(data);
+
+			var caps = [];
 			
 			for(var i = 0; i < data.length; i++) {
-				data[i].cousrc = ngsrcConvertService.convert(data[i]);
+				var src = base64Service.base64ToUrl(data[i].base64);
+				caps.push({src: src, id: data[i].id});
 			}
-
-			$scope.couphotos = data;
+			
+			$scope.caps = caps;
 		});
 		
 		$scope.openCap = function(index) {
-			$location.path('/collect/' + $scope.country + '/' + $scope.couphotos[index].id);
+			$location.path('/collect/' + $scope.country + '/' + $scope.caps[index].id);
 		};
 		
 		$scope.filterCaps = function(searchText) {

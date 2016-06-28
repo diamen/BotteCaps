@@ -11,17 +11,23 @@ import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.Countries;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
 
 @Path("/photo/")
 public class PhotoController {
+	
+	@Inject
+	private ImageManager imageManager;
 	
 	@Inject
 	private DaoService dao;
@@ -35,16 +41,11 @@ public class PhotoController {
 		return Arrays.asList(file.list());
 	}
 	
-	@POST
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("bycountry")
-	public List<Caps> photosByCountry(String country) {
-		Countries countries = (Countries) dao
-				.retrieveSingleData(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build());
-		
-		return dao.retrieveData(
-				new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countries.getId()).build())
-				.stream().map(e -> (Caps) e).collect(Collectors.toList());
+	@Path("bycountry/{country}")
+	public List<Base64Cap> photosByCountry(@PathParam("country") String country) {
+		return imageManager.loadFiles(country);
 	}
 	
 	@POST
@@ -59,7 +60,7 @@ public class PhotoController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("singlecap")
-	public Caps getSingleCap(@QueryParam("countryId") Integer countryId, @QueryParam("id") Integer id) {
+	public Caps getSingleCap(@QueryParam("countryId") Long countryId, @QueryParam("id") Long id) {
 		return (Caps) dao.retrieveSingleData
 				(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME, Caps.ID_NAME).eq(countryId, id).build());
 	}

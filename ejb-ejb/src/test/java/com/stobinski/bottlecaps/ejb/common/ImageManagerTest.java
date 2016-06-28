@@ -3,7 +3,6 @@ package com.stobinski.bottlecaps.ejb.common;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
-import java.util.Base64;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,19 +22,6 @@ public class ImageManagerTest {
 	private DaoService daoService;
 	
 	@Test
-	public void shouldConvertBase64ToByteArray() {
-		// given
-		String base64 = "{\"baseimage\":\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6CAYAAACI7Fo9AAAgAEl\"}";
-		byte[] expected = Base64.getDecoder().decode("iVBORw0KGgoAAAANSUhEUgAAAPoAAAD6CAYAAACI7Fo9AAAgAEl");
-		
-		// when
-		byte[] actual = imageManager.base64ToByteArray(base64);
-		
-		// then
-		assertThat(actual).isEqualTo(expected);
-	}
-	
-	@Test
 	public void shouldReturnProperFileNameNumber() {
 		// given
 		int fileName = 13;
@@ -52,10 +38,11 @@ public class ImageManagerTest {
 	public void shouldGenerateProperName() {
 		// given
 		int fileName = 13;
-		String exceptedValue = ImageManager.PATH + File.separatorChar + fileName  + "." + ImageManager.EXT;
+		String country = "ALBANIA";
+		String exceptedValue = ImageManager.PATH + File.separatorChar + country;
 		
 		// when
-		String returnedValue = imageManager.generateFilePath(fileName);
+		String returnedValue = imageManager.generateFilePath(fileName, country);
 		
 		// then
 		assertThat(returnedValue).isEqualTo(exceptedValue);

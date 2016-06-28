@@ -2,10 +2,11 @@ package com.stobinski.bottlecaps.ejb.common;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,20 +25,19 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.entities.Brands;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.Countries;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
 
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ImageManager {
 
-	public static final String PATH = "C:\\Users\\user\\workspace\\ejb\\ADDED";
+	public static final String PATH = "D:\\KAPSLE\\ZAGRANICA";
 	public static final String EXT = "JPG";
 	
 	@Inject
@@ -48,24 +48,26 @@ public class ImageManager {
 	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void saveImage(String base64, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
+	public void saveImage(byte[] b, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
 		Integer oldFileName = getLastFileNameNumber();
 		Integer newFileName = getNewFileNameNumber(oldFileName);
 		Long brandId = getBrandId(capbrand);
 		Long countryId = getCountryId(country);
-		saveFile(base64ToByteArray(base64), generateFilePath(newFileName));
-		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, countryId);
+		String filePath = generateFilePath(newFileName, country);
+		saveFile(b, generateFullFilePath(newFileName, country));
+		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, countryId, filePath);
 		
 		log.debug("File {" + newFileName + "} added to database");
 	}
 
-	protected byte[] base64ToByteArray(String base64) {
-		JsonParser jsonParser = new JsonParser();
-		JsonObject jsonObject = jsonParser.parse(base64).getAsJsonObject();
-		String sBase64 = jsonObject.get("baseimage").getAsString();
-		int index = sBase64.indexOf("base64,") + "base64,".length();
-		sBase64 = sBase64.substring(index);
-		return Base64.getDecoder().decode(sBase64);
+	@Lock(LockType.WRITE)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public List<Base64Cap> loadFiles(String country) {
+		Long countryId = getCountryId(country);
+		
+		return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countryId).build())
+			.stream().map(e -> (Caps) e).map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
+			.collect(Collectors.toList());
 	}
 	
 	protected Integer getLastFileNameNumber() {
@@ -97,8 +99,12 @@ public class ImageManager {
 		return ((Countries) daoService.retrieveSingleData(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build())).getId();
 	}
 	
-	protected String generateFilePath(Integer newFileName) {
-		return ImageManager.PATH + File.separatorChar + newFileName + "." + ImageManager.EXT;
+	protected String generateFilePath(Integer newFileName, String country) {
+		return ImageManager.PATH + File.separatorChar + country;
+	}
+
+	protected String generateFullFilePath(Integer newFileName, String country) {
+		return ImageManager.PATH + File.separatorChar + country + File.separatorChar + newFileName + "." + ImageManager.EXT;
 	}
 	
 	private void saveFile(byte[] image, String path) throws IOException {
@@ -108,13 +114,31 @@ public class ImageManager {
 		ImageIO.write(bufferedImage, ImageManager.EXT, new File(path));
 	}
 	
-	protected void insertDBEntry(String fileName, String captext, Long brandId, Boolean isBeer, Long countryId) {
+	private byte[] retrieveImage(String path, String fileName) {
+		String filePath = path + File.separatorChar + fileName + '.' + ImageManager.EXT;
+		try {
+			InputStream inputStream = new FileInputStream(new File(filePath));
+			BufferedImage bufferedImage = ImageIO.read(inputStream);
+			
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			ImageIO.write(bufferedImage, ImageManager.EXT, baos);
+			baos.flush();
+			byte[] b = baos.toByteArray();
+			baos.close();
+			return b;
+		} catch(IOException e) {
+			log.error(e);
+			throw new RuntimeException(e);
+		}
+	}
+	
+	protected void insertDBEntry(String fileName, String captext, Long brandId, Boolean isBeer, Long countryId, String filePath) {
 		Caps caps = new Caps();
 		caps.setCountry_id(countryId);
 		caps.setBrand_id(brandId);
 		caps.setBeer(isBeer ? 1 : 0);
 		caps.setAdded_date(new Date());
-		caps.setPath("jjj");
+		caps.setPath(filePath);
 		caps.setFile_name(fileName);
 		caps.setExtension(ImageManager.EXT);
 		caps.setCap_text(captext);
