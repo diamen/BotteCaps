@@ -36,9 +36,6 @@ import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ImageManager {
-
-	public static final String PATH = "D:\\KAPSLE\\ZAGRANICA";
-	public static final String EXT = "JPG";
 	
 	@Inject
 	private Logger log;
@@ -46,15 +43,18 @@ public class ImageManager {
 	@Inject
 	private DaoService daoService;
 	
+	@Inject
+	private ImageFileHandler fileHandler;
+	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void saveImage(byte[] b, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
-		Integer oldFileName = getLastFileNameNumber();
-		Integer newFileName = getNewFileNameNumber(oldFileName);
+		Integer oldFileName = fileHandler.getLastFileNameNumber();
+		Integer newFileName = fileHandler.getNewFileNameNumber(oldFileName);
 		Long brandId = getBrandId(capbrand);
 		Long countryId = getCountryId(country);
-		String filePath = generateFilePath(newFileName, country);
-		saveFile(b, generateFullFilePath(newFileName, country));
+		String filePath = fileHandler.generateFilePath(newFileName, country);
+		saveFile(b, fileHandler.generateFullFilePath(newFileName, country));
 		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, countryId, filePath);
 		
 		log.debug("File {" + newFileName + "} added to database");
@@ -68,16 +68,6 @@ public class ImageManager {
 		return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countryId).build())
 			.stream().map(e -> (Caps) e).map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
 			.collect(Collectors.toList());
-	}
-	
-	protected Integer getLastFileNameNumber() {
-		return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).build())
-			.stream().map(e -> (Caps) e).map(e -> e.getFile_name())	// List<Serializable> -> List<Caps> -> List<Caps.getFile_name()>
-			.mapToInt(e -> Integer.valueOf(e)).max().getAsInt();
-	}
-	
-	protected Integer getNewFileNameNumber(Integer oldFileName) {
-		return oldFileName + 1;
 	}
 	
 	protected long getBrandId(String capbrand) {
@@ -99,29 +89,21 @@ public class ImageManager {
 		return ((Countries) daoService.retrieveSingleData(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build())).getId();
 	}
 	
-	protected String generateFilePath(Integer newFileName, String country) {
-		return ImageManager.PATH + File.separatorChar + country;
-	}
-
-	protected String generateFullFilePath(Integer newFileName, String country) {
-		return ImageManager.PATH + File.separatorChar + country + File.separatorChar + newFileName + "." + ImageManager.EXT;
-	}
-	
 	private void saveFile(byte[] image, String path) throws IOException {
 		InputStream inputStream = new ByteArrayInputStream(image);
 		
 		BufferedImage bufferedImage = ImageIO.read(inputStream);
-		ImageIO.write(bufferedImage, ImageManager.EXT, new File(path));
+		ImageIO.write(bufferedImage, ImageFileHandler.EXT, new File(path));
 	}
 	
 	private byte[] retrieveImage(String path, String fileName) {
-		String filePath = path + File.separatorChar + fileName + '.' + ImageManager.EXT;
+		String filePath = path + File.separatorChar + fileName + '.' + ImageFileHandler.EXT;
 		try {
 			InputStream inputStream = new FileInputStream(new File(filePath));
 			BufferedImage bufferedImage = ImageIO.read(inputStream);
 			
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bufferedImage, ImageManager.EXT, baos);
+			ImageIO.write(bufferedImage, ImageFileHandler.EXT, baos);
 			baos.flush();
 			byte[] b = baos.toByteArray();
 			baos.close();
@@ -140,7 +122,7 @@ public class ImageManager {
 		caps.setAdded_date(new Date());
 		caps.setPath(filePath);
 		caps.setFile_name(fileName);
-		caps.setExtension(ImageManager.EXT);
+		caps.setExtension(ImageFileHandler.EXT);
 		caps.setCap_text(captext);
 		daoService.persist(caps);
 	}
