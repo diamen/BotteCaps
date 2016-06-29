@@ -5,4 +5,4 @@ angular.module('bcControllers')
 			$scope.countries = data;
 		});
 		
-	});
+});

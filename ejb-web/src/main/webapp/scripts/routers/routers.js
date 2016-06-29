@@ -17,4 +17,4 @@ angular.module('bcRouters', [])
 			.when("/collect/:country/:id", { templateUrl: "/ejb-web/views/cap.html", controller: "capCtrl" } )
 			
 			.otherwise( { templateUrl: "/ejb-web/views/news.html", controller: "newsCtrl" } );
-		});
+});

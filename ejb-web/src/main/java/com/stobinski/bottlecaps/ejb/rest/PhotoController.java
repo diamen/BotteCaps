@@ -1,10 +1,6 @@
 package com.stobinski.bottlecaps.ejb.rest;
 
-import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -22,6 +18,7 @@ import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
+import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
 @Path("/photo/")
 public class PhotoController {
@@ -35,9 +32,10 @@ public class PhotoController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("countries")
-	public List<Countries> getCountries() {
-		return dao.retrieveData(new QueryBuilder().select().from(Countries.class).build())
-				.stream().map(e -> (Countries) e).collect(Collectors.toList());
+	public List<CountriesWithAmount> getCountries() {
+		return dao.retrieveData(new QueryBuilder().select().from(Countries.class).build()).stream()
+				.map(e -> (Countries) e).map(e -> new CountriesWithAmount(e.getId(), e.getName(), e.getFlag(), count(e.getId())))
+				.collect(Collectors.toList());
 	}
 	
 	@GET
@@ -80,20 +78,7 @@ public class PhotoController {
 				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(countryName).build());
 	}
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("count")
-	public Map<String, Integer> countPhotos() {
-		String basePath = "C:\\Users\\user\\workspace\\ejb\\ejb-web\\src\\main\\webapp\\resources\\gfx";
-		File file = new File(basePath);
-		List<String> countries = Arrays.asList(file.list());
-		
-		Map<String, Integer> countryMap = new HashMap<>();
-		
-		for(String country : countries) {
-			int count = new File(basePath + File.separatorChar + country).list().length;
-			countryMap.put(country, count);
-		}
-		return countryMap;
+	private Long count(Long countryId) {
+		return (Long) dao.retrieveSingleData(new QueryBuilder().count().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countryId).build());
 	}
 }

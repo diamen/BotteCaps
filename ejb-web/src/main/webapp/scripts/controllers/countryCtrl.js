@@ -2,7 +2,6 @@ angular.module('bcControllers')
 	.controller('countryCtrl', function($scope, $routeParams, $location, ngsrcConvertService, restService, base64Service) {
 		
 		$scope.country = $routeParams.country || 'Albania';
-		
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
 		
