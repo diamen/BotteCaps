@@ -1,7 +1,7 @@
 angular.module('bcControllers')
-	.controller('newsCtrl', function($scope, $http, $location) {
+	.controller('newsCtrl', function($scope, restService) {
 		
-		$http.get("./rest/news/count").success(function(data) {
+		restService.newsController().getNewsCount().success(function(data) {
 			$scope.pagenumbers = Math.ceil(data/10);
 			$scope.newscount = new Array($scope.pagenumbers);
 			
@@ -12,7 +12,7 @@ angular.module('bcControllers')
 		});
 		
 		function pageReload(no) {
-			$http.get("./rest/news/page/" + no).success(function(data) {
+			restService.newsController().getNewsCount().success(function(data) {
 				$scope.newsarr = data;
 				$scope.currentpage = no;
 			});
@@ -51,10 +51,6 @@ angular.module('bcControllers')
 				doubleContent.expand = false;
 			}
 			return doubleContent;
-		};
-		
-		$scope.openNews = function(id) {
-			$location.path('/news/' + id);
 		};
 		
 	});

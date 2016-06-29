@@ -9,8 +9,6 @@ angular.module('bcControllers')
 		
 		$scope.selected = [];
 		
-		console.log($scope.beerOptions);
-		
 		$scope.uploadFiles = function(idx) {
 			
 			var numberOfFiles = $scope.files.length;
@@ -28,7 +26,5 @@ angular.module('bcControllers')
 						}
 					});
 			});
-			
 		};
-		
 });

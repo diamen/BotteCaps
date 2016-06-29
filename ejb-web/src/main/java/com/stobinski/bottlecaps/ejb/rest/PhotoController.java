@@ -35,10 +35,9 @@ public class PhotoController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("countries")
-	public List<String> countryList() {
-		String basePath = "C:\\Users\\user\\workspace\\ejb\\ejb-web\\src\\main\\webapp\\resources\\gfx";
-		File file = new File(basePath);
-		return Arrays.asList(file.list());
+	public List<Countries> getCountries() {
+		return dao.retrieveData(new QueryBuilder().select().from(Countries.class).build())
+				.stream().map(e -> (Countries) e).collect(Collectors.toList());
 	}
 	
 	@GET

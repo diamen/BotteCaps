@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('userStripCtrl', function($scope, $http, $sessionStorage, $rootScope, restService) {
+	.controller('userStripCtrl', function($scope, $sessionStorage, $rootScope, restService) {
 		
 		$scope.logout = function() {
 			restService.authController().logout().success(function() {

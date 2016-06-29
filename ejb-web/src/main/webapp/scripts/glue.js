@@ -23,7 +23,6 @@ head.load(
     { file: '/' + appName + '/scripts/controllers/countryCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/loginCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/newsCtrl.js' },
-    { file: '/' + appName + '/scripts/controllers/photoCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/userStripCtrl.js' },
     
     /* Directives */

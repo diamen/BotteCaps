@@ -39,24 +39,27 @@ angular.module('bcServices', [])
 		return {
 			adminController: function() {
 				return {
+					csrfPrevent: function() {
+						return $http.get("./admin/login");
+					},
 					imageUpload: function(base64, capt, capb, beer, country) {
 						return $http({
 							method: "POST",
 							url: "./rest/admin/image/upload",
 							headers: {'AUTH-TOKEN': $sessionStorage.authToken },
 							data: {baseimage: base64},
-							params: {captext: capt, capbrand: capb, beer: beer, country: country}
+							params: { captext: capt, capbrand: capb, beer: beer, country: country }
 						});
 					}
 				};
-			},			
+			},
 			authController: function() {
 				return {
 					logout: function() {
 						return $http({
 							method: "POST",
 							url: "./rest/auth/secure/logout",
-							headers: {'AUTH-TOKEN': $sessionStorage.authToken }
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken }
 							});
 					}
 				};
@@ -65,6 +68,36 @@ angular.module('bcServices', [])
 				return {
 					getImages: function(country) {
 						return $http.get("./rest/photo/bycountry/" + country);
+					},
+					getCountries: function() {
+						return $http.get("./rest/photo/countries");
+					},
+					getCountryFlag: function(country) {
+						return $http({
+							method: "GET",
+							url: "./rest/photo/flag/",
+							params: { countryName : country }
+						});
+					},
+					getFilteredCaps: function(searchText) {
+						return $http({
+							method: "GET",
+							url: "./rest/photo/filtercap/",
+							params: { searchText : searchText }
+						});
+					}
+				};
+			},
+			newsController: function() {
+				return {
+					getNewsCount: function() {
+						return $http.get("./rest/news/count");
+					},
+					getNewsFromPage: function(pageNo) {
+						return $http.get("./rest/news/page/" + pageNo);
+					},
+					getSingleNews: function(id) {
+						return $http.post("./rest/news" + id);
 					}
 				};
 			}

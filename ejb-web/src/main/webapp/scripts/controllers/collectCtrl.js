@@ -1,12 +1,8 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $http, $location) {
+	.controller('collectCtrl', function($scope, restService) {
 		
-		$http.get("./rest/collect/countries").success(function(data) {
+		restService.photoController().getCountries().success(function(data) {
 			$scope.countries = data;
 		});
-		
-		$scope.redirectToCountry = function(country) {
-			$location.path('/collect/' + country);
-		};
 		
 	});

@@ -4,7 +4,7 @@ angular.module('bcRouters', [])
 		$locationProvider.html5Mode(true);
 		
 		$routeProvider
-			.when("/", { templateUrl: "/ejb-web/views/photo.html", controller: "photoCtrl" } )
+			.when("/", { templateUrl: "/ejb-web/views/news.html", controller: "newsCtrl" } )
 			
 			.when("/admin/login", { templateUrl: "/ejb-web/views/login.html", controller: "loginCtrl" } )
 			.when("/admin/secure", { templateUrl: "/ejb-web/views/admin.html", controller: "adminCtrl" } )
@@ -16,5 +16,5 @@ angular.module('bcRouters', [])
 			.when("/collect/:country", { templateUrl: "/ejb-web/views/country.html", controller: "countryCtrl" } )
 			.when("/collect/:country/:id", { templateUrl: "/ejb-web/views/cap.html", controller: "capCtrl" } )
 			
-			.otherwise( { templateUrl: "/ejb-web/views/photo.html", controller: "photoCtrl" } );
+			.otherwise( { templateUrl: "/ejb-web/views/news.html", controller: "newsCtrl" } );
 		});

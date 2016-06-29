@@ -1,9 +1,9 @@
 angular.module('bcControllers')
-	.controller('anewsCtrl', function($scope, $http, $location) {
+	.controller('anewsCtrl', function($scope, $location, restService) {
 		
 		var id = $location.path().substring($location.path().lastIndexOf("/"));
 		
-		$http.post("./rest/news" + id).success(function(data) {
+		restService.newsController().getSingleNews(id).success(function(data) {
 			$scope.news = data;
 		});
 		

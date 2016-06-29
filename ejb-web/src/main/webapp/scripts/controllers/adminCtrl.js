@@ -1,18 +1,8 @@
 angular.module('bcControllers')
-	.controller('adminCtrl', function($scope, $http, $rootScope) {
+	.controller('adminCtrl', function($scope, restService) {
 		
-		$http.get("./admin/login").success(function(data, status, headers, config, statusText) {
+		restService.adminController().csrfPrevent().success(function(data) {
 			$scope.csrfPreventionSalt = headers()['xsrf-token'];
 		});
-		
-		$scope.auth = function() {
-			$http({
-				method: "GET",
-				url: "./rest/auth/secure/test",
-				headers: {'AUTH-TOKEN': $rootScope.$storage.authToken }
-				}).success(function(data) {
-					console.log(data);
-			});			
-		};
-		
-	});
+	
+});

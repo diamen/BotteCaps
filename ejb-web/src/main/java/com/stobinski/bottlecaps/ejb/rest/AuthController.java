@@ -85,12 +85,4 @@ public class AuthController {
 		sessionCache.clearCache(httpReq);
 	}
 	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@AuthToken
-	@Path("secure/test")
-	public String getTest() {
-		return "WORKS";
-	}
-	
 }
