@@ -12,7 +12,7 @@ angular.module('bcControllers')
 		if($scope.country === undefined)
 			$scope.country = 'Albania';
 		
-		restService.photoController().getImages('Albania').success(function(data) {
+		restService.photoController().getImages($scope.country).success(function(data) {
 			var caps = [];
 			
 			for(var i = 0; i < data.length; i++) {

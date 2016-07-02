@@ -85,6 +85,13 @@ angular.module('bcServices', [])
 							url: "./rest/photo/filtercap/",
 							params: { searchText : searchText }
 						});
+					},
+					getSingleCap: function(country, capId) {
+						return $http({
+							method: "GET",
+							url: "./rest/photo/singlecap/",
+							params: { country: country, id: capId}
+						});
 					}
 				};
 			},

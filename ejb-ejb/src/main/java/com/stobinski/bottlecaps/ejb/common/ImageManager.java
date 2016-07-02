@@ -64,10 +64,31 @@ public class ImageManager {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public List<Base64Cap> loadFiles(String country) {
 		Long countryId = getCountryId(country);
-		
+		return this.loadFiles(countryId);
+	}
+	
+	@Lock(LockType.WRITE)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public List<Base64Cap> loadFiles(Long countryId) {
 		return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countryId).build())
-			.stream().map(e -> (Caps) e).map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
-			.collect(Collectors.toList());
+				.stream().map(e -> (Caps) e).map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
+				.collect(Collectors.toList());
+	}
+	
+	@Lock(LockType.WRITE)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Base64Cap loadFile(String country, Long capId) {
+		Long countryId = getCountryId(country);
+		return this.loadFile(countryId, capId);
+	}
+	
+	@Lock(LockType.WRITE)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public Base64Cap loadFile(Long countryId, Long capId) {
+		Caps cap = (Caps) daoService.retrieveSingleData
+				(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME, Caps.ID_NAME).eq(countryId, capId).build());
+		
+		return new Base64Cap(cap.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
 	}
 	
 	protected long getBrandId(String capbrand) {

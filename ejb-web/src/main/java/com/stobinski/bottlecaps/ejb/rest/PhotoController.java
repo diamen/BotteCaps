@@ -49,17 +49,15 @@ public class PhotoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("idbycountry")
 	public Long idByCountry(String country) {
-		Countries countries = (Countries) dao.retrieveSingleData
-				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build());
-		return countries.getId();
+		return ((Countries) dao.retrieveSingleData
+				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build())).getId();
 	}	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("singlecap")
-	public Caps getSingleCap(@QueryParam("countryId") Long countryId, @QueryParam("id") Long id) {
-		return (Caps) dao.retrieveSingleData
-				(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME, Caps.ID_NAME).eq(countryId, id).build());
+	public Base64Cap getSingleCap(@QueryParam("country") String country, @QueryParam("id") Long id) {
+		return imageManager.loadFile(country, id);
 	}
 	
 	@GET
