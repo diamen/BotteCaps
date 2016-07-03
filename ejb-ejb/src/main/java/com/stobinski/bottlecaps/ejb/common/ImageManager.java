@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,11 +24,8 @@ import javax.inject.Inject;
 
 import org.jboss.logging.Logger;
 
-import com.stobinski.bottlecaps.ejb.dao.DaoService;
-import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
-import com.stobinski.bottlecaps.ejb.entities.Brands;
+import com.stobinski.bottlecaps.ejb.dao.CapsDaoService;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
-import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
 
 @Singleton
@@ -41,7 +37,7 @@ public class ImageManager {
 	private Logger log;
 	
 	@Inject
-	private DaoService daoService;
+	private CapsDaoService capsDao;
 	
 	@Inject
 	private ImageFileHandler fileHandler;
@@ -51,63 +47,32 @@ public class ImageManager {
 	public void saveImage(byte[] b, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
 		Integer oldFileName = fileHandler.getLastFileNameNumber();
 		Integer newFileName = fileHandler.getNewFileNameNumber(oldFileName);
-		Long brandId = getBrandId(capbrand);
-		Long countryId = getCountryId(country);
+		Long brandId = capsDao.getBrandId(capbrand);
+		Long countryId = capsDao.getCountryId(country);
 		String filePath = fileHandler.generateFilePath(newFileName, country);
 		saveFile(b, fileHandler.generateFullFilePath(newFileName, country));
-		insertDBEntry(String.valueOf(newFileName), captext, brandId, isBeer, countryId, filePath);
+		capsDao.insertCap(String.valueOf(newFileName), captext, brandId, isBeer, countryId, filePath, ImageFileHandler.EXT);
 		
 		log.debug("File {" + newFileName + "} added to database");
-	}
-
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public List<Base64Cap> loadFiles(String country) {
-		Long countryId = getCountryId(country);
-		return this.loadFiles(countryId);
 	}
 	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public List<Base64Cap> loadFiles(Long countryId) {
-		return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countryId).build())
-				.stream().map(e -> (Caps) e).map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
+	public List<Base64Cap> loadFiles(List<Caps> caps) {
+		return caps.stream().map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
 				.collect(Collectors.toList());
 	}
 	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Base64Cap loadFile(String country, Long capId) {
-		Long countryId = getCountryId(country);
-		return this.loadFile(countryId, capId);
+	public Base64Cap loadFile(Caps cap) {
+		return new Base64Cap(cap.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
 	}
 	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Base64Cap loadFile(Long countryId, Long capId) {
-		Caps cap = (Caps) daoService.retrieveSingleData
-				(new QueryBuilder().select().from(Caps.class).where(Caps.COUNTRY_ID_NAME, Caps.ID_NAME).eq(countryId, capId).build());
-		
-		return new Base64Cap(cap.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
-	}
-	
-	protected long getBrandId(String capbrand) {
-		List<Brands> brands = daoService.retrieveData(new QueryBuilder().select().from(Brands.class).build())
-										.stream().map(e -> (Brands) e).collect(Collectors.toList());
-		boolean exists = brands.stream().map(e -> e.getName()).anyMatch(e -> e.equals(capbrand));
-	
-		if(exists)
-			return brands.stream().filter(e -> e.getName().equals(capbrand)).findFirst().map(e -> e.getId()).get().intValue();
-		
-		Brands brand = new Brands();
-		brand.setName(capbrand);
-		daoService.persist(brand);
-		
-		return brands.stream().map(e -> e.getId()).mapToLong(e -> e).max().getAsLong() + 1;
-	}
-	
-	protected long getCountryId(String country) {
-		return ((Countries) daoService.retrieveSingleData(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build())).getId();
+	public void removeCap(String country, Long capId) {
+		capsDao.removeCap(country, capId);
 	}
 	
 	private void saveFile(byte[] image, String path) throws IOException {
@@ -133,19 +98,6 @@ public class ImageManager {
 			log.error(e);
 			throw new RuntimeException(e);
 		}
-	}
-	
-	protected void insertDBEntry(String fileName, String captext, Long brandId, Boolean isBeer, Long countryId, String filePath) {
-		Caps caps = new Caps();
-		caps.setCountry_id(countryId);
-		caps.setBrand_id(brandId);
-		caps.setBeer(isBeer ? 1 : 0);
-		caps.setAdded_date(new Date());
-		caps.setPath(filePath);
-		caps.setFile_name(fileName);
-		caps.setExtension(ImageFileHandler.EXT);
-		caps.setCap_text(captext);
-		daoService.persist(caps);
 	}
 	
 }

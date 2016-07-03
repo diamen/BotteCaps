@@ -3,8 +3,8 @@ package com.stobinski.bottlecaps.ejb.common;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.io.Serializable;
 import java.util.Arrays;
@@ -16,16 +16,17 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.stobinski.bottlecaps.ejb.dao.CapsDaoService;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.StringQuery;
 import com.stobinski.bottlecaps.ejb.entities.Brands;
 import com.stobinski.bottlecaps.ejb.entities.Countries;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ImageManagerTest {
+public class CapsDaoServiceTest {
 
 	@InjectMocks
-	private ImageManager imageManager;
+	private CapsDaoService capsDao;
 	
 	@Mock
 	private DaoService dao;
@@ -39,7 +40,7 @@ public class ImageManagerTest {
 		given(dao.retrieveSingleData(any(StringQuery.class))).willReturn(countries);
 		
 		// when
-		long returnedId = imageManager.getCountryId("Albania");
+		long returnedId = capsDao.getCountryId("Albania");
 
 		// then
 		assertThat(returnedId).isEqualTo(expectedId);
@@ -54,7 +55,7 @@ public class ImageManagerTest {
 		given(dao.retrieveData(any(StringQuery.class))).willReturn(list);
 		
 		// when
-		imageManager.getBrandId("different");
+		capsDao.getBrandId("different");
 		
 		// then
 		verify(dao, times(1)).persist(any(Object.class));
@@ -71,7 +72,7 @@ public class ImageManagerTest {
 		given(dao.retrieveData(any(StringQuery.class))).willReturn(list);
 		
 		// when
-		long returnedId = imageManager.getBrandId("test");
+		long returnedId = capsDao.getBrandId("test");
 		
 		// then
 		verify(dao, times(0)).persist(any(Object.class));
