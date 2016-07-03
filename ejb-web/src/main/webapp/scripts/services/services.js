@@ -50,6 +50,14 @@ angular.module('bcServices', [])
 							data: {baseimage: base64},
 							params: { captext: capt, capbrand: capb, beer: beer, country: country }
 						});
+					},
+					imageDelete: function(country, capId) {
+						return $http({
+							method: "POST",
+							url: "./rest/admin/image/delete",
+							headers: {'AUTH-TOKEN': $sessionStorage.authToken },
+							params: { country: country, capId: capId }
+						});
 					}
 				};
 			},
@@ -76,14 +84,14 @@ angular.module('bcServices', [])
 						return $http({
 							method: "GET",
 							url: "./rest/photo/flag/",
-							params: { countryName : country }
+							params: { country : country }
 						});
 					},
-					getFilteredCaps: function(searchText) {
+					getFilteredCaps: function(country, searchText) {
 						return $http({
 							method: "GET",
 							url: "./rest/photo/filtercap/",
-							params: { searchText : searchText }
+							params: { country: country, searchText : searchText }
 						});
 					},
 					getSingleCap: function(country, capId) {

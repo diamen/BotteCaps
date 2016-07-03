@@ -55,6 +55,11 @@ public class DaoService {
 		entityManager.flush();
 	}
 	
+	public void remove(Object object) {
+		entityManager.remove(entityManager.contains(object) ? object : entityManager.merge(object));
+		entityManager.flush();
+	}
+	
 	private Query attachParameters(Query query, Object[] values) {
 		for(int i = 1; i <= values.length; i++) {
 			query.setParameter(i, values[i - 1]);

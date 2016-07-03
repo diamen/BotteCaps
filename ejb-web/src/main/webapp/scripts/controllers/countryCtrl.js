@@ -1,6 +1,7 @@
 angular.module('bcControllers')
-	.controller('countryCtrl', function($scope, $routeParams, $location, ngsrcConvertService, restService, base64Service) {
+	.controller('countryCtrl', function($scope, $routeParams, $location, restService, base64Service) {
 		
+		var markedIds = [];
 		$scope.country = $routeParams.country || 'Albania';
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
@@ -12,7 +13,7 @@ angular.module('bcControllers')
 		if($scope.country === undefined)
 			$scope.country = 'Albania';
 		
-		restService.photoController().getImages($scope.country).success(function(data) {
+		var convertPhotos = function(data) {
 			var caps = [];
 			
 			for(var i = 0; i < data.length; i++) {
@@ -21,19 +22,51 @@ angular.module('bcControllers')
 			}
 			
 			$scope.caps = caps;
+		};
+		
+		restService.photoController().getImages($scope.country).success(function(data) {
+			convertPhotos(data);
 		});
 		
 		$scope.filterCaps = function(searchText) {
-			restService.photoController().getFilteredCaps(searchText).success(function(data) {
-				for(var i = 0; i < data.length; i++) {
-					data[i].cousrc = ngsrcConvertService.convert(data[i]);
-				}
-				$scope.couphotos = data;
+			restService.photoController().getFilteredCaps($scope.country, searchText).success(function(data) {
+				convertPhotos(data);
 			});
 		};
 		
 		$scope.openCap = function(index) {
 			$location.path('/collect/' + $scope.country + '/' + $scope.caps[index].id);
+		};
+		
+		$scope.markCap = function(capId) {
+			var index = markedIds.indexOf(capId);
+			if(index > -1) {
+				markedIds.splice(index, 1);
+				console.log(markedIds);
+				return;
+			}
+			markedIds.push(capId);
+			
+			console.log(markedIds);
+		};
+		
+		$scope.deleteFiles = function() {
+			
+			var numberOfFiles = markedIds.length;
+			var i = 0;
+			var deleteFile = function(capId) {
+				restService.adminController().imageDelete($scope.country, capId).success(function(data) {
+					console.log(data);
+					
+					if(i + 1 < numberOfFiles) {
+						i += 1;
+						deleteFile(markedIds[i]);
+					}
+				});
+			};
+			
+			deleteFile(markedIds[0]);
+			
 		};
 		
 		$scope.addCapRedirect = function() {

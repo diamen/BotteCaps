@@ -43,4 +43,14 @@ public class AdminController {
 		return Response.ok().build();
 	}
 	
+	@POST
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("image/delete")
+	public Response deleteFile(@QueryParam("country") String country, @QueryParam("capId") Long capId) {
+		imageManager.removeCap(country, capId);
+		
+		return Response.ok().build();
+	}
+	
 }

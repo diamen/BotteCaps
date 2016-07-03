@@ -28,7 +28,7 @@ angular.module('bcDirectives', [])
 	    };
 	})
 
-	.directive("fileread", ['restService', 'base64Service', '$q', function (restService, base64Service, $q) {
+	.directive("fileread", ['restService', 'base64Service', function (restService, base64Service) {
 	    return {
 	        scope: {
 	            fileread: "="
@@ -48,7 +48,6 @@ angular.module('bcDirectives', [])
 		                      
 		            			base64Service.imgToBase64(scope.fileread, 'image/jpeg', function(base64) {
 		            				restService.adminController().imageUpload(base64).success(function(data) {
-		            					console.log(data);
 		            					if(i + 1 < numberOfFiles) {
 		            						i += 1;
 		            						uploadFile(files[i]);
@@ -58,7 +57,6 @@ angular.module('bcDirectives', [])
 		            			
 		                    });
 		                };
-		                console.log(file);
 	                	reader.readAsDataURL(file);
 	            	};
 	            	
@@ -68,7 +66,26 @@ angular.module('bcDirectives', [])
 	        }
 	    };
 	}])
-
+	
+	.directive("markButton", function() {
+		return {
+			restrict: 'E',
+			link: function(scope, element, attrs) {
+				element.bind("click", function(clickEvent) {
+					var btn = element.children();
+					if(btn.hasClass("btn-primary")) {
+						btn.removeClass("btn-primary");
+						btn.addClass("btn-danger");
+					} else{
+						btn.removeClass("btn-danger");
+						btn.addClass("btn-primary");
+					}
+				});
+			},
+			template: '<button style="width: 100px" type="submit" class="btn btn-primary">Zaznacz</button>'
+		};
+	})
+	
 	.directive("isAdmin", ['$http', '$sessionStorage', '$rootScope', function($http, $sessionStorage, $rootScope) {
 		return {
 			restrict: 'A',
@@ -95,5 +112,5 @@ angular.module('bcDirectives', [])
 				});
 
 			}
-		}
+		};
 	}]);
