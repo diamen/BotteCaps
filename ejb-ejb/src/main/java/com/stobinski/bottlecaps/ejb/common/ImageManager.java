@@ -59,14 +59,14 @@ public class ImageManager {
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public List<Base64Cap> loadFiles(List<Caps> caps) {
-		return caps.stream().map(e -> new Base64Cap(e.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
+		return caps.stream().map(e -> new Base64Cap(e, Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
 				.collect(Collectors.toList());
 	}
 	
 	@Lock(LockType.WRITE)
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Base64Cap loadFile(Caps cap) {
-		return new Base64Cap(cap.getId(), Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
+		return new Base64Cap(cap, Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
 	}
 	
 	@Lock(LockType.WRITE)

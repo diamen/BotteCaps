@@ -48,6 +48,13 @@ public class PhotoController {
 	}
 	
 	@GET
+	@Produces(MediaType.TEXT_PLAIN)
+	@Path("brand")
+	public String getBrandById(@QueryParam("id") Long id) {
+		return dao.getBrand(id);
+	}
+	
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("filtercap")
 	public List<Base64Cap> getFilteredCaps(@QueryParam("country") String country, @QueryParam("searchText") String searchText) {

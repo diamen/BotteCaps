@@ -1,4 +1,16 @@
-<div ng-controller="capCtrl">
+<div ng-controller="capCtrl" style="text-align: center">
 	<span class="row">{{country}}</span>
-	<img ng-src="{{capsrc}}"></img>
+	<span style="width: 400px; display: inline-block">
+		<img style="margin-bottom: 1px" ng-src="{{capsrc}}"></img>
+		<div style="display: block !important; width: 250px; font-size: 100% !important; margin-bottom: 3px; margin-left: 75px" class="label label-success">Piwo</div>
+		
+		<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Tekst na kapslu</div>
+		<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{cap.cap_text}}</div>
+		
+		<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Marka</div>
+		<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{brand}}</div>
+		
+		<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Data dodania</div>
+		<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{cap.added_date | date: 'dd/MM/yyyy'}}</div>
+	</span>
 </div>

@@ -98,7 +98,14 @@ angular.module('bcServices', [])
 						return $http({
 							method: "GET",
 							url: "./rest/photo/singlecap/",
-							params: { country: country, id: capId}
+							params: { country: country, id: capId }
+						});
+					},
+					getBrand: function(id) {
+						return $http({
+							method: "GET",
+							url: "./rest/photo/brand/",
+							params: { id: id }
 						});
 					}
 				};

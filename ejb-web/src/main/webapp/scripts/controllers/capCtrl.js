@@ -7,6 +7,10 @@ angular.module('bcControllers')
 		restService.photoController().getSingleCap($scope.country, $scope.id).success(function(data) {
 			$scope.cap = data;
 			$scope.capsrc = base64Service.base64ToUrl(data.base64);
+			
+			restService.photoController().getBrand(data.brand_id).success(function(d) {
+				$scope.brand = d;
+			});
 		});
 		
 });

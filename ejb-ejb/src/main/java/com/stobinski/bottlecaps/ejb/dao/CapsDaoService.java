@@ -99,6 +99,10 @@ public class CapsDaoService {
 		dao.remove(caps);
 	}
 	
+	public String getBrand(Long id) {
+		return ((Brands) dao.retrieveSingleData(new QueryBuilder().select().from(Brands.class).where(Brands.ID_NAME).eq(id).build())).getName();
+	}
+	
 	private Long count(Long countryId) {
 		return (Long) dao.retrieveSingleData(new QueryBuilder().count().from(Caps.class).where(Caps.COUNTRY_ID_NAME).eq(countryId).build());
 	}
