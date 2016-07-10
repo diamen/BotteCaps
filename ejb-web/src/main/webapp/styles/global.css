@@ -2,5 +2,6 @@
 @import "common/footer.css";
 @import "common/navibar.css";
 @import "collect/caps.css";
+@import "collect/countrybar.css";
 @import "collect/countrylist.css";
 @import "news/news.css";

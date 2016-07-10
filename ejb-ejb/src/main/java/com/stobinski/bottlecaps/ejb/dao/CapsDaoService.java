@@ -43,7 +43,7 @@ public class CapsDaoService {
 				.filter(e -> e.getCap_text().toLowerCase().contains(searchText.toLowerCase()))
 				.collect(Collectors.toList());
 	}
-	
+
 	public long getBrandId(String capbrand) {
 		List<Brands> brands = dao.retrieveData(new QueryBuilder().select().from(Brands.class).build())
 										.stream().map(e -> (Brands) e).collect(Collectors.toList());
@@ -62,7 +62,6 @@ public class CapsDaoService {
 	public Countries getCountry(String country) {
 		return (Countries) dao.retrieveSingleData
 				(new QueryBuilder().select().from(Countries.class).where(Countries.NAME_NAME).eq(country).build());
-	
 	}
 	
 	public List<CountriesWithAmount> getCountriesWithAmount() {

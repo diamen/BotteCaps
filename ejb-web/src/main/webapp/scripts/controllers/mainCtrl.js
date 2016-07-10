@@ -8,6 +8,10 @@ angular.module('bcControllers', [])
 			$location.path('/admin/login');
 		};
 		
+		$scope.redirectMain = function() {
+			$location.path('/');
+		};
+		
 		$scope.redirectCollect = function() {
 			$location.path('/collect');
 		};

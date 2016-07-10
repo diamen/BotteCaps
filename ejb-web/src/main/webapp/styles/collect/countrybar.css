@@ -1,0 +1,27 @@
+.countrybar {
+	width: auto;
+	height: 52px;
+	
+	display: flex;
+	
+	margin-right: 1%;
+	margin-left: 1%;
+	margin-bottom: 20px;
+	
+	background-color: snow;
+	border: 1px solid silver;
+}
+
+.countrytitle {
+	box-shadow: inset 0px 0px 8px lightgray;
+	
+	width: 100%;
+	
+	font-size: 2.6em;
+	font-family: serif;
+}
+
+.countryimg {
+	height: 100%;
+	margin-top: -5px;
+}

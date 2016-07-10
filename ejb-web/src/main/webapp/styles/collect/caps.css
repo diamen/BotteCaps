@@ -11,3 +11,7 @@
 .addcap {
 	float: left;
 }
+
+.capback {
+	opacity: 0.5;
+}

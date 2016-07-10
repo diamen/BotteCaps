@@ -13,7 +13,7 @@ angular.module('bcRouters', [])
 			.when("/news/:id", { templateUrl: "/ejb-web/views/anews.html" } )
 			
 			.when("/collect", { templateUrl: "/ejb-web/views/collect.html", controller: "collectCtrl" } )
-			.when("/collect/:country", { templateUrl: "/ejb-web/views/country.html", controller: "countryCtrl" } )
+			.when("/collect/:country", { templateUrl: "/ejb-web/views/collect.html", controller: "collectCtrl" } )
 			.when("/collect/:country/:id", { templateUrl: "/ejb-web/views/cap.html", controller: "capCtrl" } )
 			
 			.otherwise( { templateUrl: "/ejb-web/views/news.html", controller: "newsCtrl" } );

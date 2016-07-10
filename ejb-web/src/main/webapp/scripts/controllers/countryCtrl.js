@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('countryCtrl', function($scope, $routeParams, $location, restService, base64Service) {
+	.controller('countryCtrl', function($scope, $routeParams, $location, restService, base64Service, shareData) {
 		
 		var markedIds = [];
 		$scope.country = $routeParams.country || 'Albania';
@@ -26,6 +26,7 @@ angular.module('bcControllers')
 		
 		restService.photoController().getImages($scope.country).success(function(data) {
 			convertPhotos(data);
+			shareData.addData($scope.caps);
 		});
 		
 		$scope.filterCaps = function(searchText) {
