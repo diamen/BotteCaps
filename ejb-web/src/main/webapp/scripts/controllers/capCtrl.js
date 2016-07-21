@@ -43,12 +43,17 @@ angular.module('bcControllers')
 				fivecaps = mover.updateLast(fivecaps);
 			
 			$scope.fivecaps = fivecaps;
+			$scope.mainsrc = fivecaps[2].src;
 		};
 		
 		$scope.selectFiveCaps(parseInt($scope.id));
 		
 		$scope.previousCap = function() {
 			$scope.selectFiveCaps(parseInt($scope.fivecaps[1].id));
+		};
+		
+		$scope.nextCap = function() {
+			$scope.selectFiveCaps($scope.fivecaps[3].id);
 		};
 		
 });

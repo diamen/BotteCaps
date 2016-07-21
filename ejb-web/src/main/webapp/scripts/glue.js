@@ -4,6 +4,7 @@ head.load(
     
 	/* Libraries */
     { file: '/' + appName + '/libraries/angular/angular.min.js' },
+    { file: '/' + appName + '/libraries/angular-animate/angular-animate.min.js' },
     { file: '/' + appName + '/libraries/angular-route/angular-route.js' },
     { file: '/' + appName + '/libraries/angular-cookies/angular-cookies.min.js' },
     { file: '/' + appName + '/libraries/angular-locale/angular-locale_pl-pl.js' },

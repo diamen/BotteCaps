@@ -37,12 +37,12 @@
 		
 		<div class="col-md-12" style="height: 122px; margin-top: 15px;">
 			<i ng-click="previousCap()" class="col-md-1 fa fa-chevron-left" style="margin-top: 54px" aria-hidden="true"></i>
-			<img class="col-md-2 capback" ng-src="{{fivecaps[0].src}}"></img>
-			<img class="col-md-2 capback" ng-src="{{fivecaps[1].src}}"></img>
-			<img class="col-md-2" ng-src="{{fivecaps[2].src}}"></img>
-			<img class="col-md-2 capback" ng-src="{{fivecaps[3].src}}"></img>
-			<img class="col-md-2 capback" ng-src="{{fivecaps[4].src}}"></img>
-			<i class="col-md-1 fa fa-chevron-right" style="margin-top: 54px" aria-hidden="true"></i>
+			<img fade-in class="col-md-2" ng-src="{{fivecaps[0].src}}"></img>
+			<img fade-in class="col-md-2" ng-src="{{fivecaps[1].src}}"></img>
+			<img fade-in class="col-md-2" ng-src="{{mainsrc}}"></img>
+			<img fade-in class="col-md-2" ng-src="{{fivecaps[3].src}}"></img>
+			<img fade-in class="col-md-2" ng-src="{{fivecaps[4].src}}"></img>
+			<i ng-click="nextCap()" class="col-md-1 fa fa-chevron-right" style="margin-top: 54px" aria-hidden="true"></i>
 		</div>
 		
 	</div>
