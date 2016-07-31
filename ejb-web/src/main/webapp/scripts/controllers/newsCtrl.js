@@ -12,7 +12,7 @@ angular.module('bcControllers')
 		});
 		
 		function pageReload(no) {
-			restService.newsController().getNewsCount().success(function(data) {
+			restService.newsController().getNewsFromPage(no).success(function(data) {
 				$scope.newsarr = data;
 				$scope.currentpage = no;
 			});
@@ -40,9 +40,9 @@ angular.module('bcControllers')
 			
 			var doubleContent = {};
 			
-			if(content.length > 100) {
+			if(content.length > 500) {
 				doubleContent.fullContent = content;
-				var index = content.indexOf(" ", 100);
+				var index = content.indexOf(" ", 500);
 				doubleContent.shortContent = content.substring(0, index) + "...";
 				doubleContent.expand = true;
 			} else {

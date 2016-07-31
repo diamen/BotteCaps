@@ -1,3 +1,4 @@
+<!doctype html>
 <html ng-app="bcApp">
 	<head>
 		<base href="/ejb-web/">
@@ -10,16 +11,11 @@
 
 	<body ng-controller="mainCtrl">
 	
-		<div class="navibar">
-			<div class="navicol col-md-3">NEWS</div>
-			<div class="navicol col-md-3"><a href="" ng-click="redirectCollect()" class="disabled">KOLEKCJA</a></div>
-			<div class="navicol col-md-3">WYMIANA</div>
-			<div class="navicol col-md-3">O MNIE</div>
-		</div>
-		<div is-admin ng-include src="'/ejb-web/views/user.strip.html'"></div>
-		<div ng-view class="full"></div>
+		<header class="sclaret" ng-include src="'/ejb-web/views/header.html'"></header>
 		
-		<div class="cfooter">Wykonanie: Micha³ Stobiñski. 2016</div>
+		<div class="navi" ng-include src="'/ejb-web/views/navbar.html'"></div>
+		
+		<div class="main" ng-include src="'/ejb-web/views/main/main.html'"></div>
 		
 	</body>
 

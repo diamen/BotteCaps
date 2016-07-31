@@ -5,5 +5,4 @@
 .visib {
     opacity: 1 !important;
     transition: opacity .8s ease-in-out;
-   -moz-transition: opacity .8s ease-in-out;
 }

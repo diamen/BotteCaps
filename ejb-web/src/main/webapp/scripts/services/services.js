@@ -188,6 +188,9 @@ angular.module('bcServices', [])
 			},
 			newsController: function() {
 				return {
+					getAllNews: function() {
+						return $http.get("./rest/news/all");
+					},
 					getNewsCount: function() {
 						return $http.get("./rest/news/count");
 					},

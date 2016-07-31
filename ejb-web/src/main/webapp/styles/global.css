@@ -1,8 +1,13 @@
 @import "common/animations.css";
 @import "common/common.css";
+@import "common/content.css";
 @import "common/footer.css";
 @import "common/navibar.css";
+@import "common/rwd.css";
+
 @import "collect/caps.css";
 @import "collect/countrybar.css";
 @import "collect/countrylist.css";
-@import "news/news.css";
+
+@import "sections/news/news.css";
+@import "sections/news/sidebar.css";

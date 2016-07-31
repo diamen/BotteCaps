@@ -1,0 +1,12 @@
+.main {
+	background-color: #D4D4D4;
+	box-shadow: inset 0px 0px 40px #9C9B9B;
+	border: 1px solid transparent;
+
+	padding: 10px 0px;
+	height: 100%;
+}
+
+.main div.container {
+	height: inherit;
+}

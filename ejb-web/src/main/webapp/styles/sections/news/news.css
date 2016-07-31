@@ -1,0 +1,24 @@
+.secnews {
+	height: inherit;
+	
+	overflow: auto;
+	background-color: #E0E0E0;
+}
+
+.news {
+	padding: 6px 3px;
+	border-bottom: 1px solid #ABABAB;
+}
+
+.secnews .stitle {
+	color: #353535;
+}
+
+.secnews article * {
+	text-indent: 20px;
+	text-align: justify;
+}
+
+.secnews article span {
+	margin-left: 20px;
+}

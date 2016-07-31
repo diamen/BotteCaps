@@ -1,34 +1,60 @@
 @CHARSET "UTF-8";
 
-.navibar {
-	height: 50px;
-	width: 100%;
-	margin-bottom: 5px;
-	s
-	border-left: 1px solid cadetblue;
-	border-bottom: 2px solid #555;
-	box-shadow: inset 0px 0px 8px darkgrey;
-	background-color: snow;
+.logo {
+	background: url('../../resources/gfx/nukacola.png');
+	display: inline-block;
+	width: 200px;
+	height: 150px;
 }
 
-.navicol {
+.navi {
+	background-color: #442C2A;
+	overflow: auto;
+}
+
+.navi {
+	overflow: auto;
+	
+	border-top: 1px solid #5A3D3D;
+	border-bottom: 1px solid #5A3D3D;
+	outline: 2px solid black;
+	box-shadow: inset 0px 0px 20px #2B2121;
+}
+
+.navi div div {
 	height: 100%;
-	padding-top: 10px;
+	padding: 8px 0;
 	
-	font: inherit;
-	font-size: large;
+	font-family: "Lato" sans-seriff;
+	font-size: 1.3em;
 	text-align: center;
-	
-	box-shadow: inset 0px 0px 3px darkgray;
+	color: snow;
 }
 
-.navicol:hover {
-	background-color: cadetblue;
+.navi div div:hover {
+	background-color: #E6E6E6;
 	color: black;
 	
-	border-right: 1px solid black;
-	border-left: 1px solid black;
-	box-shadow: 0px 0px 5px black;
+	font-size: 1.3.em;
+	text-align: center;
 	
-	transition: background 0.5s ease;
+	box-shadow: inset 0px 0px 15px #AFAFAF;
+	
+	transition: background 0.3s ease;
+}
+
+div.container {
+	overflow: auto; 
+	
+	max-width: 1170px;
+	
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.navi div div a {
+	display: block;
+	
+	color: snow;
+	text-decoration: none;
 }
