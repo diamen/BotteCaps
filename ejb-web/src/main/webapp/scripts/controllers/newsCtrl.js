@@ -1,39 +1,21 @@
 angular.module('bcControllers')
 	.controller('newsCtrl', function($scope, restService) {
-		
-		restService.newsController().getNewsCount().success(function(data) {
-			$scope.pagenumbers = Math.ceil(data/10);
-			$scope.newscount = new Array($scope.pagenumbers);
-			
-			if(data > 10) {
-				pageReload(1);
-			}
-			
-		});
-		
-		function pageReload(no) {
-			restService.newsController().getNewsFromPage(no).success(function(data) {
-				$scope.newsarr = data;
-				$scope.currentpage = no;
-			});
-		}
-		
-		$scope.currentpage = 1;
-		
-		$scope.pageReload = pageReload;
-		
-		$scope.nextPage = function() {
-			if($scope.currentpage < $scope.pagenumbers) {
-				$scope.currentpage += 1;
-				$scope.pageReload($scope.currentpage);
-			}
+
+		$scope.pagination = {
+			currentPage: 1,
+			totalItems: 0
 		};
 		
-		$scope.previousPage = function() {
-			if($scope.currentpage > 1) {
-				$scope.currentpage -= 1;
-				$scope.pageReload($scope.currentpage);
-			}
+		restService.newsController().getNewsCount().success(function(data) {
+			$scope.pagination.totalItems = data;
+
+    		$scope.reload(1);
+		});
+		
+		$scope.reload = function() {
+			restService.newsController().getNewsFromPage($scope.pagination.currentPage).success(function(data) {
+				$scope.newsarr = data;
+			});
 		};
 		
 		$scope.checkLength = function(content) {

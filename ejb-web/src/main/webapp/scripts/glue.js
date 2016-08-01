@@ -9,6 +9,7 @@ head.load(
     { file: '/' + appName + '/libraries/angular-cookies/angular-cookies.min.js' },
     { file: '/' + appName + '/libraries/angular-locale/angular-locale_pl-pl.js' },
     { file: '/' + appName + '/libraries/ngStorage-master/ngStorage.js' },
+    { file: '/' + appName + '/libraries/ui-bootstrap/ui-bootstrap-tpls-2.0.0.min.js' },
     
     /* Main */
     { file: '/' + appName + '/scripts/app.js' },

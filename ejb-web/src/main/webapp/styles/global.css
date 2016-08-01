@@ -3,6 +3,7 @@
 @import "common/content.css";
 @import "common/footer.css";
 @import "common/navibar.css";
+@import "common/pagination.css";
 @import "common/rwd.css";
 
 @import "collect/caps.css";

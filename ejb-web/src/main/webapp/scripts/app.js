@@ -4,6 +4,7 @@ angular.module('bcApp',
         'ngCookies',
         'ngStorage',
         'ngAnimate',
+        'ui.bootstrap',
         
         'bcControllers',
         'bcDirectives',
