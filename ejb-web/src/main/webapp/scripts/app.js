@@ -1,10 +1,10 @@
 angular.module('bcApp',
     [
-        'ngRoute',
         'ngCookies',
         'ngStorage',
         'ngAnimate',
         'ui.bootstrap',
+        'ui.router',
         
         'bcControllers',
         'bcDirectives',
