@@ -1,0 +1,14 @@
+<button class="btn btn-default">Dodaj</button>
+<h1 class="stitle">Najnowsze wiadomosci</h1>
+
+<article ng-repeat="news in newsarr" class="news">
+	<h3>{{news.title}}</h3>
+	<span>{{news.date | date:"dd MMM yy"}}</span>
+	<p>{{checkLength(news.content).shortContent}}</p>
+	<button ng-if="checkLength(news.content).expand" type="button" class="btn btn-default"><a ui-sref="news.detail({id: $index})" class="link black">Czytaj dalej...</a></button>
+</article>
+
+<div>
+	<ul uib-pagination ng-change="reload()" boundary-links="true" total-items="pagination.totalItems"
+	ng-model="pagination.currentPage" class="pagination-md" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+</div>

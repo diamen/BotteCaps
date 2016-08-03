@@ -1,26 +1,31 @@
 angular.module('bcRouters', [])
 	.config(function($stateProvider, $urlRouterProvider) {
 		
-		$urlRouterProvider.otherwise("/home");
+		$urlRouterProvider.otherwise("/news");
 		
 		$stateProvider
-		
-			.state("home", {
-				url: "/home",
-				templateUrl: "/ejb-web/views/main/main.html"
-			})
 		
 			.state("news", {
 				url: "/news",
 				views: {
-					'': { templateUrl: "/ejb-web/views/main/main-news.html" },
-					"viewA@news": {
+					'': { templateUrl: "/ejb-web/views/main/partial-news.html" },
+					"newsView@news": {
 						controller: "newsCtrl",
-						templateUrl: "/ejb-web/views/main/news.html"
+						templateUrl: "/ejb-web/views/news/news.html"
 						},
-					 "viewB@news": {
+					 "sidebarView@news": {
 						templateUrl: "/ejb-web/views/main/sidebar.html"
 					 	}
+					}
+				})
+				
+				.state("news.detail", {
+					url: "/:id",
+					views: {
+						"newsView@news": {
+							controller: "anewsCtrl",
+							templateUrl: "/ejb-web/views/news/anews.html"
+							}
 					}
 				});
 		
