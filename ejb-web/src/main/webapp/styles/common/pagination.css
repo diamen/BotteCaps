@@ -1,0 +1,13 @@
+.pagination>li>a {
+	color: #a94442 !important;
+}
+
+.pagination>li>a:hover {
+	color: #631F1F !important;
+}
+
+.pagination>.active>a {
+	background-color: #a94442 !important;
+	border-color: #791513 !important;
+	color: #fff !important;
+}

@@ -5,6 +5,11 @@
 	background-color: #E0E0E0;
 }
 
+.secnews > button {
+	float: left;
+	margin-top: 13px;
+}
+
 .news {
 	padding: 6px 3px;
 	border-bottom: 1px solid #ABABAB;
@@ -21,4 +26,8 @@
 
 .secnews article span {
 	margin-left: 20px;
+}
+
+.secnews article.news + div {
+	text-align: center;
 }
