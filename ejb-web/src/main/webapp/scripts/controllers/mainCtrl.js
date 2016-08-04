@@ -1,7 +1,12 @@
 angular.module('bcControllers', [])
-	.controller('mainCtrl', function($scope, $location, $sessionStorage, $rootScope) {
+	.controller('mainCtrl', function($scope, $state, $location, $sessionStorage, $rootScope) {
 		
 		$rootScope.$storage = $sessionStorage;
+		
+		/** Redirect */
+		$scope.go = function(state) {
+			$state.go(state);
+		};
 		
 		// -------- Redirect Section --------
 		$scope.redirect = function() {

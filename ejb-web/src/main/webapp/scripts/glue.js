@@ -19,7 +19,6 @@ head.load(
     
     { file: '/' + appName + '/scripts/controllers/addCapCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/adminCtrl.js' },
-    { file: '/' + appName + '/scripts/controllers/anewsCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/capCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/collectCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/countryCtrl.js' },
