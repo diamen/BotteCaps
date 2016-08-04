@@ -18,21 +18,34 @@ angular.module('bcControllers')
 			});
 		};
 		
-		$scope.checkLength = function(content) {
+		$scope.toggleExpand = function(id) {
+			$scope.newsarr[id].expanded = !$scope.newsarr[id].expanded;
+		};
+		
+		$scope.isExpanded = function(id) {
+			var news = $scope.newsarr[id];
 			
+			if(!news.hasOwnProperty('expanded'))
+				news.expanded = false;
+			
+			return news.expanded;
+		};
+		
+		$scope.initExpand = function(id) {
+			var content = $scope.newsarr[id].content;
 			var doubleContent = {};
 			
 			if(content.length > 500) {
 				doubleContent.fullContent = content;
 				var index = content.indexOf(" ", 500);
 				doubleContent.shortContent = content.substring(0, index) + "...";
-				doubleContent.expand = true;
+				doubleContent.wordy = true;
 			} else {
 				doubleContent.shortContent = content;
 				doubleContent.fullContent = null;
-				doubleContent.expand = false;
+				doubleContent.wordy = false;
 			}
-			return doubleContent;
+			$scope.newsarr[id].doubleContent = doubleContent;
 		};
 		
 	});

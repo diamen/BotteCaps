@@ -1,7 +1,5 @@
-<html>
-	<div ng-controller="anewsCtrl" class="col-md-8 full">
-		<span class="newstitle">{{news.title}}</span>
-		<span class="newsdate">{{news.date | date:"dd MMM yy"}}</span>
-		<div class="newscontent">{{news.content}}</div>
-	</div>	
-</html>
+<article class="news">
+	<h3>{{news.title}}</h3>
+	<span>{{news.date | date:"dd MMM yy"}}</span>
+	<p>{{news.content}}</p>
+</article>

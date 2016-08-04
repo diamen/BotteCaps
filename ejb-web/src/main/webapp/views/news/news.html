@@ -1,11 +1,13 @@
 <button class="btn btn-default">Dodaj</button>
 <h1 class="stitle">Najnowsze wiadomosci</h1>
 
-<article ng-repeat="news in newsarr" class="news">
+<article ng-init="initExpand($index)" ng-repeat="news in newsarr" class="news">
 	<h3>{{news.title}}</h3>
 	<span>{{news.date | date:"dd MMM yy"}}</span>
-	<p>{{checkLength(news.content).shortContent}}</p>
-	<button ng-if="checkLength(news.content).expand" type="button" class="btn btn-default"><a ui-sref="news.detail({id: $index})" class="link black">Czytaj dalej...</a></button>
+	<p ng-if="isExpanded($index)">{{news.doubleContent.fullContent}}</p>
+	<p ng-if="!isExpanded($index)">{{news.doubleContent.shortContent}}</p>
+	<button ng-if="news.doubleContent.wordy && !isExpanded($index)" ng-click="toggleExpand($index)" type="button" class="btn btn-default">Rozwin...</button>
+	<button ng-if="news.doubleContent.wordy && isExpanded($index)" ng-click="toggleExpand($index)" type="button" class="btn btn-default">Zwin...</button>
 </article>
 
 <div>

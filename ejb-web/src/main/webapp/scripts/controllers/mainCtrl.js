@@ -20,8 +20,4 @@ angular.module('bcControllers', [])
 			$location.path('/collect/' + country);
 		};
 		
-		$scope.openNews = function(id) {
-			$location.path('/news/' + id);
-		};
-		
 	});
