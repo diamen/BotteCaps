@@ -122,7 +122,7 @@ angular.module('bcServices', [])
 						return $http({
 							method: "POST",
 							url: "./rest/admin/image/upload",
-							headers: {'AUTH-TOKEN': $sessionStorage.authToken },
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							data: {baseimage: base64},
 							params: { captext: capt, capbrand: capb, beer: beer, country: country }
 						});
@@ -131,8 +131,16 @@ angular.module('bcServices', [])
 						return $http({
 							method: "POST",
 							url: "./rest/admin/image/delete",
-							headers: {'AUTH-TOKEN': $sessionStorage.authToken },
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							params: { country: country, capId: capId }
+						});
+					},
+					addNews: function(title, content) {
+						return $http({
+							method: "POST",
+							url: "./rest/admin/news/add",
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
+							params: { title: title, content: content }
 						});
 					}
 				};

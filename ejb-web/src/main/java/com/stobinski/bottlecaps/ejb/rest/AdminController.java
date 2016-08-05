@@ -15,12 +15,16 @@ import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
+import com.stobinski.bottlecaps.ejb.common.NewsManager;
 
 @Path("/admin/")
 public class AdminController {
 
 	@Inject
 	private ImageManager imageManager;
+	
+	@Inject
+	private NewsManager newsManager;
 	
 	@Inject
 	private Logger log;
@@ -49,6 +53,16 @@ public class AdminController {
 	@Path("image/delete")
 	public Response deleteFile(@QueryParam("country") String country, @QueryParam("capId") Long capId) {
 		imageManager.removeCap(country, capId);
+		
+		return Response.ok().build();
+	}
+	
+	@POST
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("news/add")
+	public Response addNews(@QueryParam("title") String title, @QueryParam("content") String content) {
+		newsManager.saveNews(title, content);
 		
 		return Response.ok().build();
 	}

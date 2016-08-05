@@ -48,4 +48,13 @@ angular.module('bcControllers')
 			$scope.newsarr[id].doubleContent = doubleContent;
 		};
 		
+		/* add cap */
+		
+		$scope.submit = function(news) {
+			console.log(news);
+			restService.adminController().addNews(news.title, news.content).success(function(data) {
+				console.log(data);
+			});
+		};
+		
 	});

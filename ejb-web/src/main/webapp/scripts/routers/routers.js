@@ -23,6 +23,7 @@ angular.module('bcRouters', [])
 					url: "/add",
 					views: {
 						"newsView@news": {
+							controller: "newsCtrl",
 							templateUrl: "/ejb-web/views/news/addnews.html"
 							}
 					}
