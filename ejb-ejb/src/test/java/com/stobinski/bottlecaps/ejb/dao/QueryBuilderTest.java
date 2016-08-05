@@ -11,8 +11,10 @@ import org.junit.Test;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.FromClassLackException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
+import com.stobinski.bottlecaps.ejb.entities.News;
 
 public class QueryBuilderTest {
 
@@ -116,6 +118,48 @@ public class QueryBuilderTest {
 		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
 
+	@Test
+	public void shouldAppendOrderByToQuery() {
+		// given
+		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME;
+		
+		// when
+		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).build();
+		
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+
+	@Test
+	public void shouldAppendAscToOrderByQuery() {
+		// given
+		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME + " ASC";
+	
+		// when
+		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).Asc().build();
+	
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+
+	@Test
+	public void shouldAppendDescToOrderByQuery() {
+		// given
+		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME + " DESC";
+		
+		// when
+		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).Desc().build();
+		
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+	
+	@Test
+	public void shouldThrowExceptionWhenUsedAscAndDescTogether() {
+		// expected
+		assertThatThrownBy(() -> { queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).Asc().Desc().build(); } ).isInstanceOf(OrderByException.class);
+	}
+	
 	@Test
 	public void shouldThrowExceptionWhenNumberOfColumnsAndLikeValuesDontMatch() {
 		// expected

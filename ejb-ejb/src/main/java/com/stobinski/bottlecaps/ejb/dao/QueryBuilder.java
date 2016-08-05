@@ -12,6 +12,9 @@ public class QueryBuilder {
 	private SqlFunction sqlFunction;
 	private Class<? extends Serializable> entity;	
 	private boolean where = false;
+	private boolean desc = false;
+	private boolean asc = false;
+	private String orderColumn;
 	private String[] columns;
 	private Object[] values;
 	private String[] likeValues;
@@ -50,6 +53,21 @@ public class QueryBuilder {
 		return this;
 	}
 	
+	public QueryBuilder orderBy(String column) {
+		this.orderColumn = column;
+		return this;
+	}
+	
+	public QueryBuilder Desc() {
+		this.desc = true;
+		return this;
+	}
+
+	public QueryBuilder Asc() {
+		this.asc = true;
+		return this;
+	}
+	
 	public QueryBuilder eq(Object... values) {
 		this.values = values;
 		return this;
@@ -72,6 +90,14 @@ public class QueryBuilder {
 		return where;
 	}
 	
+	public boolean isAsc() {
+		return asc;
+	}
+	
+	public boolean isDesc() {
+		return desc;
+	}
+	
 	public String[] getColumns() {
 		return columns;
 	}
@@ -82,6 +108,10 @@ public class QueryBuilder {
 
 	public String[] getLikeValues() {
 		return likeValues;
+	}
+	
+	public String getOrderColumn() {
+		return orderColumn;
 	}
 	
 }
