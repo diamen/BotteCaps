@@ -8,7 +8,10 @@
 
 @import "collect/caps.css";
 @import "collect/countrybar.css";
-@import "collect/countrylist.css";
 
+/* NEWS SECTION */
 @import "sections/news/news.css";
 @import "sections/news/sidebar.css";
+
+/* COLLECT SECTION */
+@import "sections/collect/collect.css";

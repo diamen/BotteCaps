@@ -5,6 +5,7 @@ angular.module('bcRouters', [])
 		
 		$stateProvider
 		
+			/* NEWS SECTION */
 			.state("news", {
 				url: "/news",
 				views: {
@@ -26,6 +27,22 @@ angular.module('bcRouters', [])
 							controller: "newsCtrl",
 							templateUrl: "/ejb-web/views/news/addnews.html"
 							}
+					}
+				})
+				
+			/* COLLECT SECTION */
+			.state("collect", {
+				url: "/collect",
+				views: {
+					'': { templateUrl: "/ejb-web/views/main/partial-collect.html" },
+					"countriesView@collect": {
+						controller: "countriesCtrl",
+						templateUrl: "/ejb-web/views/collect/countries.html"
+						},
+					 "collectView@collect": {
+						controller: "collectCtrl",
+						templateUrl: "/ejb-web/views/collect/collect.html"
+					 	}
 					}
 				});
 

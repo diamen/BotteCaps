@@ -1,5 +1,0 @@
-<table ng-controller="countryCtrl" class="table">
-	<tr ng-repeat="country in countries" ng-class-even="'countrytreven'" ng-class-odd="'countrytrodd'" ng-click="redirectToCountry(country.name)">
-		<td class="tdflag"><img class="flag" ng-src="{{country.flag}}"></img></td><td class="tdflag">{{country.name}}</td><td class="tdflag">[{{country.amount}}]</td>
-	</tr>
-</table>

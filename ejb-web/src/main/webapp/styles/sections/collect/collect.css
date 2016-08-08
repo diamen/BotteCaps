@@ -1,0 +1,58 @@
+.secnews {
+	overflow: auto;
+	background-color: #E0E0E0;
+}
+
+.seccollect uib-accordion div {
+	margin: 10px auto;
+	width: 100%;
+}
+
+.seccollect * table {
+	margin: 10px auto;
+	width: 100%;
+}
+
+.seccollect table {
+	margin: 10px auto;
+	width: 100%;
+}
+
+.seccollect * tr td {
+	padding: 4px 2px;
+}
+
+.seccollect * tr:nth-child(even) {
+	cursor: pointer;
+}
+
+.seccollect * tr:nth-child(odd) {
+	cursor: pointer;
+	background-color: #D8D8D8;
+}
+
+.seccollect * tr:hover {
+	background-color: khaki;
+	transition: background 1.5s ease;
+}
+
+.flag {
+	height: 24px;
+}
+
+.sidebar .navbar {
+	margin-top: 8px;
+	margin-bottom: 4px;
+}
+
+div.container-fluid {
+	text-align: center;
+}
+
+div.container-fluid div.navbar-header {
+	width: 100%;
+}
+
+div.container-fluid div.navbar-header a.navbar-brand {
+	float: none !important;
+}
