@@ -75,4 +75,11 @@ public class PhotoController {
 		return dao.getCountryId(country);
 	}	
 	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("newest")
+	public List<Base64Cap> getNewestCaps(@QueryParam("limit") Integer limit) {
+		return imageManager.loadFiles(dao.getNewestCaps(limit));
+	}
+	
 }

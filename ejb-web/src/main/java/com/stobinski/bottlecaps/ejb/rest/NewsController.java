@@ -35,7 +35,7 @@ public class NewsController {
 	public List<News> getPageNews(@PathParam("no") int no) {
 		int offset = (no - 1) * 10;
 		
-		return dao.retrieveData(new QueryBuilder().select().from(News.class).build(), 10, offset)
+		return dao.retrieveData(new QueryBuilder().select().from(News.class).orderBy(News.DATE_NAME).Desc().build(), 10, offset)
 				.stream().map(e -> (News) e).collect(Collectors.toList());
 	}
 	

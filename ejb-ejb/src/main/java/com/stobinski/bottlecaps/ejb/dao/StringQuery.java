@@ -2,6 +2,9 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.Serializable;
 
+import org.jboss.logging.Logger;
+
+import com.stobinski.bottlecaps.ejb.common.LoggerFactory;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.FromClassLackException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
@@ -10,6 +13,8 @@ import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
 
 public class StringQuery {
 
+	private Logger log = LoggerFactory.create(StringQuery.class);
+	
 	public static final String LIKE_VALUE = "likeValue";
 	
 	private SqlFunction sqlFunction;
@@ -75,6 +80,8 @@ public class StringQuery {
 				orderExist && !asc && desc ? appendDesc(appendColumnToOrderBy(query, orderColumn)):
 					
 				query;	
+				
+		log.debug(query);		
 				
 		return query;
 	}

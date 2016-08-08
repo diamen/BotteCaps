@@ -44,6 +44,12 @@ public class CapsDaoService {
 				.collect(Collectors.toList());
 	}
 
+	public List<Caps> getNewestCaps(Integer limit) {
+		return dao.retrieveData(new QueryBuilder().select().from(Caps.class).orderBy(Caps.ADDED_DATE_NAME).Desc().build(), limit, 0)
+				.stream().map(e -> (Caps) e)
+				.collect(Collectors.toList());
+	}
+	
 	public long getBrandId(String capbrand) {
 		List<Brands> brands = dao.retrieveData(new QueryBuilder().select().from(Brands.class).build())
 										.stream().map(e -> (Brands) e).collect(Collectors.toList());

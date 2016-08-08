@@ -12,4 +12,8 @@ public class LoggerFactory {
 		return Logger.getLogger(injectionPoint.getMember().getDeclaringClass().getName());
 	}
 	
+	public static Logger create(Class<?> clazz) {
+		return Logger.getLogger(clazz);
+	}
+	
 }
