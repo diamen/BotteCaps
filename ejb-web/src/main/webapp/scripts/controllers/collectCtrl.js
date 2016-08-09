@@ -1,8 +1,8 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $location, restService, base64Service, shareData) {
+	.controller('collectCtrl', function($scope, $stateParams, restService, base64Service, shareData) {
 		
 		var markedIds = [];
-		$scope.country = 'Albania';
+		$scope.country = $stateParams.country || 'Albania';
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
 		
@@ -35,9 +35,9 @@ angular.module('bcControllers')
 			});
 		};
 		
-		$scope.openCap = function(index) {
-			$location.path('/collect/' + $scope.country + '/' + $scope.caps[index].id);
-		};
+//		$scope.openCap = function(index) {
+//			$location.path('/collect/' + $scope.country + '/' + $scope.caps[index].id);
+//		};
 		
 		$scope.markCap = function(capId) {
 			var index = markedIds.indexOf(capId);
@@ -70,8 +70,8 @@ angular.module('bcControllers')
 			
 		};
 		
-		$scope.addCapRedirect = function() {
-			$location.path('/admin/addcap/' + $scope.country);
-		};
+//		$scope.addCapRedirect = function() {
+//			$location.path('/admin/addcap/' + $scope.country);
+//		};
 		
 	});

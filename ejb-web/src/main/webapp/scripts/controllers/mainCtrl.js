@@ -22,7 +22,7 @@ angular.module('bcControllers', [])
 		};
 		
 		$scope.redirectToCountry = function(country) {
-			$location.path('/collect/' + country);
+			$state.go("collect.country", { country: country });
 		};
 		
 	});
