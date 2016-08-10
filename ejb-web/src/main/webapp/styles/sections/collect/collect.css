@@ -56,3 +56,12 @@ div.container-fluid div.navbar-header {
 div.container-fluid div.navbar-header a.navbar-brand {
 	float: none !important;
 }
+
+.addfunc {
+	margin-top: 8px;
+	margin-bottom: 4px;		
+}
+
+.addfunc > * {
+	width: 33%;
+}

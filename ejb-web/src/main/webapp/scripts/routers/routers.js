@@ -47,18 +47,24 @@ angular.module('bcRouters', [])
 				})
 				
 			.state("collect.country", {
-				url: "/collect/:country",
+				url: "/:country",
 				views: {
-					'': { templateUrl: "/ejb-web/views/main/partial-collect.html" },
-					"countriesView@collect": {
-						controller: "countriesCtrl",
-						templateUrl: "/ejb-web/views/collect/countries.html"
-						},
 					 "collectView@collect": {
 						controller: "collectCtrl",
 						templateUrl: "/ejb-web/views/collect/collect.html"
 					 	}
 					}
-				});;
+				})
+		
+			/* ADMIN SECTION */
+			.state("collect.country.add", {
+				url: "/add",
+				views: {
+					"collectView@collect": {
+						controller: "addCapCtrl",
+						templateUrl: "/ejb-web/views/collect/addcap.html"
+					}
+				}
+			});
 
 });

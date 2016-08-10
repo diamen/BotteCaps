@@ -4,7 +4,12 @@ angular.module('bcDirectives', [])
 	    return {
 	        scope: false,
 	        link: function (scope, element, attributes) {
-	            element.bind("change", function (changeEvent) {
+	        	
+	        	element.on("click", function() {
+	        		element.val("");
+	        	});
+	        	
+	            element.on("change", function (changeEvent) {
 	            	
 	            	var files = changeEvent.target.files;
 	            	var numberOfFiles = files.length;
@@ -22,7 +27,6 @@ angular.module('bcDirectives', [])
 	            	
 	            	for(var i = 0; i < numberOfFiles; i++)
 	            		uploadFile(files[i], i);
-	            	
 	            });
 	        }
 	    };

@@ -1,7 +1,7 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $stateParams, restService, base64Service, shareData) {
+	.controller('collectCtrl', function($scope, $window, $state, $stateParams, $uibModal, restService, base64Service, shareData) {
 		
-		var markedIds = [];
+		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
@@ -40,38 +40,61 @@ angular.module('bcControllers')
 //		};
 		
 		$scope.markCap = function(capId) {
-			var index = markedIds.indexOf(capId);
+			var index = $scope.markedIds.indexOf(capId);
 			if(index > -1) {
-				markedIds.splice(index, 1);
-				console.log(markedIds);
+				$scope.markedIds.splice(index, 1);
+				console.log($scope.markedIds);
 				return;
 			}
-			markedIds.push(capId);
+			$scope.markedIds.push(capId);
 			
-			console.log(markedIds);
+			console.log($scope.markedIds);
 		};
 		
 		$scope.deleteFiles = function() {
 			
-			var numberOfFiles = markedIds.length;
+			var numberOfFiles = $scope.markedIds.length;
 			var i = 0;
 			var deleteFile = function(capId) {
-				restService.adminController().imageDelete($scope.country, capId).success(function(data) {
-					console.log(data);
+				restService.adminController().imageDelete($scope.country, capId).success(function() {
 					
 					if(i + 1 < numberOfFiles) {
 						i += 1;
-						deleteFile(markedIds[i]);
+						deleteFile($scope.markedIds[i]);
+					} else {
+						$window.location.reload();
 					}
 				});
 			};
 			
-			deleteFile(markedIds[0]);
+			deleteFile($scope.markedIds[0]);
 			
 		};
 		
-//		$scope.addCapRedirect = function() {
-//			$location.path('/admin/addcap/' + $scope.country);
-//		};
+		$scope.addCapRedirect = function() {
+			$state.go("collect.country.add", { country: $scope.country });
+		};
+		
+		/* modal */
+		$scope.open = function() {
+			
+			var modalInstance = $uibModal.open({
+			      animation: true,
+			      templateUrl: '/ejb-web/views/templates/modal.html',
+			      controller: 'modalCtrl',
+			      size: 'sm',
+			      resolve: {
+			        msg: function () {
+			          return "Czy chcesz usunac zaznaczone kapsle?";
+			        }
+			      }
+			    });
+	
+			modalInstance.result.then(function () {
+			      $scope.deleteFiles();
+			    }, function () {
+			      console.log('dismissed');
+			    });
+		};
 		
 	});
