@@ -41,3 +41,7 @@ a.black {
 a.black:hover {
 	color: black;
 }
+
+.flag {
+	height: 24px;
+}

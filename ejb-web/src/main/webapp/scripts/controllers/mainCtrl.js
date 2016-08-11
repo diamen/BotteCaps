@@ -1,28 +1,23 @@
 angular.module('bcControllers', [])
-	.controller('mainCtrl', function($scope, $state, $location, $sessionStorage, $rootScope) {
-		
+	.controller('mainCtrl', function($scope, $state, $sessionStorage, $rootScope) {
+
 		$rootScope.$storage = $sessionStorage;
-		
-		/** Redirect */
+
+		/* Redirect */
 		$scope.go = function(state) {
 			$state.go(state);
 		};
-		
-		// -------- Redirect Section --------
-		$scope.redirect = function() {
-			$location.path('/admin/login');
-		};
-		
-		$scope.redirectMain = function() {
-			$location.path('/');
-		};
-		
-		$scope.redirectCollect = function() {
-			$location.path('/collect');
-		};
-		
+
 		$scope.redirectToCountry = function(country) {
 			$state.go("collect.country", { country: country });
 		};
 		
-	});
+		$scope.addCapRedirect = function(country) {
+			$state.go("collect.country.add", { country: country });
+		};
+
+		$scope.openCap = function(country, id) {
+			$state.go("collect.country.id", { country: country, id: id });
+		};
+
+});

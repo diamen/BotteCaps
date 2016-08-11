@@ -1,10 +1,10 @@
 angular.module('bcRouters', [])
 	.config(function($stateProvider, $urlRouterProvider) {
-		
+
 		$urlRouterProvider.otherwise("/news");
-		
+
 		$stateProvider
-		
+
 			/* NEWS SECTION */
 			.state("news", {
 				url: "/news",
@@ -19,7 +19,7 @@ angular.module('bcRouters', [])
 					 	}
 					}
 				})
-				
+
 				.state("news.add", {
 					url: "/add",
 					views: {
@@ -29,7 +29,7 @@ angular.module('bcRouters', [])
 							}
 					}
 				})
-				
+
 			/* COLLECT SECTION */
 			.state("collect", {
 				url: "/collect",
@@ -45,7 +45,7 @@ angular.module('bcRouters', [])
 					 	}
 					}
 				})
-				
+
 			.state("collect.country", {
 				url: "/:country",
 				views: {
@@ -55,9 +55,20 @@ angular.module('bcRouters', [])
 					 	}
 					}
 				})
-		
+
+			.state("collect.country.id", {
+				url: "/{id:[0-9]{1,9}}",
+				views: {
+					"collectView@collect": {
+						controller: "capCtrl",
+						templateUrl: "/ejb-web/views/collect/cap.html"
+					}
+				}
+			})
+
 			/* ADMIN SECTION */
 			.state("collect.country.add", {
+				controller: "collectCtrl",
 				url: "/add",
 				views: {
 					"collectView@collect": {

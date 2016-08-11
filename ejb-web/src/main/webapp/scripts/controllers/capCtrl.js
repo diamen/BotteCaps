@@ -1,8 +1,10 @@
 angular.module('bcControllers')
-	.controller('capCtrl', function($scope, $routeParams, restService, base64Service, shareData, capMover) {
+	.controller('capCtrl', function($scope, $stateParams, restService, base64Service, shareData, capMover) {
 		
-		$scope.country = $routeParams.country;
-		$scope.id = $routeParams.id;
+		angular.element(document.querySelector('.sidebar')).removeClass("sidebar");
+		
+		$scope.country = $stateParams.country;
+		$scope.id = $stateParams.id;
 
 		restService.photoController().getCountryFlag($scope.country).success(function(data) {
 			$scope.flag = data.flag;
@@ -23,6 +25,9 @@ angular.module('bcControllers')
 		
 		$scope.selectFiveCaps = function(capId) {
 
+			if($scope.caps === undefined)
+				return;
+			
 			var fivecaps = [];
 			var capIndex = $scope.caps.map(function(e) { return e.id; }).indexOf(capId);
 			

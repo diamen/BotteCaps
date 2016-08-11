@@ -1,49 +1,37 @@
-<div ng-controller="collectCtrl" class="row">
-	<div class="col-md-3" ng-include src="'/ejb-web/views/list.country.html'"></div>
-	<div class="col-md-9" ng-controller="capCtrl" style="text-align: center">
-		<ol class="breadcrumb" style="margin-bottom: 5px; text-align: left">
-		  <li><a href="#" ng-click="redirectMain()">Dom</a></li>
-		  <li><a href="#" ng-click="redirectCollect()">Kolekcja</a></li>
-		  <li><a href="#" ng-click="redirectToCountry(country)">{{country}}</a></li>
-		</ol>
+<ol class="breadcrumb">
+  <li><a ui-sref="news">Dom</a></li>
+  <li><a ui-sref="collect">Kolekcja</a></li>
+  <li><a ui-sref="collect.country({country: country})">{{country}}</a></li>
+</ol>
 
-		<span style="display: inline-flex; height: 50%;">
-			<div class="col-md-5" style="display: flex;">
-				<img class="img-rounded" style="margin-left: auto; margin-right: auto; align-self: center;" ng-src="{{capsrc}}"></img>
-			</div>
+<div class="capview">
+	<img class="img-rounded" ng-src="{{capsrc}}"></img>
+</div>
 
-			<div class="col-md-7" style="display: flex; justify-content: center;">
-				<div style="align-self: center;">
-					<div style="display: block !important; width: 100%; margin-bottom: 5px;">
-						<img class="flag" ng-src="{{flag}}"></img>
-					</div>
-				
-					<div style="display: block !important; width: 100%; font-size: 150% !important; margin-bottom: 5px;" class="label label-default">Informacje o kapslu</div>
-				
-					<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Rodzaj</div>
-					<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{beerLabel}}</div>
-					
-					<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Tekst na kapslu</div>
-					<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{cap.cap_text}}</div>
-					
-					<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Marka</div>
-					<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{brand}}</div>
-					
-					<div style="display: block !important; width: 34%; float: left; font-size: 100% !important; margin-bottom: 3px; margin-right: 1px" class="label label-default">Data dodania</div>
-					<div style="display: block !important; width: 64%; float: right; font-size: 100% !important; margin-bottom: 3px; margin-left: 1px" class="label label-info">{{cap.added_date | date: 'dd/MM/yyyy'}}</div>
-				</div>
-			</div>
-		</span>
+<div class="capinfo">
+		<div><img class="flag" ng-src="{{flag}}"></img></div>
+	
+		<div class="label infc">Informacje o kapslu</div>
+	
+		<div class="label infl">Rodzaj</div>
+		<div class="label infr">{{beerLabel}}</div>
 		
-		<div class="col-md-12" style="height: 122px; margin-top: 15px;">
-			<i ng-click="previousCap()" class="col-md-1 fa fa-chevron-left" style="margin-top: 54px" aria-hidden="true"></i>
-			<img fade-in class="col-md-2" ng-src="{{fivecaps[0].src}}"></img>
-			<img fade-in class="col-md-2" ng-src="{{fivecaps[1].src}}"></img>
-			<img fade-in class="col-md-2" ng-src="{{mainsrc}}"></img>
-			<img fade-in class="col-md-2" ng-src="{{fivecaps[3].src}}"></img>
-			<img fade-in class="col-md-2" ng-src="{{fivecaps[4].src}}"></img>
-			<i ng-click="nextCap()" class="col-md-1 fa fa-chevron-right" style="margin-top: 54px" aria-hidden="true"></i>
-		</div>
+		<div class="label infl">Tekst na kapslu</div>
+		<div class="label infr">{{cap.cap_text}}</div>
 		
-	</div>
+		<div class="label infl">Marka</div>
+		<div class="label infr">{{brand}}</div>
+		
+		<div class="label infl">Data dodania</div>
+		<div class="label infr">{{cap.added_date | date: 'dd/MM/yyyy'}}</div>
+</div>
+
+<div ng-hide="caps === undefined" class="capmover md-hidden">
+	<i ng-click="previousCap()" class="col-md-1 fa fa-chevron-left"></i>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[0].id)" ng-src="{{fivecaps[0].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[1].id)" ng-src="{{fivecaps[1].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[2].id)" ng-src="{{mainsrc}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[3].id)" ng-src="{{fivecaps[3].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[4].id)" ng-src="{{fivecaps[4].src}}"></img>
+	<i ng-click="nextCap()" class="col-md-1 fa fa-chevron-right"></i>
 </div>

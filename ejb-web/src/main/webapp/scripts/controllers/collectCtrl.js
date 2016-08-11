@@ -1,44 +1,40 @@
 angular.module('bcControllers')
 	.controller('collectCtrl', function($scope, $window, $state, $stateParams, $uibModal, restService, base64Service, shareData) {
-		
+
 		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
-		
+
 		restService.photoController().getCountryFlag($scope.country).success(function(data) {
 			$scope.flag = data.flag;
 		});
-		
+
 		if($scope.country === undefined)
 			$scope.country = 'Albania';
-		
-		var convertPhotos = function(data) {
+
+		$scope.convertPhotos = function(data) {
 			var caps = [];
-			
+
 			for(var i = 0; i < data.length; i++) {
 				var src = base64Service.base64ToUrl(data[i].base64);
 				caps.push({src: src, id: data[i].id});
 			}
-			
+
 			$scope.caps = caps;
 		};
-		
+
 		restService.photoController().getImages($scope.country).success(function(data) {
-			convertPhotos(data);
+			$scope.convertPhotos(data);
 			shareData.addData($scope.caps);
 		});
-		
+
 		$scope.filterCaps = function(searchText) {
 			restService.photoController().getFilteredCaps($scope.country, searchText).success(function(data) {
-				convertPhotos(data);
+				$scope.convertPhotos(data);
 			});
 		};
-		
-//		$scope.openCap = function(index) {
-//			$location.path('/collect/' + $scope.country + '/' + $scope.caps[index].id);
-//		};
-		
+
 		$scope.markCap = function(capId) {
 			var index = $scope.markedIds.indexOf(capId);
 			if(index > -1) {
@@ -47,17 +43,17 @@ angular.module('bcControllers')
 				return;
 			}
 			$scope.markedIds.push(capId);
-			
+
 			console.log($scope.markedIds);
 		};
-		
+
 		$scope.deleteFiles = function() {
-			
+
 			var numberOfFiles = $scope.markedIds.length;
 			var i = 0;
 			var deleteFile = function(capId) {
 				restService.adminController().imageDelete($scope.country, capId).success(function() {
-					
+
 					if(i + 1 < numberOfFiles) {
 						i += 1;
 						deleteFile($scope.markedIds[i]);
@@ -66,18 +62,14 @@ angular.module('bcControllers')
 					}
 				});
 			};
-			
+
 			deleteFile($scope.markedIds[0]);
-			
+
 		};
-		
-		$scope.addCapRedirect = function() {
-			$state.go("collect.country.add", { country: $scope.country });
-		};
-		
+
 		/* modal */
 		$scope.open = function() {
-			
+
 			var modalInstance = $uibModal.open({
 			      animation: true,
 			      templateUrl: '/ejb-web/views/templates/modal.html',
@@ -89,12 +81,12 @@ angular.module('bcControllers')
 			        }
 			      }
 			    });
-	
+
 			modalInstance.result.then(function () {
 			      $scope.deleteFiles();
 			    }, function () {
 			      console.log('dismissed');
 			    });
 		};
-		
+
 	});

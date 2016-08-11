@@ -3,6 +3,7 @@
 	background-color: #E0E0E0;
 }
 
+/* collect.html & countries.html */
 .seccollect uib-accordion div {
 	margin: 10px auto;
 	width: 100%;
@@ -36,10 +37,6 @@
 	transition: background 1.5s ease;
 }
 
-.flag {
-	height: 24px;
-}
-
 .sidebar .navbar {
 	margin-top: 8px;
 	margin-bottom: 4px;
@@ -58,10 +55,77 @@ div.container-fluid div.navbar-header a.navbar-brand {
 }
 
 .addfunc {
+	text-align: center;
 	margin-top: 8px;
 	margin-bottom: 4px;		
 }
 
 .addfunc > * {
-	width: 33%;
+	width: 32%;
+}
+
+/* cap.html */
+.sclaret ol {
+	margin-top: 8px;
+	text-align: left;
+}
+
+.capview {
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.capinfo {
+	display: table;
+	width: 100%;
+	text-align: center;
+	margin-bottom: 8px;
+}
+
+.capinfo * {
+	margin-bottom: 5px;
+}
+
+.capinfo:nth-child(1) {
+	text-align: center;
+}
+
+.capinfo:nth-child(2) {
+	display: block;
+	font-size: 1.5em;
+}
+
+.infc {
+	display: block !important;
+	width: 100%;
+	font-size: 1.5em !important;
+	background-color: #6F6F6F;
+}
+
+.infl {
+	width: 34%;
+	float: left;
+	font-size: 1em !important;
+	margin-bottom: 3px;
+	background-color: #6F6F6F;
+	color: white !important;
+}
+
+.infr {
+	width: 64%;
+	float: right;
+	font-size: 1em !important;
+	margin-bottom: 3px;
+	background-color: #DEDEDE;
+	color: #464646 !important;
+}
+
+.capmover {
+	display: flex;
+	align-items: center;
+	padding: 5px 0;
+	border-radius: 5px;
+	background-color: #EAEAEA;
+	margin-top: 25px;
+	margin-bottom: 8px;
 }

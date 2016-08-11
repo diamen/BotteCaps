@@ -1,23 +1,23 @@
 @media (max-width: 992px) {
 	.md-hidden {
-		display: none;
+		display: none !important;
 	}
 }
 
 @media (max-width: 1200px) {
 	.bg-hidden {
-		display: none;
+		display: none !important;
 	}
 }
 
 @media (min-width: 992px) {
 	.md-shown {
-		display: none;
+		display: none !important;
 	}
 }
 
 @media (max-width: 768px) {
 	.sm-btn {
-		margin-top: 6px;
+		margin-top: 6px !important;
 	}
 }
