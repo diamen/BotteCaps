@@ -1,10 +1,21 @@
 package com.stobinski.bottlecaps.ejb.dao.functions;
 
-public class Count implements SqlFunction {
+import java.io.Serializable;
 
+import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
+
+public class Count implements SqlFunction {
+	
+	private String query;
+	
 	@Override
 	public String getFunctionQuery() {
-		return "SELECT COUNT(e)";
+		return query;
+	}
+	
+	public QueryBuilder from(Class<? extends Serializable> entity) {
+		this.query = "SELECT COUNT(e) FROM " + entity.getSimpleName() + " e";
+		return new QueryBuilder(this);
 	}
 	
 }

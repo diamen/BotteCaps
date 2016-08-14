@@ -6,50 +6,59 @@ import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
 import com.stobinski.bottlecaps.ejb.dao.functions.Count;
 import com.stobinski.bottlecaps.ejb.dao.functions.Select;
 import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
+import com.stobinski.bottlecaps.ejb.dao.functions.Update;
 
 public class QueryBuilder {
 
-	private SqlFunction sqlFunction;
-	private Class<? extends Serializable> entity;	
+	private SqlFunction sqlFunction;	
 	private boolean where = false;
 	private boolean desc = false;
 	private boolean asc = false;
 	private String orderColumn;
-	private String[] columns;
-	private Object[] values;
+	private String[] whereColumns;
+	private Object[] whereValues;
 	private String[] likeValues;
+	
+	public QueryBuilder() {}
+	
+	public QueryBuilder(SqlFunction sqlFunction) {
+		this.sqlFunction = sqlFunction;
+	}
 	
 	public StringQuery build() {
 		return new StringQuery(this);
 	}
 	
-	public QueryBuilder select() {
+	public Select select() {
 		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
-			
-		this.sqlFunction = new Select();
-		return this;
+		
+		Select select = new Select();
+		this.sqlFunction = select;
+		return select;
 	}
 
-	public QueryBuilder count() {
+	public Update update(Class <? extends Serializable> entity) {
 		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
 			
-		this.sqlFunction = new Count();
-		return this;	
+		Update update = new Update(entity);
+		this.sqlFunction = update;
+		return update;
 	}
 	
-	public QueryBuilder from(Class<? extends Serializable> entity) {
-		if(this.entity != null)
+	public Count count() {
+		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
 			
-		this.entity = entity;
-		return this;
+		Count count = new Count();
+		this.sqlFunction = count;
+		return count;	
 	}
-
+	
 	public QueryBuilder where(String... columns) {
 		this.where = true;
-		this.columns = columns;
+		this.whereColumns = columns;
 		return this;
 	}
 	
@@ -58,18 +67,18 @@ public class QueryBuilder {
 		return this;
 	}
 	
-	public QueryBuilder Desc() {
+	public QueryBuilder desc() {
 		this.desc = true;
 		return this;
 	}
 
-	public QueryBuilder Asc() {
+	public QueryBuilder asc() {
 		this.asc = true;
 		return this;
 	}
 	
 	public QueryBuilder eq(Object... values) {
-		this.values = values;
+		this.whereValues = values;
 		return this;
 	}
 	
@@ -80,10 +89,6 @@ public class QueryBuilder {
 	
 	public SqlFunction getSqlFunction() {
 		return sqlFunction;
-	}
-	
-	public Class<? extends Serializable> getEntity() {
-		return entity;
 	}
 
 	public boolean isWhere() {
@@ -98,14 +103,14 @@ public class QueryBuilder {
 		return desc;
 	}
 	
-	public String[] getColumns() {
-		return columns;
+	public String[] getWhereColumns() {
+		return whereColumns;
 	}
 
-	public Object[] getValues() {
-		return values;
+	public Object[] getWhereValues() {
+		return whereValues;
 	}
-
+	
 	public String[] getLikeValues() {
 		return likeValues;
 	}

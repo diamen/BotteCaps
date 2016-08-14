@@ -75,6 +75,12 @@ public class ImageManager {
 		capsDao.removeCap(country, capId);
 	}
 	
+	@Lock(LockType.WRITE)
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void updateCap(Long id, String country, String captext, String capbrand, Integer beer) {
+		capsDao.updateCap(id, country, captext, capbrand, beer);
+	}
+	
 	private void saveFile(byte[] image, String path) throws IOException {
 		InputStream inputStream = new ByteArrayInputStream(image);
 		

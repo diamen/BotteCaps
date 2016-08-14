@@ -58,6 +58,21 @@ public class AdminController {
 	}
 	
 	@POST
+//  @AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("image/update")
+	public Response updateImage(@QueryParam("id") Long id,
+			@QueryParam("country") String country,
+			@QueryParam("captext") String captext,
+			@QueryParam("capbrand") String capbrand,
+			@QueryParam("beer") Integer beer) {
+		
+		imageManager.updateCap(id, country, captext, capbrand, beer);
+		
+		return Response.ok().build();
+	}
+	
+	@POST
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news/add")

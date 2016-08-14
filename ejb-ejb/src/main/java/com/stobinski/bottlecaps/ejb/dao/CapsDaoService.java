@@ -45,7 +45,7 @@ public class CapsDaoService {
 	}
 
 	public List<Caps> getNewestCaps(Integer limit) {
-		return dao.retrieveData(new QueryBuilder().select().from(Caps.class).orderBy(Caps.ADDED_DATE_NAME).Desc().build(), limit, 0)
+		return dao.retrieveData(new QueryBuilder().select().from(Caps.class).orderBy(Caps.ADDED_DATE_NAME).desc().build(), limit, 0)
 				.stream().map(e -> (Caps) e)
 				.collect(Collectors.toList());
 	}
@@ -106,6 +106,17 @@ public class CapsDaoService {
 	
 	public String getBrand(Long id) {
 		return ((Brands) dao.retrieveSingleData(new QueryBuilder().select().from(Brands.class).where(Brands.ID_NAME).eq(id).build())).getName();
+	}
+
+	public void updateCap(Long id, Long countryId, String captext, Long capbrandId, Integer beer) {
+		dao.update(new QueryBuilder().update(Caps.class).set(Caps.COUNTRY_ID_NAME, Caps.CAP_TEXT_NAME, Caps.BRAND_ID_NAME, Caps.BEER_NAME)
+				.eq(countryId, captext, capbrandId, beer)
+				.where(Caps.ID_NAME).eq(id)
+				.build());
+	}
+	
+	public void updateCap(Long id, String country, String captext, String capbrand, Integer beer) {
+		updateCap(id, getCountryId(country), captext, getBrandId(capbrand), beer);
 	}
 	
 	private Long count(Long countryId) {

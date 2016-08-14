@@ -1,38 +1,35 @@
 package com.stobinski.bottlecaps.ejb.dao;
 
-import java.io.Serializable;
-
 import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.LoggerFactory;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
-import com.stobinski.bottlecaps.ejb.dao.exceptions.FromClassLackException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
 import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
+import com.stobinski.bottlecaps.ejb.dao.functions.Update;
+import com.stobinski.bottlecaps.ejb.dao.functions.eSqlFunctions;
 
 public class StringQuery {
 
 	private Logger log = LoggerFactory.create(StringQuery.class);
 	
-	public static final String LIKE_VALUE = "likeValue";
-	
 	private SqlFunction sqlFunction;
-	private Class<? extends Serializable> entity;
 	private boolean where;
 	private boolean asc;
 	private boolean desc;
 	private String orderColumn;
 	private String[] columns;
-	private Object[] values;
+	private Object[] setValues;
+	private Object[] whereValues;
 	private String[] likeValues;
 	
+	public static final String LIKE_VALUE = "likeValue";
 	private static final String WHITESPACE = " ";
 	private static final String AND = "AND";
 	
 	public StringQuery(QueryBuilder queryBuilder) {
 		handleSqlFunction(queryBuilder.getSqlFunction());
-		handleFrom(queryBuilder.getEntity());
 		this.where = queryBuilder.isWhere();
 		this.asc = queryBuilder.isAsc();
 		this.desc = queryBuilder.isDesc();
@@ -42,12 +39,12 @@ public class StringQuery {
 			throw new OrderByException();
 		
 		if(where) {
-			this.columns = queryBuilder.getColumns();
+			this.columns = queryBuilder.getWhereColumns();
 			
-			if(queryBuilder.getValues() != null) {
-				this.values = queryBuilder.getValues();
+			if(queryBuilder.getWhereValues() != null) {
+				this.whereValues = queryBuilder.getWhereValues();
 				
-				if(!isLengthMatch(columns, values))
+				if(!isLengthMatch(columns, whereValues))
 					throw new ColumnsValuesNotMatchException();
 			}
 			
@@ -63,12 +60,29 @@ public class StringQuery {
 	
 	@Override
 	public String toString() {
-		String query = sqlFunction.getFunctionQuery() + " FROM " + entity.getSimpleName() + " e";
+		
+		String query = "";
+		
+		if(sqlFunction.getSqlFunctionName().equals(eSqlFunctions.Select.name()) | sqlFunction.getSqlFunctionName().equals(eSqlFunctions.Count.name())) {
+			query = sqlFunction.getFunctionQuery();
+		}
 			
-		query = where && this.values != null ? 
-				appendColumnsToWhereEq(query + " WHERE ", this.columns): 
+		boolean update = false;
+		
+		if(sqlFunction.getSqlFunctionName().equals(eSqlFunctions.Update.name())) {
+			update = true;
+			query = sqlFunction.getFunctionQuery();
+			
+			String[] setColumns = ((Update) sqlFunction).getColumns();
+			setValues = ((Update) sqlFunction).getValues();
+			
+			query = appendUpdateColumns(query, setColumns);
+		}
+		
+		query = where && this.whereValues != null ? 
+				appendWhereColumns(update, query + " WHERE ", this.columns): 
 				where && this.likeValues != null ?
-				appendColumnsToWhereLike(query + " WHERE ", this.columns):
+				appendLikeColumns(query + " WHERE ", this.columns):
 				query;
 		
 		boolean orderExist = orderColumn != null;		
@@ -86,8 +100,12 @@ public class StringQuery {
 		return query;
 	}
 	
-	public Object[] getValues() {
-		return values;
+	public Object[] getSetValues() {
+		return setValues;
+	}
+	
+	public Object[] getWhereValues() {
+		return whereValues;
 	}
 	
 	public Object[] getLikeValues() {
@@ -100,20 +118,35 @@ public class StringQuery {
 		else
 			throw new SqlFunctionLackException();
 	}
-	
-	private void handleFrom(Class<? extends Serializable> entity) {
-		if(entity != null)
-			this.entity = entity;
-		else
-			throw new FromClassLackException();
-	}
-	
-	private String appendColumnsToWhereEq(String query, String[] columns) {
+
+	private String appendUpdateColumns(String query, String[] columns) {
 		StringBuilder sb = new StringBuilder(query);
 		
 		for(int i = 0; i < columns.length; i++) {
 			int valuesIndex = i + 1;
 			sb.append("e." + columns[i] + "=?" + valuesIndex);
+			
+			if(i + 1 < columns.length)
+				sb.append(", ");
+		}
+		
+		return sb.toString();
+	}
+	
+	private String appendWhereColumns(boolean update, String query, String[] columns) {
+		StringBuilder sb = new StringBuilder(query);
+		
+		int j = 0;
+		
+		if(update) {
+			j = ((Update) sqlFunction).getColumns().length;
+		}
+		
+		for(int i = 0; i < columns.length; i++) {
+			int valuesIndex = j + 1;
+			sb.append("e." + columns[i] + "=?" + valuesIndex);
+			
+			j++;
 			
 			if(i + 1 < columns.length)
 				sb.append(WHITESPACE + AND + WHITESPACE);
@@ -122,7 +155,7 @@ public class StringQuery {
 		return sb.toString();
 	}
 	
-	private String appendColumnsToWhereLike(String query, String[] columns) {
+	private String appendLikeColumns(String query, String[] columns) {
 		StringBuilder sb = new StringBuilder(query);
 		
 		for(int i = 1; i <= columns.length; i++)

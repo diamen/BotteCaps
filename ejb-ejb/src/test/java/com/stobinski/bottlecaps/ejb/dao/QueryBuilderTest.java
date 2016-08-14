@@ -2,14 +2,11 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.spy;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
-import com.stobinski.bottlecaps.ejb.dao.exceptions.FromClassLackException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
@@ -26,15 +23,12 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildFirstPartOfQuery() {
-		// given
-		QueryBuilder queryBuilderSpy = spy(queryBuilder);
-		
+	public void shouldBuildFirstPartOfSelectQuery() {
 		// when
-		doReturn(Caps.class).when(queryBuilderSpy).getEntity();
+		String query = queryBuilder.select().from(Caps.class).build().toString();
 		
 		// then
-		assertThat(queryBuilderSpy.select().build().toString()).contains("SELECT");
+		assertThat(query).contains("SELECT");
 	}
 
 	@Test
@@ -46,7 +40,7 @@ public class QueryBuilderTest {
 	@Test
 	public void shouldThrowExceptionWhenSqlFunctionIsCalledOneThanMoreTime() {
 		// expected
-		assertThatThrownBy(() -> { queryBuilder.select().select().build(); } ).isInstanceOf(MultipleInvocationException.class);
+		assertThatThrownBy(() -> { queryBuilder.select().from(Caps.class).select().from(Caps.class).build(); } ).isInstanceOf(MultipleInvocationException.class);
 	}
 	
 	@Test
@@ -60,36 +54,9 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldThrowExceptionWhenBuiltWithoutGivingClass() {
-		// expected
-		assertThatThrownBy(() -> { queryBuilder.select().build(); } ).isInstanceOf(FromClassLackException.class);		
-	}
-	
-	@Test
 	public void shouldThrowExceptionWhenFromIsCalledOneThanMoreTime() {
 		// expected
-		assertThatThrownBy(() -> { queryBuilder.select().from(Caps.class).from(Caps.class).build(); } ).isInstanceOf(MultipleInvocationException.class);
-	}
-	
-	@Test
-	public void shouldContainsWhereWhenInvokedWhereMethod() {
-		// given
-		QueryBuilder queryBuilderSpy = spy(queryBuilder);
-		// when
-		doReturn(new Object[] {"spy", "spy"}).when(queryBuilderSpy).getValues();
-		doReturn(new String[] {"spy", "spy"}).when(queryBuilderSpy).getColumns();
-		// then
-		assertThat(queryBuilderSpy.select().from(Caps.class).where().build().toString()).contains("WHERE");
-	}
-	
-	@Test
-	public void shouldContainsColumnsNames() {
-		// given
-		QueryBuilder queryBuilderSpy = spy(queryBuilder);
-		// when
-		doReturn(new Object[] {"spy", "spy"}).when(queryBuilderSpy).getValues();
-		// then
-		assertThat(queryBuilderSpy.select().from(Caps.class).where(Caps.BEER_NAME, Caps.CAP_TEXT_NAME).build().toString()).contains(Caps.BEER_NAME, Caps.CAP_TEXT_NAME);
+		assertThatThrownBy(() -> { queryBuilder.select().from(Caps.class).select().from(Caps.class).build(); } ).isInstanceOf(MultipleInvocationException.class);
 	}
 	
 	@Test
@@ -136,7 +103,7 @@ public class QueryBuilderTest {
 		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME + " ASC";
 	
 		// when
-		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).Asc().build();
+		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).asc().build();
 	
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
@@ -148,7 +115,7 @@ public class QueryBuilderTest {
 		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME + " DESC";
 		
 		// when
-		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).Desc().build();
+		StringQuery query = queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).desc().build();
 		
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
@@ -157,7 +124,7 @@ public class QueryBuilderTest {
 	@Test
 	public void shouldThrowExceptionWhenUsedAscAndDescTogether() {
 		// expected
-		assertThatThrownBy(() -> { queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).Asc().Desc().build(); } ).isInstanceOf(OrderByException.class);
+		assertThatThrownBy(() -> { queryBuilder.select().from(News.class).orderBy(News.DATE_NAME).asc().desc().build(); } ).isInstanceOf(OrderByException.class);
 	}
 	
 	@Test
@@ -172,6 +139,34 @@ public class QueryBuilderTest {
 		String expectedQuery = "SELECT COUNT(e) FROM " + Caps.class.getSimpleName() + " e";
 		// when
 		StringQuery query = queryBuilder.count().from(Caps.class).build();
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+	
+	@Test
+	public void shouldBuildFirstPartOfUpdateQuery() {
+		// when
+		StringQuery query = queryBuilder.update(Caps.class).set(Caps.BEER_NAME).eq("TEST").build();
+		// then
+		assertThat(query.toString()).contains("UPDATE");
+	}
+	
+	@Test
+	public void shouldBuildUpdateQueryWithSet() {
+		// given
+		String expectedQuery = "UPDATE " + Caps.class.getSimpleName() + " e SET e." + Caps.BEER_NAME + "=?1, e." + Caps.FILE_NAME_NAME + "=?2";
+		// when
+		StringQuery query = queryBuilder.update(Caps.class).set(Caps.BEER_NAME, Caps.FILE_NAME_NAME).eq("KORCA", "2").build();
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+	
+	@Test
+	public void shouldBuildUpdateQueryWithSetAndWhere() {
+		// given
+		String expectedQuery = "UPDATE " + Caps.class.getSimpleName() + " e SET e." + Caps.BEER_NAME + "=?1, e." + Caps.FILE_NAME_NAME + "=?2 WHERE e." + Caps.ID_NAME + "=?3";
+		// when
+		StringQuery query = queryBuilder.update(Caps.class).set(Caps.BEER_NAME, Caps.FILE_NAME_NAME).eq("KORCA", "2").where(Caps.ID_NAME).eq(1).build();
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
