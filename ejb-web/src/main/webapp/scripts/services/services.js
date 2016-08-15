@@ -135,6 +135,14 @@ angular.module('bcServices', [])
 							params: { country: country, capId: capId }
 						});
 					},
+					updateCap: function(id, country, captext, capbrand, beer) {
+						return $http({
+							method: "POST",
+							url: "./rest/admin/image/update",
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
+							params: { id: id, country: country, captext: captext, capbrand: capbrand, beer: beer }
+						});
+					},
 					addNews: function(title, content) {
 						return $http({
 							method: "POST",

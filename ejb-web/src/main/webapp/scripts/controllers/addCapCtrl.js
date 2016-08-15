@@ -2,22 +2,22 @@ angular.module('bcControllers')
 	.controller('addCapCtrl', function($scope, $stateParams, $uibModal, base64Service, restService) {
 
 		$scope.country = $stateParams.country;
-		
+
 		$scope.beerOptions =
 		[ {key: "Niepiwo", value: 0},
 		  {key: "Piwo", value: 1} ];
-		
+
 		$scope.selected = [];
-		
+
 		$scope.clear = function() {
 			$scope.files.length = 0;
 		};
-		
+
 		$scope.uploadFiles = function(idx) {
-			
+
 			if(idx === undefined)
 				idx = 0;
-			
+
 			var numberOfFiles = $scope.files.length;
 			var i = idx;
 
@@ -25,9 +25,9 @@ angular.module('bcControllers')
 				$scope.showAlert = true;
 				return;
 			}
-			
+
 			$scope.files[i].beer = $scope.selected[i].value;
-			
+
 			base64Service.imgToBase64($scope.files[i].src, 'image/jpeg', function(base64) {
 				restService.adminController().imageUpload(base64, $scope.files[i].captext, $scope.files[i].capbrand, $scope.files[i].beer, $scope.country)
 					.success(function(data) {
@@ -46,7 +46,7 @@ angular.module('bcControllers')
 		};
 		
 		/* modal */
-		$scope.open = function(type) {
+		$scope.openModal = function(type) {
 			
 			if(type === 'CLR') {
 				$scope.msg = "Czy chcesz wycofac zmiany?";

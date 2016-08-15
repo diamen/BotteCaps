@@ -11,6 +11,9 @@ head.load(
     { file: '/' + appName + '/libraries/ui-bootstrap/ui-bootstrap-tpls-2.0.0.min.js' },
     { file: '/' + appName + '/libraries/ui-router/angular-ui-router.min.js' },
     
+    /* Common */
+    { file: '/' + appName + '/scripts/common.js' },
+    
     /* Main */
     { file: '/' + appName + '/scripts/app.js' },
     
@@ -22,6 +25,7 @@ head.load(
     { file: '/' + appName + '/scripts/controllers/capCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/collectCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/countriesCtrl.js' },
+    { file: '/' + appName + '/scripts/controllers/editCapCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/loginCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/modalCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/newsCtrl.js' },

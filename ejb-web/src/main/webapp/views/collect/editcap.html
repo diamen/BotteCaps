@@ -1,0 +1,33 @@
+<ol class="breadcrumb">
+  <li><a ui-sref="news">Dom</a></li>
+  <li><a ui-sref="collect">Kolekcja</a></li>
+  <li><a ui-sref="collect.country({country: country})">{{country}}</a></li>
+</ol>
+
+<div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Nie udalo sie zaktualizowac informacji.</div>	
+
+<div class="capview">
+	<button class="btn btn-default" ng-click="openModal('OK')">Zatwierdz</button>
+	<button class="btn btn-default" ng-click="openModal('CAN')">Anuluj</button>
+	<button class="btn btn-default">Zatwierdz</button>
+	<button class="btn btn-default">Anuluj</button>
+	<img class="img-rounded" ng-src="{{capsrc}}"></img>
+</div>
+
+<div class="capinfo">
+		<div><img class="flag" ng-src="{{flag}}"></img></div>
+	
+		<div class="label infc">Informacje o kapslu</div>
+	
+		<div class="label infl">Rodzaj</div>
+		<select class="infr" ng-model="beerLabel" ng-options="elem as elem for elem in beerOptions"></select>
+		
+		<div class="label infl">Tekst na kapslu</div>
+		<input type="text" ng-model="cap.cap_text" class="infr" required></input>
+		
+		<div class="label infl">Marka</div>
+		<input type="text" ng-model="brand" class="infr" required></input>
+		
+		<div class="label infl">Data dodania</div>
+		<div class="label infr">{{cap.added_date | date: 'dd/MM/yyyy'}}</div>
+</div>

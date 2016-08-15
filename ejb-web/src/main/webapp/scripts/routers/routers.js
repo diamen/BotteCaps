@@ -66,6 +66,16 @@ angular.module('bcRouters', [])
 				}
 			})
 
+			.state("collect.country.id.edit", {
+				url: "/edit",
+				views: {
+					"collectView@collect": {
+						controller: "editCapCtrl",
+						templateUrl: "/ejb-web/views/collect/editcap.html"
+					}
+				}
+			})
+			
 			/* ADMIN SECTION */
 			.state("collect.country.add", {
 				controller: "collectCtrl",

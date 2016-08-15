@@ -75,6 +75,30 @@ div.container-fluid div.navbar-header a.navbar-brand {
 	margin-bottom: 5px;
 }
 
+.capview button:nth-child(1) {
+	float: left;
+}
+
+.capview button:nth-child(2) {
+	float: left;
+	margin-left: 2px;
+}
+
+.capview button:nth-child(3) {
+	float: right;
+	margin-right: 2px;
+	background-color: transparent !important;
+	color: transparent !important;
+	border-color: transparent !important;
+}
+
+.capview button:nth-child(4) {
+	float: right;
+	background-color: transparent !important;
+	color: transparent !important;
+	border-color: transparent !important;
+}
+
 .capinfo {
 	display: table;
 	width: 100%;
@@ -116,8 +140,23 @@ div.container-fluid div.navbar-header a.navbar-brand {
 	float: right;
 	font-size: 1em !important;
 	margin-bottom: 3px;
+}
+
+div.infr {
 	background-color: #DEDEDE;
 	color: #464646 !important;
+}
+
+input.infr {
+	line-height: 1;
+	text-align: center;
+	border-radius: 4px;
+}
+
+select.infr {
+	padding-left: 15px;
+	border-radius: 2px;
+	text-align-last: center;
 }
 
 .capmover {

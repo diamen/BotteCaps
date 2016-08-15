@@ -11,7 +11,7 @@ angular.module('bcControllers', [])
 		$scope.redirectToCountry = function(country) {
 			$state.go("collect.country", { country: country });
 		};
-		
+
 		$scope.addCapRedirect = function(country) {
 			$state.go("collect.country.add", { country: country });
 		};
@@ -20,4 +20,8 @@ angular.module('bcControllers', [])
 			$state.go("collect.country.id", { country: country, id: id });
 		};
 
+		$scope.openEditCap = function(country, id) {
+			$state.go("collect.country.id.edit", { country: country, id: id });
+		};
+		
 });
