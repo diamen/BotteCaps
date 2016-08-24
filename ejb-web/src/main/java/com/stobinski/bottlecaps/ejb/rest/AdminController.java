@@ -16,6 +16,7 @@ import org.jboss.logging.Logger;
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.common.NewsManager;
+import com.stobinski.bottlecaps.ejb.dao.TradeCapsManager;
 
 @Path("/admin/")
 public class AdminController {
@@ -28,6 +29,9 @@ public class AdminController {
 	
 	@Inject
 	private Logger log;
+	
+	@Inject
+	private TradeCapsManager tradeManager;
 	
 	@POST
 //	@AuthToken
@@ -44,6 +48,18 @@ public class AdminController {
 			log.error(e);
 			return Response.serverError().status(Status.INTERNAL_SERVER_ERROR).build();
 		}
+		return Response.ok().build();
+	}
+
+	@POST
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("trade/upload")
+	public Response uploadTrade(String baseimage, 
+			@QueryParam("filename") String filename) {
+
+		tradeManager.saveFile(baseimage, filename);
+		
 		return Response.ok().build();
 	}
 	

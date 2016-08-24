@@ -37,14 +37,14 @@ public class PhotoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("bycountry/{country}")
 	public List<Base64Cap> photosByCountry(@PathParam("country") String country) {
-		return imageManager.loadFiles(dao.getCaps(country));
+		return imageManager.loadCapFiles(dao.getCaps(country));
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("singlecap")
 	public Base64Cap getSingleCap(@QueryParam("country") String country, @QueryParam("id") Long id) {
-		return imageManager.loadFile(dao.getCap(country, id));
+		return imageManager.loadCapFile(dao.getCap(country, id));
 	}
 	
 	@GET
@@ -58,7 +58,7 @@ public class PhotoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("filtercap")
 	public List<Base64Cap> getFilteredCaps(@QueryParam("country") String country, @QueryParam("searchText") String searchText) {
-		return imageManager.loadFiles(dao.getFilteredCaps(country, searchText));
+		return imageManager.loadCapFiles(dao.getFilteredCaps(country, searchText));
 	}	
 	
 	@GET
@@ -79,7 +79,7 @@ public class PhotoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("newest")
 	public List<Base64Cap> getNewestCaps(@QueryParam("limit") Integer limit) {
-		return imageManager.loadFiles(dao.getNewestCaps(limit));
+		return imageManager.loadCapFiles(dao.getNewestCaps(limit));
 	}
 	
 }

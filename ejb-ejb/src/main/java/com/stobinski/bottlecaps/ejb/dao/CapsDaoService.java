@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import com.stobinski.bottlecaps.ejb.entities.Brands;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.Countries;
+import com.stobinski.bottlecaps.ejb.entities.TradeCaps;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
 public class CapsDaoService {
@@ -48,6 +49,11 @@ public class CapsDaoService {
 		return dao.retrieveData(new QueryBuilder().select().from(Caps.class).orderBy(Caps.ADDED_DATE_NAME).desc().build(), limit, 0)
 				.stream().map(e -> (Caps) e)
 				.collect(Collectors.toList());
+	}
+	
+	public List<TradeCaps> getAllTradeCaps() {
+		return dao.retrieveData(new QueryBuilder().select().from(TradeCaps.class).build())
+				.stream().map(e -> (TradeCaps) e).collect(Collectors.toList());
 	}
 	
 	public long getBrandId(String capbrand) {
