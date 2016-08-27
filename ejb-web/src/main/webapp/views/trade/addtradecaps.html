@@ -1,0 +1,15 @@
+<div class="addfunc">
+	<label ng-class="files.length === undefined || files.length === 0 ? 'enabled' : 'disabled'" class="btn btn-default btn-sm btn-file">
+		Dodaj <input uploadfile="img" type="file" style="display: none;" accept="image/*" multiple>
+	</label>
+	<button ng-class="files.length === undefined || files.length === 0 ? 'disabled' : 'enabled'" ng-click="openModal('CLR')" type="button" class="btn btn-default btn-sm">Czysc</button>
+	<button ng-class="files.length === undefined || files.length === 0 ? 'disabled' : 'enabled'" ng-click="openModal('UPL')" type="button" class="btn btn-default btn-sm">Zaladuj</button>
+</div>
+
+<div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">{{msg}}</div>	
+
+<div class="sm-trade tradebox" ng-repeat="file in files">
+	<span class="sm-hidden"><b>Nazwa pliku:</b> {{file.name}}</span>
+	<span class="sm-hidden"><b>Rozmiar:</b> {{file.size}}</span>
+	<trade-img class="sm-hidden" source="{{file.src}}"></trade-img>
+</div>

@@ -12,6 +12,7 @@ angular.module('bcDirectives', [])
 	            element.on("change", function (changeEvent) {
 	            	
 	            	var files = changeEvent.target.files;
+	            	
 	            	var numberOfFiles = files.length;
 	            	scope.files = [];
 	            	
@@ -19,7 +20,7 @@ angular.module('bcDirectives', [])
 	                    var reader = new FileReader();
 		                reader.onload = function (loadEvent) {
 		                    scope.$apply(function () {
-		                    	scope.files[i] = { src: loadEvent.target.result, captext: "", capbrand: "", beer: 0 };
+		                    	scope.files[i] = { src: loadEvent.target.result, name: file.name, size: file.size, type: file.type, captext: "", capbrand: "", beer: 0 };
 		                    });
 		                };
 	                	reader.readAsDataURL(file);

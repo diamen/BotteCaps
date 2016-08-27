@@ -1,7 +1,7 @@
 angular.module('bcServices', [])
 
 	.service("capMover", [function() {
-		
+
 		return {
 			capMover : function(caps) {
 				var capsLength = caps.length;
@@ -150,6 +150,15 @@ angular.module('bcServices', [])
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							params: { title: title, content: content }
 						});
+					},
+					tradeUpload: function(base64, filename) {
+						return $http({
+							method: "POST",
+							url: "./rest/admin/trade/upload",
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
+							data: {baseimage: base64},
+							params: { filename: filename }
+						});
 					}
 				};
 			},
@@ -224,10 +233,20 @@ angular.module('bcServices', [])
 						return $http.post("./rest/news" + id);
 					}
 				};
+			},
+			tradeController: function() {
+				return {
+					getCaps: function() {
+						return $http({
+							method: "GET",
+							url: "./rest/trade/caps"
+						});
+					}
+				};
 			}
 		};
 	}])
-	
+
 	.service("ngsrcConvertService", function () {
 		return {
 			convert: function (cap) {

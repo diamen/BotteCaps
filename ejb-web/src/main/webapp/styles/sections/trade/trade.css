@@ -1,0 +1,33 @@
+.sectrade {
+	height: inherit;
+	padding-bottom: 5px;
+}
+
+.tradebox {
+	background-color: #EAEAEA;
+	border: 1px solid #C7C7C7;
+	height: 156px;
+	margin: 6px 16px;
+	padding: 2px 8px;"
+}
+
+.tradebox span {
+	line-height: 156px;
+	vertical-align: middle;
+}
+
+.tradebox span:nth-child(1) {
+	margin-right: 4px;	
+}
+
+.tradebox span:nth-child(2) {
+	margin-left: 4px;
+}
+
+.tradebox trade-img {
+	float: right;
+}
+
+.sectrade div.alert-danger {
+	margin: 0 15px;
+}

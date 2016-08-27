@@ -11,6 +11,10 @@ public class FileHelper {
 	public static String joinPath(String...directory) {
 		return StringUtils.join(directory, File.separatorChar);
 	}
+
+	public static String getFullPath(String path, String filename) {
+		return path + File.separatorChar + filename;
+	}
 	
 	public static String getFullPath(String path, String filename, String extension) {
 		return path + File.separatorChar + filename + "." + extension;

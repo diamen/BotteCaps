@@ -15,3 +15,6 @@
 
 /* COLLECT SECTION */
 @import "sections/collect/collect.css";
+
+/* TRADE SECTION */
+@import "sections/trade/trade.css";

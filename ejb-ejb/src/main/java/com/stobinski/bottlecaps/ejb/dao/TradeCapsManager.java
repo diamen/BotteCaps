@@ -2,6 +2,7 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.FileAlreadyExistsException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -32,6 +33,9 @@ public class TradeCapsManager {
 	private EntityManager entityManager;
 	
 	@Inject
+	private DaoService dao;
+	
+	@Inject
 	private ConfigurationBean config;
 	
 	@Inject
@@ -41,30 +45,19 @@ public class TradeCapsManager {
 	private Logger log;
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void saveFile(String base64, String filename) {
+	public void saveFile(String base64, String filename) throws FileAlreadyExistsException {
 		String fullPath = FileHelper.getFullPath(
 				FileHelper.joinPath(config.getValue(EConfigKeys.PATH.toString()), config.getValue(EConfigKeys.TRADE.toString())), 
-				filename, config.getValue(EConfigKeys.EXT.toString()));
+				filename);
 		
 		String fullPathMini = FileHelper.getFullPath(
 				FileHelper.joinPath(config.getValue(EConfigKeys.PATH.toString()), config.getValue(EConfigKeys.MINI.toString())), 
-				filename, config.getValue(EConfigKeys.EXT.toString()));
-
-		MiniTradeCaps mini = new MiniTradeCaps();
-		mini.setAdded_date(Date.valueOf(LocalDate.now()));
-		mini.setExtension(config.getValue(EConfigKeys.EXT.toString()));
-		mini.setFile_name(filename);
-		mini.setPath(FileHelper.joinPath(config.getValue(EConfigKeys.PATH.toString()), config.getValue(EConfigKeys.MINI.toString())));
+				filename);
 		
-		TradeCaps trade = new TradeCaps();
-		trade.setAdded_date(Date.valueOf(LocalDate.now()));
-		trade.setExtension(config.getValue(EConfigKeys.EXT.toString()));
-		trade.setFile_name(filename);
-		trade.setPath(FileHelper.joinPath(config.getValue(EConfigKeys.PATH.toString()), config.getValue(EConfigKeys.TRADE.toString())));	
-		trade.setMini_trade_caps(mini);
-		mini.setTrade_caps(trade);
+		if(isAlreadyInDatabase(filename))
+			throw new FileAlreadyExistsException(filename);
 		
-		entityManager.persist(mini);
+		persistEntity(filename);
 		
 		try {
 			imageManager.saveFile(Base64Service.fromBase64JsonToByteArray(base64), fullPath);
@@ -82,6 +75,34 @@ public class TradeCapsManager {
 				.map(e -> (TradeCaps) e)
 				.map(e -> new Base64TradeCap(e, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(e.getPath(), e.getFile_name()))))
 				.collect(Collectors.toList());
+	}
+	
+	private boolean isAlreadyInDatabase(String filename) {	
+		return !dao.retrieveData(entityManager,
+				new QueryBuilder().select().from(TradeCaps.class).where(TradeCaps.FILE_NAME_NAME).eq(filename.split("\\.")[0]).build())
+				.isEmpty();
+	}
+	
+	private void persistEntity(String filename) {
+		
+		String name = filename.split("\\.")[0];
+		String ext = filename.split("\\.")[1];
+		
+		MiniTradeCaps mini = new MiniTradeCaps();
+		mini.setAdded_date(Date.valueOf(LocalDate.now()));
+		mini.setExtension(ext);
+		mini.setFile_name(name);
+		mini.setPath(FileHelper.joinPath(config.getValue(EConfigKeys.PATH.toString()), config.getValue(EConfigKeys.MINI.toString())));
+		
+		TradeCaps trade = new TradeCaps();
+		trade.setAdded_date(Date.valueOf(LocalDate.now()));
+		trade.setExtension(ext);
+		trade.setFile_name(name);
+		trade.setPath(FileHelper.joinPath(config.getValue(EConfigKeys.PATH.toString()), config.getValue(EConfigKeys.TRADE.toString())));	
+		trade.setMini_trade_caps(mini);
+		mini.setTrade_caps(trade);
+		
+		entityManager.persist(mini);
 	}
 	
 	@SuppressWarnings("unchecked")

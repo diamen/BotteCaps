@@ -75,8 +75,7 @@ angular.module('bcRouters', [])
 					}
 				}
 			})
-			
-			/* ADMIN SECTION */
+
 			.state("collect.country.add", {
 				controller: "collectCtrl",
 				url: "/add",
@@ -85,6 +84,37 @@ angular.module('bcRouters', [])
 						controller: "addCapCtrl",
 						templateUrl: "/ejb-web/views/collect/addcap.html"
 					}
+				}
+			})
+
+			/* TRADE SECTION */
+			.state("trade", {
+				url: "/trade",
+				views: {
+					'': { templateUrl: "/ejb-web/views/main/partial-trade.html" },
+					"tradeView@trade": {
+						controller: "tradeCtrl",
+						templateUrl: "/ejb-web/views/trade/trade.html"
+					}
+				}
+			})
+
+			.state("trade.add", {
+				url: "/add",
+				views: {
+					'': { templateUrl: "/ejb-web/views/main/partial-trade.html" },
+					"tradeView@trade": {
+						controller: "addTradeCapsCtrl",
+						templateUrl: "/ejb-web/views/trade/addtradecaps.html"
+					}
+				}
+			})
+
+			/* ABOUT SECTION */
+			.state("about", {
+				url: "/about",
+				views: {
+					'': { templateUrl: "/ejb-web/views/about/about.html" }
 				}
 			});
 

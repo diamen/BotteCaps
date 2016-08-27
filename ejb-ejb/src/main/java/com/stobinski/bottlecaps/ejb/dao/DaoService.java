@@ -59,6 +59,17 @@ public class DaoService {
 				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList();	
 	}
 	
+	public List<Serializable> retrieveData(EntityManager em, StringQuery query) {
+		log.debug(query.toString());
+		
+		return query.getWhereValues() == null && query.getLikeValues() == null ? 
+				entityManager.createQuery(query.toString()).getResultList() :
+				query.getWhereValues() != null ?		
+				attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()).getResultList() :
+				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList();	
+	}
+	
+	
 	public List<Serializable> retrieveData(StringQuery query, int limit, int offset) {
 		log.debug(query.toString());
 		
