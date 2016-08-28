@@ -8,7 +8,7 @@ import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
 import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
 import com.stobinski.bottlecaps.ejb.dao.functions.Update;
-import com.stobinski.bottlecaps.ejb.dao.functions.eSqlFunctions;
+import com.stobinski.bottlecaps.ejb.dao.functions.ESqlFunctions;
 
 public class StringQuery {
 
@@ -63,13 +63,13 @@ public class StringQuery {
 		
 		String query = "";
 		
-		if(sqlFunction.getSqlFunctionName().equals(eSqlFunctions.Select.name()) | sqlFunction.getSqlFunctionName().equals(eSqlFunctions.Count.name())) {
+		if(sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Select.name()) | sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Count.name())) {
 			query = sqlFunction.getFunctionQuery();
 		}
 			
 		boolean update = false;
 		
-		if(sqlFunction.getSqlFunctionName().equals(eSqlFunctions.Update.name())) {
+		if(sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Update.name())) {
 			update = true;
 			query = sqlFunction.getFunctionQuery();
 			

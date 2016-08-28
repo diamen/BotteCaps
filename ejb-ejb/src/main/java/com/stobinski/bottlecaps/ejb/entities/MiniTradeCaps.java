@@ -10,10 +10,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
+
+@NamedQuery(name="MiniTradeCaps.findTradeCaps",
+query="SELECT e " +
+      "FROM MiniTradeCaps e")
 
 @Entity
 @Table(name="mini_trade_caps")

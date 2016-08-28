@@ -230,16 +230,22 @@ angular.module('bcServices', [])
 						return $http.get("./rest/news/page/" + pageNo);
 					},
 					getSingleNews: function(id) {
-						return $http.post("./rest/news" + id);
+						return $http.post("./rest/news/" + id);
 					}
 				};
 			},
 			tradeController: function() {
 				return {
-					getCaps: function() {
+					getMiniCaps: function() {
 						return $http({
 							method: "GET",
-							url: "./rest/trade/caps"
+							url: "./rest/trade/minicaps"
+						});
+					},
+					getTradeCap: function(id) {
+						return $http({
+							method: "GET",
+							url: "./rest/trade/tradecap/" + id
 						});
 					}
 				};
