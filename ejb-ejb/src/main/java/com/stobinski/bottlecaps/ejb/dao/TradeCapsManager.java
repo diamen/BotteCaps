@@ -5,6 +5,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
@@ -21,6 +22,7 @@ import com.stobinski.bottlecaps.ejb.common.ConfigurationBean;
 import com.stobinski.bottlecaps.ejb.common.EConfigKeys;
 import com.stobinski.bottlecaps.ejb.common.FileHelper;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.entities.MiniTradeCaps;
 import com.stobinski.bottlecaps.ejb.entities.TradeCaps;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64MiniTradeCap;
@@ -69,6 +71,21 @@ public class TradeCapsManager {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+	public void deleteFiles(Set<Long> ids) {
+		Set<Object> set = (Set<Object>)(Set<?>) ids;
+		
+		try {
+			dao.remove(entityManager,
+					new QueryBuilder().delete().from(MiniTradeCaps.class).where(MiniTradeCaps.ID_NAME).in(set).build()
+					);
+
+		} catch (QueryBuilderException e) {
+			log.error(e);
+		}
+	}
+	
 	public List<Base64MiniTradeCap> getMiniTradeCaps() {
 		return findMiniCaps()
 				.stream()
@@ -77,9 +94,14 @@ public class TradeCapsManager {
 	}
 	
 	private boolean isAlreadyInDatabase(String filename) {	
-		return !dao.retrieveData(entityManager,
-				new QueryBuilder().select().from(TradeCaps.class).where(TradeCaps.FILE_NAME_NAME).eq(filename.split("\\.")[0]).build())
-				.isEmpty();
+		try {
+			return !dao.retrieveData(entityManager,
+					new QueryBuilder().select().from(TradeCaps.class).where(TradeCaps.FILE_NAME_NAME).eq(filename.split("\\.")[0]).build())
+					.isEmpty();
+		} catch (QueryBuilderException e) {
+			log.error(e);
+			return false;
+		}
 	}
 	
 	private void persistEntity(String filename) {

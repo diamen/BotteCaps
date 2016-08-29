@@ -10,7 +10,10 @@ import javax.ejb.Startup;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import org.jboss.logging.Logger;
+
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.entities.Configuration;
 
 @Startup
@@ -25,8 +28,13 @@ public class ConfigurationBean {
 	@SuppressWarnings("unchecked")
 	@PostConstruct
 	public void init() {
-		this.items = ((List<Configuration>) entityManager.createQuery(new QueryBuilder().select().from(Configuration.class).build().toString()).getResultList())
-		.stream().collect(Collectors.toMap(Configuration::getKeyy, Configuration::getValue));
+		try {
+			this.items = ((List<Configuration>) entityManager.createQuery(new QueryBuilder().select().from(Configuration.class).build().toString()).getResultList())
+			.stream().collect(Collectors.toMap(Configuration::getKeyy, Configuration::getValue));
+		} catch (QueryBuilderException e) {
+			Logger log = LoggerFactory.create(getClass());
+			log.error(e);
+		}
 	}
 	
 	public String getValue(String key) {

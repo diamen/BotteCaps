@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -20,11 +22,14 @@ import org.jboss.logging.Logger;
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.common.NewsManager;
+import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.TradeCapsManager;
 
 @Path("/admin/")
 public class AdminController {
 
+	@Inject DaoService dao;
+	
 	@Inject
 	private ImageManager imageManager;
 	
@@ -85,6 +90,16 @@ public class AdminController {
 	@Path("image/delete")
 	public Response deleteFile(@QueryParam("country") String country, @QueryParam("capId") Long capId) {
 		imageManager.removeCap(country, capId);
+		
+		return Response.ok().build();
+	}
+	
+	@DELETE
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("tradecaps")
+	public Response deleteTradeCaps(@QueryParam("ids") Set<Long> ids) {
+		tradeManager.deleteFiles(ids);
 		
 		return Response.ok().build();
 	}

@@ -28,9 +28,12 @@
 	float: right;
 }
 
-.sectrade button {
-	margin-left: 13px;
+.sectrade > button {
 	margin-top: 13px;
+}
+
+.sectrade > button:first-child {
+	margin-left: 13px;
 }
 
 .sectrade div.alert-danger {
@@ -46,7 +49,12 @@
 .tradegallery trade-img {
 	cursor: pointer;
 	background-color: #F1F1F1;
-    margin: 3px;
     border-radius: 2px;
-    border: 1px solid #9E9E9E;
+    border: 1px solid #ABABAB;
+}
+
+.tradegallery > span {
+	width: 150px;
+	margin: 5px;
+	display: inline-block;
 }

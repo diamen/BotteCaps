@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $window, $state, $stateParams, $uibModal, restService, base64Service, shareData) {
+	.controller('collectCtrl', function($scope, $window, $state, $stateParams, $uibModal, restService, base64Service, markService, shareData) {
 
 		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';
@@ -36,14 +36,7 @@ angular.module('bcControllers')
 		};
 
 		$scope.markCap = function(capId) {
-			var index = $scope.markedIds.indexOf(capId);
-			if(index > -1) {
-				$scope.markedIds.splice(index, 1);
-				console.log($scope.markedIds);
-				return;
-			}
-			$scope.markedIds.push(capId);
-
+			$scope.markedIds = markService($scope.markedIds, capId);
 			console.log($scope.markedIds);
 		};
 

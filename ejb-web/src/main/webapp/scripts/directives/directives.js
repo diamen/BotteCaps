@@ -76,6 +76,8 @@ angular.module('bcDirectives', [])
 		return {
 			restrict: 'E',
 			link: function(scope, element, attrs) {
+				element.css('width', 'inherit');
+				
 				element.bind("click", function(clickEvent) {
 					var btn = element.children();
 					if(btn.hasClass("btn-primary")) {
@@ -87,7 +89,7 @@ angular.module('bcDirectives', [])
 					}
 				});
 			},
-			template: '<button style="width: 100px" type="submit" class="btn btn-primary">Zaznacz</button>'
+			template: '<button style="width: inherit" type="submit" class="btn btn-primary">Zaznacz</button>'
 		};
 	})
 	

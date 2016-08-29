@@ -44,5 +44,6 @@ head.load(
     { file: '/' + appName + '/scripts/routers/routers.js' },
 
     /* Services */
-    { file: '/' + appName + '/scripts/services/services.js' }
+    { file: '/' + appName + '/scripts/services/services.js' },
+    { file: '/' + appName + '/scripts/services/markService.js' }
 );

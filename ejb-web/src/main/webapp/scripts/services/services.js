@@ -156,8 +156,16 @@ angular.module('bcServices', [])
 							method: "POST",
 							url: "./rest/admin/trade/upload",
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
-							data: {baseimage: base64},
+							data: { baseimage: base64 },
 							params: { filename: filename }
+						});
+					},
+					tradeDelete: function(ids) {
+						return $http({
+							method: "DELETE",
+							url: "./rest/admin/tradecaps",
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
+							params: { ids: ids }
 						});
 					}
 				};
