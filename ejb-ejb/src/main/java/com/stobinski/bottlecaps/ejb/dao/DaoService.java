@@ -2,6 +2,7 @@ package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -42,42 +43,50 @@ public class DaoService {
 	public Object retrieveSingleData(StringQuery query) {
 		log.debug(query.toString());
 		
-		return query.getWhereValues() == null && query.getLikeValues() == null ? 
+		return query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
 			entityManager.createQuery(query.toString()).getSingleResult() :
 			query.getWhereValues() != null ?		
 			attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()).getSingleResult() :
-			attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getSingleResult();	
+			query.getLikeValues() != null ?	
+			attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getSingleResult() :
+			attachInParameters(entityManager.createQuery(query.toString()), query.getInValues()).getSingleResult();	
 	}
 	
 	public List<Serializable> retrieveData(StringQuery query) {
 		log.debug(query.toString());
 		
-		return query.getWhereValues() == null && query.getLikeValues() == null ? 
+		return query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
 				entityManager.createQuery(query.toString()).getResultList() :
 				query.getWhereValues() != null ?		
 				attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()).getResultList() :
-				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList();	
+				query.getLikeValues() != null ?	
+				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList() :
+				attachInParameters(entityManager.createQuery(query.toString()), query.getInValues()).getResultList();
 	}
 	
 	public List<Serializable> retrieveData(EntityManager em, StringQuery query) {
 		log.debug(query.toString());
 		
-		return query.getWhereValues() == null && query.getLikeValues() == null ? 
+		return query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
 				entityManager.createQuery(query.toString()).getResultList() :
 				query.getWhereValues() != null ?		
 				attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()).getResultList() :
-				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList();	
+				query.getLikeValues() != null ?	
+				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList() :
+				attachInParameters(entityManager.createQuery(query.toString()), query.getInValues()).getResultList();
 	}
 	
 	
 	public List<Serializable> retrieveData(StringQuery query, int limit, int offset) {
 		log.debug(query.toString());
 		
-		return query.getWhereValues() == null && query.getLikeValues() == null ? 
+		return query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
 				entityManager.createQuery(query.toString()).setFirstResult(offset).setMaxResults(limit).getResultList() :
 				query.getWhereValues() != null ?		
 				attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()).setFirstResult(offset).setMaxResults(limit).getResultList() :
-				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).setFirstResult(offset).setMaxResults(limit).getResultList();	
+				query.getLikeValues() != null ?	
+				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList() :
+				attachInParameters(entityManager.createQuery(query.toString()), query.getInValues()).getResultList();
 	}
 	
 	public void persist(Object object) {
@@ -88,6 +97,22 @@ public class DaoService {
 	public void remove(Object object) {
 		entityManager.remove(entityManager.contains(object) ? object : entityManager.merge(object));
 		entityManager.flush();
+	}
+	
+	public void remove(EntityManager em, StringQuery query) {
+		log.debug(query.toString());
+		
+		Query q = query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
+				entityManager.createQuery(query.toString()) :
+				query.getWhereValues() != null ?		
+				attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()) :
+				query.getLikeValues() != null ?	
+				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()) :
+				attachInParameters(entityManager.createQuery(query.toString()), query.getInValues());
+				
+		int numberOfRemoved = q.executeUpdate();	
+		
+		log.debug(String.format("Deleted %d records", numberOfRemoved));
 	}
 	
 	private Query attachParameters(Query query, Object[] values) {
@@ -102,6 +127,11 @@ public class DaoService {
 		for(int i = 1; i <= values.length; i++) {
 			query.setParameter(StringQuery.LIKE_VALUE + index, "%" + values[i - 1] + "%");
 		}
+		return query;
+	}
+	
+	private Query attachInParameters(Query query, Set<Object> params) {
+		query.setParameter("params", params);
 		return query;
 	}
 	

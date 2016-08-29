@@ -1,14 +1,18 @@
 package com.stobinski.bottlecaps.ejb.dao;
 
+import java.util.Set;
+
 import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.LoggerFactory;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.InMultipleColumnsException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
+import com.stobinski.bottlecaps.ejb.dao.functions.ESqlFunctions;
 import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
 import com.stobinski.bottlecaps.ejb.dao.functions.Update;
-import com.stobinski.bottlecaps.ejb.dao.functions.ESqlFunctions;
 
 public class StringQuery {
 
@@ -23,12 +27,13 @@ public class StringQuery {
 	private Object[] setValues;
 	private Object[] whereValues;
 	private String[] likeValues;
+	private Set<Object> inValues;
 	
 	public static final String LIKE_VALUE = "likeValue";
 	private static final String WHITESPACE = " ";
 	private static final String AND = "AND";
 	
-	public StringQuery(QueryBuilder queryBuilder) {
+	public StringQuery(QueryBuilder queryBuilder) throws QueryBuilderException {
 		handleSqlFunction(queryBuilder.getSqlFunction());
 		this.where = queryBuilder.isWhere();
 		this.asc = queryBuilder.isAsc();
@@ -55,6 +60,13 @@ public class StringQuery {
 					throw new ColumnsValuesNotMatchException();
 			}
 			
+			if(queryBuilder.getInValues() != null) {
+				this.inValues = queryBuilder.getInValues();
+				
+				if(columns.length > 1)
+					throw new InMultipleColumnsException();
+			}
+			
 		}
 	}
 	
@@ -63,7 +75,9 @@ public class StringQuery {
 		
 		String query = "";
 		
-		if(sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Select.name()) | sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Count.name())) {
+		if(sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Select.name()) | 
+		   sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Count.name()) |
+		   sqlFunction.getSqlFunctionName().equals(ESqlFunctions.Delete.name())) {
 			query = sqlFunction.getFunctionQuery();
 		}
 			
@@ -80,9 +94,11 @@ public class StringQuery {
 		}
 		
 		query = where && this.whereValues != null ? 
-				appendWhereColumns(update, query + " WHERE ", this.columns): 
+				appendWhereEqColumns(update, query, this.columns): 
 				where && this.likeValues != null ?
-				appendLikeColumns(query + " WHERE ", this.columns):
+				appendLikeColumns(query, this.columns):
+				where && this.inValues != null ?
+				appendWhereInColumns(query, this.columns[0]):
 				query;
 		
 		boolean orderExist = orderColumn != null;		
@@ -112,7 +128,11 @@ public class StringQuery {
 		return likeValues;
 	}
 	
-	private void handleSqlFunction(SqlFunction sqlFunction) {
+	public Set<Object> getInValues() {
+		return inValues;
+	}
+	
+	private void handleSqlFunction(SqlFunction sqlFunction) throws SqlFunctionLackException {
 		if(sqlFunction != null)
 			this.sqlFunction = sqlFunction;
 		else
@@ -133,8 +153,8 @@ public class StringQuery {
 		return sb.toString();
 	}
 	
-	private String appendWhereColumns(boolean update, String query, String[] columns) {
-		StringBuilder sb = new StringBuilder(query);
+	private String appendWhereEqColumns(boolean update, String query, String[] columns) {
+		StringBuilder sb = new StringBuilder(query + " WHERE ");
 		
 		int j = 0;
 		
@@ -154,9 +174,13 @@ public class StringQuery {
 		
 		return sb.toString();
 	}
+
+	private String appendWhereInColumns(String query, String column) {
+		return query + " WHERE e." + column + " IN :params";
+	}
 	
 	private String appendLikeColumns(String query, String[] columns) {
-		StringBuilder sb = new StringBuilder(query);
+		StringBuilder sb = new StringBuilder(query + " WHERE ");
 		
 		for(int i = 1; i <= columns.length; i++)
 			sb.append("e." + columns[i - 1] + " LIKE :" + LIKE_VALUE + i);

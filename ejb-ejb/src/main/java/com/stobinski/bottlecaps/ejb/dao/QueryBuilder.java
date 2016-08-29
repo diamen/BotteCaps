@@ -1,9 +1,12 @@
 package com.stobinski.bottlecaps.ejb.dao;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.dao.functions.Count;
+import com.stobinski.bottlecaps.ejb.dao.functions.Delete;
 import com.stobinski.bottlecaps.ejb.dao.functions.Select;
 import com.stobinski.bottlecaps.ejb.dao.functions.SqlFunction;
 import com.stobinski.bottlecaps.ejb.dao.functions.Update;
@@ -18,18 +21,28 @@ public class QueryBuilder {
 	private String[] whereColumns;
 	private Object[] whereValues;
 	private String[] likeValues;
-	
+	private Set<Object> inValues;
+
 	public QueryBuilder() {}
 	
 	public QueryBuilder(SqlFunction sqlFunction) {
 		this.sqlFunction = sqlFunction;
 	}
 	
-	public StringQuery build() {
+	public StringQuery build() throws QueryBuilderException {
 		return new StringQuery(this);
 	}
 	
-	public Select select() {
+	public Delete delete() throws QueryBuilderException {
+		if(this.sqlFunction != null)
+			throw new MultipleInvocationException();
+		
+		Delete delete = new Delete();
+		this.sqlFunction = delete;
+		return delete;
+	}
+	
+	public Select select() throws QueryBuilderException {
 		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
 		
@@ -38,7 +51,7 @@ public class QueryBuilder {
 		return select;
 	}
 
-	public Update update(Class <? extends Serializable> entity) {
+	public Update update(Class <? extends Serializable> entity) throws QueryBuilderException {
 		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
 			
@@ -47,7 +60,7 @@ public class QueryBuilder {
 		return update;
 	}
 	
-	public Count count() {
+	public Count count() throws MultipleInvocationException {
 		if(this.sqlFunction != null)
 			throw new MultipleInvocationException();
 			
@@ -87,6 +100,11 @@ public class QueryBuilder {
 		return this;
 	}
 	
+	public QueryBuilder in(Set<Object> inValues) {
+		this.inValues = inValues;
+		return this;
+	}
+	
 	public SqlFunction getSqlFunction() {
 		return sqlFunction;
 	}
@@ -117,6 +135,14 @@ public class QueryBuilder {
 	
 	public String getOrderColumn() {
 		return orderColumn;
+	}
+	
+	public Set<Object> getInValues() {
+		return inValues;
+	}
+
+	public void setInValues(Set<Object> inValues) {
+		this.inValues = inValues;
 	}
 	
 }

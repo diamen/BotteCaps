@@ -3,12 +3,17 @@ package com.stobinski.bottlecaps.ejb.dao;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import com.stobinski.bottlecaps.ejb.dao.exceptions.ColumnsValuesNotMatchException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.InMultipleColumnsException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.MultipleInvocationException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.OrderByException;
+import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.SqlFunctionLackException;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.News;
@@ -23,7 +28,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildFirstPartOfSelectQuery() {
+	public void shouldBuildFirstPartOfSelectQuery() throws QueryBuilderException {
 		// when
 		String query = queryBuilder.select().from(Caps.class).build().toString();
 		
@@ -44,7 +49,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildTwoPartQuery() {
+	public void shouldBuildTwoPartQuery() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e";
 		// when
@@ -60,7 +65,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldFilteredQueryHaveColumnsAndValues() {
+	public void shouldFilteredQueryHaveColumnsAndValues() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e WHERE e." + Caps.BEER_NAME + "=?1 AND e." + Caps.CAP_TEXT_NAME + "=?2";
 		// when
@@ -76,7 +81,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldAppendLikeToQuery() {
+	public void shouldAppendLikeToQuery() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e WHERE e." + Caps.BEER_NAME + " LIKE :likeValue1";
 		// when
@@ -86,7 +91,7 @@ public class QueryBuilderTest {
 	}
 
 	@Test
-	public void shouldAppendOrderByToQuery() {
+	public void shouldAppendOrderByToQuery() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME;
 		
@@ -98,7 +103,7 @@ public class QueryBuilderTest {
 	}
 
 	@Test
-	public void shouldAppendAscToOrderByQuery() {
+	public void shouldAppendAscToOrderByQuery() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME + " ASC";
 	
@@ -110,7 +115,7 @@ public class QueryBuilderTest {
 	}
 
 	@Test
-	public void shouldAppendDescToOrderByQuery() {
+	public void shouldAppendDescToOrderByQuery() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT e FROM " + News.class.getSimpleName() + " e ORDER BY e." + News.DATE_NAME + " DESC";
 		
@@ -134,7 +139,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildProperCountQuery() {
+	public void shouldBuildProperCountQuery() throws QueryBuilderException {
 		// given
 		String expectedQuery = "SELECT COUNT(e) FROM " + Caps.class.getSimpleName() + " e";
 		// when
@@ -144,7 +149,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildFirstPartOfUpdateQuery() {
+	public void shouldBuildFirstPartOfUpdateQuery() throws QueryBuilderException {
 		// when
 		StringQuery query = queryBuilder.update(Caps.class).set(Caps.BEER_NAME).eq("TEST").build();
 		// then
@@ -152,7 +157,7 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildUpdateQueryWithSet() {
+	public void shouldBuildUpdateQueryWithSet() throws QueryBuilderException {
 		// given
 		String expectedQuery = "UPDATE " + Caps.class.getSimpleName() + " e SET e." + Caps.BEER_NAME + "=?1, e." + Caps.FILE_NAME_NAME + "=?2";
 		// when
@@ -162,11 +167,45 @@ public class QueryBuilderTest {
 	}
 	
 	@Test
-	public void shouldBuildUpdateQueryWithSetAndWhere() {
+	public void shouldBuildUpdateQueryWithSetAndWhere() throws QueryBuilderException {
 		// given
 		String expectedQuery = "UPDATE " + Caps.class.getSimpleName() + " e SET e." + Caps.BEER_NAME + "=?1, e." + Caps.FILE_NAME_NAME + "=?2 WHERE e." + Caps.ID_NAME + "=?3";
 		// when
 		StringQuery query = queryBuilder.update(Caps.class).set(Caps.BEER_NAME, Caps.FILE_NAME_NAME).eq("KORCA", "2").where(Caps.ID_NAME).eq(1).build();
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+	
+	@Test
+	public void shouldBuildQueryWithInExpression() throws QueryBuilderException {
+		// given
+		String expectedQuery = "SELECT e FROM " + Caps.class.getSimpleName() + " e WHERE e." + Caps.ID_NAME + " IN :params";
+		Set<Long> set = new HashSet<>();
+		set.add(1l);
+		// when
+		@SuppressWarnings("unchecked")
+		StringQuery query = queryBuilder.select().from(Caps.class).where(Caps.ID_NAME).in((Set<Object>)(Set<?>) set).build();
+		// then
+		assertThat(query.toString()).isEqualTo(expectedQuery);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldThrowExceptionWhenInIsCalledWithMoreThanOneColumns() {
+		// given
+		Set<Long> set = new HashSet<>();
+		set.add(1l);
+		
+		// expected
+		assertThatThrownBy(() -> { queryBuilder.select().from(Caps.class).where(Caps.ID_NAME, Caps.ADDED_DATE_NAME).in((Set<Object>)(Set<?>) set).build(); } ).isInstanceOf(InMultipleColumnsException.class);
+	}
+	
+	@Test
+	public void shouldBuildDeleteQuery() throws QueryBuilderException {
+		// given
+		String expectedQuery = "DELETE FROM " + Caps.class.getSimpleName() + " e";
+		// when
+		StringQuery query = queryBuilder.delete().from(Caps.class).build();
 		// then
 		assertThat(query.toString()).isEqualTo(expectedQuery);
 	}
