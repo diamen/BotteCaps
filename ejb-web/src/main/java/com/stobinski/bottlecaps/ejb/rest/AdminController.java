@@ -23,7 +23,7 @@ import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.common.NewsManager;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
-import com.stobinski.bottlecaps.ejb.dao.TradeCapsManager;
+import com.stobinski.bottlecaps.ejb.trade.TradeCapsManager;
 
 @Path("/admin/")
 public class AdminController {

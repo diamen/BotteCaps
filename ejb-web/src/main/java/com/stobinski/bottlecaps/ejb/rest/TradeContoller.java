@@ -9,7 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.stobinski.bottlecaps.ejb.dao.TradeCapsManager;
+import com.stobinski.bottlecaps.ejb.trade.TradeCapsManager;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64MiniTradeCap;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64TradeCap;
 

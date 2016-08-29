@@ -1,4 +1,4 @@
-package com.stobinski.bottlecaps.ejb.dao;
+package com.stobinski.bottlecaps.ejb.trade;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -22,6 +22,8 @@ import com.stobinski.bottlecaps.ejb.common.ConfigurationBean;
 import com.stobinski.bottlecaps.ejb.common.EConfigKeys;
 import com.stobinski.bottlecaps.ejb.common.FileHelper;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
+import com.stobinski.bottlecaps.ejb.dao.DaoService;
+import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.entities.MiniTradeCaps;
 import com.stobinski.bottlecaps.ejb.entities.TradeCaps;
@@ -86,11 +88,21 @@ public class TradeCapsManager {
 		}
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public Base64TradeCap getTradeCap(Long id) {
+		TradeCaps cap = entityManager.createNamedQuery("TradeCaps.findTradeCapById", TradeCaps.class).setParameter("id", id).getSingleResult();
+		return new Base64TradeCap(cap, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(cap.getPath(), cap.getFile_name())));
+	}
+	
 	public List<Base64MiniTradeCap> getMiniTradeCaps() {
 		return findMiniCaps()
 				.stream()
 				.map(e -> new Base64MiniTradeCap(e, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(e.getPath(), e.getFile_name()))))
 				.collect(Collectors.toList());
+	}
+	
+	protected List<MiniTradeCaps> findMiniCaps() {
+		return entityManager.createNamedQuery("MiniTradeCaps.findTradeCaps", MiniTradeCaps.class).getResultList();
 	}
 	
 	private boolean isAlreadyInDatabase(String filename) {	
@@ -126,14 +138,4 @@ public class TradeCapsManager {
 		entityManager.persist(mini);
 	}
 
-	private List<MiniTradeCaps> findMiniCaps() {
-		return entityManager.createNamedQuery("MiniTradeCaps.findTradeCaps", MiniTradeCaps.class).getResultList();
-	}
-
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Base64TradeCap getTradeCap(Long id) {
-		TradeCaps cap = entityManager.createNamedQuery("TradeCaps.findTradeCapById", TradeCaps.class).setParameter("id", id).getSingleResult();
-		return new Base64TradeCap(cap, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(cap.getPath(), cap.getFile_name())));
-	}
-	
 }
