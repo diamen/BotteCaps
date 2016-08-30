@@ -6,6 +6,22 @@ import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
+@NamedQueries({
+	@NamedQuery(name="News.findNews",
+				query="SELECT e FROM News e " +
+					  "ORDER BY e.date DESC"),
+
+	@NamedQuery(name="News.findNewsById",
+				query="SELECT e FROM News e " +
+					  "WHERE e.id = :id"),
+	
+	@NamedQuery(name="News.countNews",
+				query="SELECT COUNT(e) " +
+					  "FROM News e")
+})
 
 @Entity
 public class News implements Serializable {

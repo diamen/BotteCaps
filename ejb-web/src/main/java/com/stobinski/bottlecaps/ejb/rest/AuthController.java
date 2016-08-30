@@ -19,7 +19,7 @@ import org.jboss.security.Base64Utils;
 import com.stobinski.bottlecaps.ejb.security.AuthToken;
 import com.stobinski.bottlecaps.ejb.security.PasswordGenerator;
 import com.stobinski.bottlecaps.ejb.security.SessionCache;
-import com.stobinski.bottlecaps.ejb.security.iSessionCache;
+import com.stobinski.bottlecaps.ejb.security.ISessionCache;
 import com.stobinski.bottlecaps.ejb.user.UserLoginValidator;
 import com.stobinski.bottlecaps.ejb.wrappers.Login;
 
@@ -34,7 +34,7 @@ public class AuthController {
 	
 	@Inject
 	@SessionCache(SessionCache.Type.TOKEN)
-	private iSessionCache sessionCache;
+	private ISessionCache sessionCache;
 	
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

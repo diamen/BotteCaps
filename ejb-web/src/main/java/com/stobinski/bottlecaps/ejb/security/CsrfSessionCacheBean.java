@@ -11,7 +11,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
 @SessionScoped
-public class CsrfSessionCacheBean implements Serializable, iSessionCache {
+public class CsrfSessionCacheBean implements Serializable, ISessionCache {
 
 	private static final long serialVersionUID = -4776662887609673255L;
 	private Cache<String, Boolean> csrfPreventionSaltCache;

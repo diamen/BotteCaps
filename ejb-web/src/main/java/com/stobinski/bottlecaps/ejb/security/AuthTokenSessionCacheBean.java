@@ -11,7 +11,7 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
 @SessionScoped
-public class AuthTokenSessionCacheBean implements Serializable, iSessionCache {
+public class AuthTokenSessionCacheBean implements Serializable, ISessionCache {
 
 	private static final long serialVersionUID = -8720325565573249407L;
 	private Cache<String, Boolean> authTokenSaltCache;

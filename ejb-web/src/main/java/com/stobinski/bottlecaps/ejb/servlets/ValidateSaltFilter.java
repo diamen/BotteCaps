@@ -13,14 +13,14 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import com.stobinski.bottlecaps.ejb.security.SessionCache;
-import com.stobinski.bottlecaps.ejb.security.iSessionCache;
+import com.stobinski.bottlecaps.ejb.security.ISessionCache;
 
 @WebFilter(filterName = "validateSaltFilter", urlPatterns = { "/rest/auth/*" } )
 public class ValidateSaltFilter implements Filter  {
 
 	@Inject
 	@SessionCache(SessionCache.Type.CSRF)
-	private iSessionCache sessionCache;
+	private ISessionCache sessionCache;
 	
 	@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

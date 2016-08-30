@@ -16,14 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.stobinski.bottlecaps.ejb.security.SessionCache;
-import com.stobinski.bottlecaps.ejb.security.iSessionCache;
+import com.stobinski.bottlecaps.ejb.security.ISessionCache;
 
 @WebFilter(filterName = "loadSaltFilter", urlPatterns = { "/admin/*" } )
 public class LoadSaltFilter implements Filter {
 
 	@Inject
 	@SessionCache(SessionCache.Type.CSRF)
-	private iSessionCache sessionCache;
+	private ISessionCache sessionCache;
 	
 	@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

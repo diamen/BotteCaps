@@ -68,14 +68,26 @@ public class DaoService {
 		log.debug(query.toString());
 		
 		return query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
-				entityManager.createQuery(query.toString()).getResultList() :
+				em.createQuery(query.toString()).getResultList() :
 				query.getWhereValues() != null ?		
-				attachParameters(entityManager.createQuery(query.toString()), query.getWhereValues()).getResultList() :
+				attachParameters(em.createQuery(query.toString()), query.getWhereValues()).getResultList() :
 				query.getLikeValues() != null ?	
-				attachLikeParameters(entityManager.createQuery(query.toString()), query.getLikeValues()).getResultList() :
-				attachInParameters(entityManager.createQuery(query.toString()), query.getInValues()).getResultList();
+				attachLikeParameters(em.createQuery(query.toString()), query.getLikeValues()).getResultList() :
+				attachInParameters(em.createQuery(query.toString()), query.getInValues()).getResultList();
 	}
 	
+
+	public List<Serializable> retrieveData(EntityManager em, StringQuery query, int limit, int offset) {
+		log.debug(query.toString());
+		
+		return query.getWhereValues() == null && query.getLikeValues() == null && query.getInValues() == null ? 
+				em.createQuery(query.toString()).setFirstResult(offset).setMaxResults(limit).getResultList() :
+				query.getWhereValues() != null ?		
+				attachParameters(em.createQuery(query.toString()), query.getWhereValues()).setFirstResult(offset).setMaxResults(limit).getResultList() :
+				query.getLikeValues() != null ?	
+				attachLikeParameters(em.createQuery(query.toString()), query.getLikeValues()).getResultList() :
+				attachInParameters(em.createQuery(query.toString()), query.getInValues()).getResultList();
+	}
 	
 	public List<Serializable> retrieveData(StringQuery query, int limit, int offset) {
 		log.debug(query.toString());

@@ -8,13 +8,13 @@ public class SessionCacheProducer {
 	
 	@Produces
 	@SessionCache(Type.CSRF)
-	public iSessionCache csrfSessionCacheFactory() {
+	public ISessionCache csrfSessionCacheFactory() {
 		return new CsrfSessionCacheBean();
 	}
 	
 	@Produces
 	@SessionCache(Type.TOKEN)
-	public iSessionCache authTokenSessionCacheFactory() {
+	public ISessionCache authTokenSessionCacheFactory() {
 		return new AuthTokenSessionCacheBean();
 	}
 	

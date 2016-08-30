@@ -1,6 +1,7 @@
 package com.stobinski.bottlecaps.ejb.entities;
 
 import java.io.Serializable;
+
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -16,6 +17,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.codehaus.jackson.annotate.JsonManagedReference;
+
 @NamedQueries({
 	@NamedQuery(name="TradeCaps.findTradeCaps",
 				query="SELECT e " +

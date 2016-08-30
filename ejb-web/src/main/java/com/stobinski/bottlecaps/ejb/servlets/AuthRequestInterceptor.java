@@ -12,7 +12,7 @@ import javax.ws.rs.ext.Provider;
 
 import com.stobinski.bottlecaps.ejb.security.AuthToken;
 import com.stobinski.bottlecaps.ejb.security.SessionCache;
-import com.stobinski.bottlecaps.ejb.security.iSessionCache;
+import com.stobinski.bottlecaps.ejb.security.ISessionCache;
 
 @Provider
 @AuthToken
@@ -20,7 +20,7 @@ public class AuthRequestInterceptor implements ContainerRequestFilter {
 
 	@Inject
 	@SessionCache(SessionCache.Type.TOKEN)
-	private iSessionCache sessionCache;
+	private ISessionCache sessionCache;
 	
 	@Context
 	private HttpServletRequest httpReq;
