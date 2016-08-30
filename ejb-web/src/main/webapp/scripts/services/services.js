@@ -170,6 +170,16 @@ angular.module('bcServices', [])
 					}
 				};
 			},
+			countriesController: function() {
+				return {
+					getCountriesWithAmount: function() {
+						return $http({
+							method: "GET",
+							url: "./rest/countries/all"
+						});
+					}
+				};
+			},
 			authController: function() {
 				return {
 					logout: function() {
@@ -192,9 +202,6 @@ angular.module('bcServices', [])
 							url: "./rest/photo/newest/",
 							params: { limit: limit }
 						});
-					},
-					getCountries: function() {
-						return $http.get("./rest/photo/countries");
 					},
 					getCountryFlag: function(country) {
 						return $http({

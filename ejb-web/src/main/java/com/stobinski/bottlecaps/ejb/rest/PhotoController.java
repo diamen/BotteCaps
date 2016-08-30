@@ -28,13 +28,6 @@ public class PhotoController {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("countries")
-	public List<CountriesWithAmount> getCountries() {
-		return dao.getCountriesWithAmount();
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	@Path("bycountry/{country}")
 	public List<Base64Cap> photosByCountry(@PathParam("country") String country) {
 		return imageManager.loadCapFiles(dao.getCaps(country));

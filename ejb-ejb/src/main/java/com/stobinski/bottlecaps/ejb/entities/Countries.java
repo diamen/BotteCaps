@@ -5,6 +5,10 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+
+@NamedQuery(name="Countries.findCountries",
+			query="SELECT e FROM Countries e")
 
 @Entity
 public class Countries implements Serializable {

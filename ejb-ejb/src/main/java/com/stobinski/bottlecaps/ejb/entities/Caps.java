@@ -6,6 +6,11 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
+
+@NamedQuery(name="Caps.countCapsByCountryId",
+			query="SELECT COUNT(e) FROM Caps e " +
+				  "WHERE e.country_id = :country_id")
 
 @Entity
 public class Caps implements Serializable {
