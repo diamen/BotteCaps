@@ -68,7 +68,6 @@ public class AdminController {
 	public Response uploadTrade(String baseimage, 
 			@QueryParam("filename") String filename) {
 
-		
 		try {
 			tradeManager.saveFile(baseimage, filename);
 		} catch (FileAlreadyExistsException e) {

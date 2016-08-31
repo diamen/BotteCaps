@@ -6,7 +6,7 @@ angular.module('bcControllers')
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
 
-		restService.photoController().getCountryFlag($scope.country).success(function(data) {
+		restService.countriesController().getFlag($scope.country).success(function(data) {
 			$scope.flag = data.flag;
 		});
 
@@ -24,13 +24,13 @@ angular.module('bcControllers')
 			$scope.caps = caps;
 		};
 
-		restService.photoController().getImages($scope.country).success(function(data) {
+		restService.collectController().getCaps($scope.country).success(function(data) {
 			$scope.convertPhotos(data);
 			shareData.addData($scope.caps);
 		});
 
 		$scope.filterCaps = function(searchText) {
-			restService.photoController().getFilteredCaps($scope.country, searchText).success(function(data) {
+			restService.collectController().getFilteredCaps($scope.country, searchText).success(function(data) {
 				$scope.convertPhotos(data);
 			});
 		};

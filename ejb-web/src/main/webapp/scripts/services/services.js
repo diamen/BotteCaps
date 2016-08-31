@@ -177,6 +177,12 @@ angular.module('bcServices', [])
 							method: "GET",
 							url: "./rest/countries/all"
 						});
+					},
+					getFlag: function(country) {
+						return $http({
+							method: "GET",
+							url: "./rest/countries/" + country + "/flag"
+						});
 					}
 				};
 			},
@@ -191,44 +197,35 @@ angular.module('bcServices', [])
 					}
 				};
 			},
-			photoController: function() {
+			collectController: function() {
 				return {
-					getImages: function(country) {
-						return $http.get("./rest/photo/bycountry/" + country);
+					getCaps: function(country) {
+						return $http.get("./rest/collect/caps/" + country);
 					},
 					getNewestCaps: function(limit) {
 						return $http({
 							method: "GET",
-							url: "./rest/photo/newest/",
+							url: "./rest/collect/newest/",
 							params: { limit: limit }
-						});
-					},
-					getCountryFlag: function(country) {
-						return $http({
-							method: "GET",
-							url: "./rest/photo/flag/",
-							params: { country : country }
 						});
 					},
 					getFilteredCaps: function(country, searchText) {
 						return $http({
 							method: "GET",
-							url: "./rest/photo/filtercap/",
-							params: { country: country, searchText : searchText }
+							url: "./rest/collect/filtercaps/" + country + "/",
+							params: { searchText : searchText }
 						});
 					},
 					getSingleCap: function(country, capId) {
 						return $http({
 							method: "GET",
-							url: "./rest/photo/singlecap/",
-							params: { country: country, id: capId }
+							url: "./rest/collect/caps/" + country + "/" + capId
 						});
 					},
 					getBrand: function(id) {
 						return $http({
 							method: "GET",
-							url: "./rest/photo/brand/",
-							params: { id: id }
+							url: "./rest/collect/brand/" + id
 						});
 					}
 				};

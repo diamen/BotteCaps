@@ -23,6 +23,14 @@ public class CountriesManager {
 				.collect(Collectors.toList());
 	}
 	
+	public String getFlag(String country) {
+		return entityManager.createNamedQuery("Countries.findFlagByName", String.class).setParameter("country", country).getSingleResult();
+	}
+	
+	public Long getCountryId(String country) {
+		return entityManager.createNamedQuery("Countries.findIdByName", Long.class).setParameter("country", country).getSingleResult();
+	}
+	
 	private Long count(Long countryId) {
 		return entityManager.createNamedQuery("Caps.countCapsByCountryId", Long.class)
 				.setParameter("country_id", countryId).getSingleResult();

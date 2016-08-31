@@ -6,11 +6,27 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-@NamedQuery(name="Caps.countCapsByCountryId",
-			query="SELECT COUNT(e) FROM Caps e " +
-				  "WHERE e.country_id = :country_id")
+@NamedQueries({
+	@NamedQuery(name="Caps.findCaps",
+			    query="SELECT e FROM Caps e"),
+	@NamedQuery(name="Caps.findCapsByCountryId",
+				query="SELECT e FROM Caps e " +
+				  	  "WHERE e.country_id = :country_id"),
+	@NamedQuery(name="Caps.countCapsByCountryId",
+				query="SELECT COUNT(e) FROM Caps e " +
+					  "WHERE e.country_id = :country_id"),
+	@NamedQuery(name="Caps.findCapByIdAndCountryId",
+				query="SELECT e FROM Caps e " +
+					  "WHERE e.country_id = :country_id " +
+					  "AND e.id = :id"),
+	@NamedQuery(name="Caps.findCapsByCountryIdAndCapText",
+				query="SELECT e FROM Caps e " +
+					  "WHERE e.country_id = :country_id " +
+					  "AND e.cap_text = :cap_text")
+})
 
 @Entity
 public class Caps implements Serializable {

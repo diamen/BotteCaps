@@ -15,7 +15,7 @@ angular.module('bcControllers')
 			$window.location.reload();
 		};
 
-		restService.photoController().getCountryFlag($scope.country).success(function(data) {
+		restService.countriesController().getFlag($scope.country).success(function(data) {
 			$scope.flag = data.flag;
 		});
 
@@ -30,13 +30,13 @@ angular.module('bcControllers')
 			});
 		};
 
-		restService.photoController().getSingleCap($scope.country, $scope.id).success(function(data) {
+		restService.collectController().getSingleCap($scope.country, $scope.id).success(function(data) {
 			$scope.cap = data;
 			$scope.capsrc = base64Service.base64ToUrl(data.base64);
 
 			$scope.beerLabel = data.beer === 1 ? 'Piwo' : 'Niepiwo';
 
-			restService.photoController().getBrand(data.brand_id).success(function(data) {
+			restService.collectController().getBrand(data.brand_id).success(function(data) {
 				$scope.brand = data;
 			});
 		});
