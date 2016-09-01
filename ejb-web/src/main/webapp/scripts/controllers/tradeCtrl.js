@@ -20,7 +20,7 @@ angular.module('bcControllers')
 		};
 
 		$scope.delete = function(ids) {
-			restService.adminController().tradeDelete(ids).success(function() {
+			restService.adminController().deleteTrade(ids).success(function() {
 				$window.location.reload();
 			});
 		};

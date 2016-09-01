@@ -12,6 +12,8 @@ import javax.persistence.NamedQuery;
 @NamedQueries({
 	@NamedQuery(name="Caps.findCaps",
 			    query="SELECT e FROM Caps e"),
+	@NamedQuery(name="Caps.findMaxId",
+				query="SELECT MAX(e.id) FROM Caps e"),
 	@NamedQuery(name="Caps.findCapsByCountryId",
 				query="SELECT e FROM Caps e " +
 				  	  "WHERE e.country_id = :country_id"),

@@ -25,6 +25,8 @@ angular.module('bcControllers')
 
 		$scope.selectFiveCaps = function(capId) {
 
+			// TODO Nie działa gdy wchodzi się na przedostatni / ostatni kapsel
+			
 			if($scope.caps === undefined)
 				return;
 

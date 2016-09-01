@@ -10,53 +10,49 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Lock;
 import javax.ejb.LockType;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 import org.imgscalr.Scalr;
 import org.jboss.logging.Logger;
 
-import com.stobinski.bottlecaps.ejb.dao.CapsDaoService;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.TradeCaps;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64TradeCap;
 
-@Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-@TransactionManagement(TransactionManagementType.CONTAINER)
+@Stateless
 public class ImageManager {
 	
-	@Inject
-	private Logger log;
+	private final Logger log;
+	
+	private final ImageFileHandler fileHandler;
+
+	private final String ext;
+	
+	public ImageManager() {	
+		this.log = null;
+		this.fileHandler = null;
+		this.ext = null;
+	}
 	
 	@Inject
-	private CapsDaoService capsDao;
+	public ImageManager(ConfigurationBean configBean, ImageFileHandler fileHandler, Logger log) {
+		this.fileHandler = fileHandler;
+		this.log = log;
+		this.ext = configBean.getValue(EConfigKeys.EXT.toString());
+	}
 	
-	@Inject
-	private ImageFileHandler fileHandler;
-	
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void saveImage(byte[] b, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
-		Integer oldFileName = fileHandler.getLastFileNameNumber();
-		Integer newFileName = fileHandler.getNewFileNameNumber(oldFileName);
-		Long brandId = capsDao.getBrandId(capbrand);
-		Long countryId = capsDao.getCountryId(country);
-		String filePath = fileHandler.generateFilePath(newFileName, country);
-		saveFile(b, fileHandler.generateFullFilePath(newFileName, country));
-		capsDao.insertCap(String.valueOf(newFileName), captext, brandId, isBeer, countryId, filePath, ImageFileHandler.EXT);
+	public void saveImage(byte[] b, Long fileNameSequence, String filePath) throws IOException {
+		String fullFilePath = fileHandler.generateFullFilePath(filePath, fileNameSequence);
+		saveFile(b, fullFilePath);
 		
-		log.debug("File {" + newFileName + "} added to database");
+		log.debug(String.format("File %d saved in %s", fileNameSequence, fullFilePath));
 	}
 	
 	@Lock(LockType.WRITE)
@@ -85,26 +81,27 @@ public class ImageManager {
 		return new Base64TradeCap(cap, Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
 	}
 	
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void removeCap(String country, Long capId) {
-		capsDao.removeCap(country, capId);
-	}
-	
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public void updateCap(Long id, String country, String captext, String capbrand, Integer beer) {
-		capsDao.updateCap(id, country, captext, capbrand, beer);
-	}
-	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void saveFile(byte[] base64, String path) throws IOException {
-		ImageIO.write(byteArrayToBufferedImage(base64), ImageFileHandler.EXT, new File(path));
+		ImageIO.write(byteArrayToBufferedImage(base64), ext, new File(path));
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void saveFile(BufferedImage image, String path) throws IOException {
-		ImageIO.write(image, ImageFileHandler.EXT, new File(path));
+		ImageIO.write(image, ext, new File(path));
+	}
+	
+	public String getExt() {
+		return ext;
+	}
+	
+	public String generateFilePath(Long fileNameSequence, String country) {
+		return fileHandler.generateFilePath(fileNameSequence, country);
+	}
+	
+	public Long generateFileNameSequence() {
+		Long oldFileName = fileHandler.getLastFileNameNumber();
+		return fileHandler.getNewFileNameNumber(oldFileName);
 	}
 	
 	public BufferedImage miniaturizeImage(byte[] base64) throws IOException {
@@ -116,7 +113,7 @@ public class ImageManager {
 	}
 	
 	public byte[] retrieveImage(String path, String fileName) {
-		String filePath = path + File.separatorChar + fileName + '.' + ImageFileHandler.EXT;
+		String filePath = path + File.separatorChar + fileName + '.' + ext;
 		try {
 			InputStream inputStream = new FileInputStream(new File(filePath));
 			BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -136,7 +133,7 @@ public class ImageManager {
 	}
 	
 	private byte[] retrieveScaledImage(String path, String fileName) {
-		String filePath = path + File.separatorChar + fileName + '.' + ImageFileHandler.EXT;
+		String filePath = path + File.separatorChar + fileName + '.' + ext;
 		try {
 			InputStream inputStream = new FileInputStream(new File(filePath));
 			BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -150,7 +147,7 @@ public class ImageManager {
 	
 	private byte[] bufferedImageToByteArray(BufferedImage bufferedImage) throws IOException {
 		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bufferedImage, ImageFileHandler.EXT, baos);
+			ImageIO.write(bufferedImage, ext, baos);
 			baos.flush();
 			byte[] b = baos.toByteArray();
 			baos.close();

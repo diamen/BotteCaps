@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -20,39 +21,36 @@ import javax.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
-import com.stobinski.bottlecaps.ejb.common.ImageManager;
-import com.stobinski.bottlecaps.ejb.dao.DaoService;
+import com.stobinski.bottlecaps.ejb.managers.CollectManager;
 import com.stobinski.bottlecaps.ejb.managers.NewsManager;
 import com.stobinski.bottlecaps.ejb.trade.TradeCapsManager;
 
 @Path("/admin/")
 public class AdminController {
 
-	@Inject DaoService dao;
-	
 	@Inject
-	private ImageManager imageManager;
+	private CollectManager collectManager;
 	
 	@Inject
 	private NewsManager newsManager;
 	
 	@Inject
-	private Logger log;
+	private TradeCapsManager tradeManager;
 	
 	@Inject
-	private TradeCapsManager tradeManager;
+	private Logger log;
 	
 	@POST
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("image/upload")
-	public Response uploadImage(String baseimage, 
+	@Path("collect")
+	public Response addCap(String baseimage, 
 			@QueryParam("captext") String captext, 
 			@QueryParam("capbrand") String capbrand,
 			@QueryParam("beer") Integer beer,
 			@QueryParam("country") String country) {
 		try {
-			imageManager.saveImage(Base64Service.fromBase64JsonToByteArray(baseimage), captext, capbrand, beer == 1, country);
+			collectManager.saveCap(Base64Service.fromBase64JsonToByteArray(baseimage), captext, capbrand, beer == 1, country);
 		} catch (IOException e) {
 			log.error(e);
 			return Response.serverError().status(Status.INTERNAL_SERVER_ERROR).build();
@@ -60,12 +58,39 @@ public class AdminController {
 		return Response.ok().build();
 	}
 
+	@PUT
+//  @AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("collect")
+	public Response editCap(@QueryParam("id") Long id,
+			@QueryParam("country") String country,
+			@QueryParam("captext") String captext,
+			@QueryParam("capbrand") String capbrand,
+			@QueryParam("beer") Integer beer) {
+		
+		collectManager.updateCap(id, captext, country, capbrand, beer);
+		
+		return Response.ok().build();
+	}
+	
+	@DELETE
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("collect")
+	public Response deleteCap( @QueryParam("capId") Long capId) {
+		// TODO Plik nie jest usuwany z lokalizacji
+		
+		collectManager.removeCap(capId);
+		
+		return Response.ok().build();
+	}
+	
 	@POST
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("trade/upload")
-	public Response uploadTrade(String baseimage, 
+	public Response addTrade(String baseimage, 
 			@QueryParam("filename") String filename) {
 
 		try {
@@ -83,46 +108,24 @@ public class AdminController {
 		return Response.ok().build();
 	}
 	
-	@POST
-//	@AuthToken
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("image/delete")
-	public Response deleteFile(@QueryParam("country") String country, @QueryParam("capId") Long capId) {
-		imageManager.removeCap(country, capId);
-		
-		return Response.ok().build();
-	}
-	
 	@DELETE
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("tradecaps")
-	public Response deleteTradeCaps(@QueryParam("ids") Set<Long> ids) {
+	public Response deleteTrade(@QueryParam("ids") Set<Long> ids) {
 		tradeManager.deleteFiles(ids);
 		
 		return Response.ok().build();
 	}
 	
 	@POST
-//  @AuthToken
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("image/update")
-	public Response updateImage(@QueryParam("id") Long id,
-			@QueryParam("country") String country,
-			@QueryParam("captext") String captext,
-			@QueryParam("capbrand") String capbrand,
-			@QueryParam("beer") Integer beer) {
-		
-		imageManager.updateCap(id, country, captext, capbrand, beer);
-		
-		return Response.ok().build();
-	}
-	
-	@POST
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("news/add")
+	@Path("news")
 	public Response addNews(@QueryParam("title") String title, @QueryParam("content") String content) {
+		
+		// TODO Przekierowanie na formatce po dodaniu nowego newsa
+		
 		newsManager.saveNews(title, content);
 		
 		return Response.ok().build();

@@ -5,13 +5,21 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
-@NamedQuery(
-		name="Brands.findById",
-		query="SELECT e.name FROM Brands e " +
-			  "WHERE e.id = :id"
-		)
+@NamedQueries({
+	@NamedQuery(
+			name="Brands.findById",
+			query="SELECT e.name FROM Brands e " +
+				  "WHERE e.id = :id"
+			),
+	@NamedQuery(
+			name="Brands.findByName",
+			query="SELECT e.id FROM Brands e " +
+				  "WHERE e.name = :name"
+			)
+})
 
 @Entity
 public class Brands implements Serializable {

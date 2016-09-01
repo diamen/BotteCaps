@@ -118,27 +118,27 @@ angular.module('bcServices', [])
 					csrfPrevent: function() {
 						return $http.get("./admin/login");
 					},
-					imageUpload: function(base64, capt, capb, beer, country) {
+					addCap: function(base64, capt, capb, beer, country) {
 						return $http({
 							method: "POST",
-							url: "./rest/admin/image/upload",
+							url: "./rest/admin/collect",
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							data: {baseimage: base64},
 							params: { captext: capt, capbrand: capb, beer: beer, country: country }
 						});
 					},
-					imageDelete: function(country, capId) {
+					deleteCap: function(capId) {
 						return $http({
-							method: "POST",
-							url: "./rest/admin/image/delete",
+							method: "DELETE",
+							url: "./rest/admin/collect",
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
-							params: { country: country, capId: capId }
+							params: { capId: capId }
 						});
 					},
-					updateCap: function(id, country, captext, capbrand, beer) {
+					editCap: function(id, country, captext, capbrand, beer) {
 						return $http({
-							method: "POST",
-							url: "./rest/admin/image/update",
+							method: "PUT",
+							url: "./rest/admin/collect",
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							params: { id: id, country: country, captext: captext, capbrand: capbrand, beer: beer }
 						});
@@ -146,12 +146,12 @@ angular.module('bcServices', [])
 					addNews: function(title, content) {
 						return $http({
 							method: "POST",
-							url: "./rest/admin/news/add",
+							url: "./rest/admin/news",
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							params: { title: title, content: content }
 						});
 					},
-					tradeUpload: function(base64, filename) {
+					addTrade: function(base64, filename) {
 						return $http({
 							method: "POST",
 							url: "./rest/admin/trade/upload",
@@ -160,7 +160,7 @@ angular.module('bcServices', [])
 							params: { filename: filename }
 						});
 					},
-					tradeDelete: function(ids) {
+					deleteTrade: function(ids) {
 						return $http({
 							method: "DELETE",
 							url: "./rest/admin/tradecaps",

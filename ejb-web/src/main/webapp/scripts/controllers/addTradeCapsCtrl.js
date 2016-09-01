@@ -21,7 +21,7 @@ angular.module('bcControllers')
 			var i = idx;
 
 			base64Service.imgToBase64($scope.files[i].src, 'image/jpeg', function(base64) {
-				restService.adminController().tradeUpload(base64, $scope.files[i].name)
+				restService.adminController().addTrade(base64, $scope.files[i].name)
 					.success(function() {
 						if(i + 1 < numberOfFiles) {
 							i += 1;

@@ -2,47 +2,44 @@ package com.stobinski.bottlecaps.ejb.common;
 
 import java.io.File;
 
-import javax.inject.Inject;
+import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-import org.jboss.logging.Logger;
-
-import com.stobinski.bottlecaps.ejb.dao.DaoService;
-import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
-import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
-import com.stobinski.bottlecaps.ejb.entities.Caps;
-
+@Stateless
 class ImageFileHandler {
 
-	protected static final String PATH = "D:\\KAPSLE\\ZAGRANICA";
-	protected static final String EXT = "JPG";
+	private String path;
+	private String ext;
 	
-	@Inject
-	private DaoService daoService;
+	@PersistenceContext(unitName = "bottlecaps")
+	private EntityManager entityManager;
 	
-	@Inject
-	private Logger log;
+	@EJB
+	private ConfigurationBean configurationBean;
 	
-	protected Integer getLastFileNameNumber() {
-		try {
-			return daoService.retrieveData(new QueryBuilder().select().from(Caps.class).build())
-				.stream().map(e -> (Caps) e).map(e -> e.getFile_name())	// List<Serializable> -> List<Caps> -> List<Caps.getFile_name()>
-				.mapToInt(e -> Integer.valueOf(e)).max().getAsInt();
-		} catch (QueryBuilderException e) {
-			log.error(e);
-			return null;
-		}
+	@PostConstruct
+	public void init() {
+		this.path = configurationBean.getValue(EConfigKeys.PATH.toString()) + File.separatorChar + configurationBean.getValue(EConfigKeys.COLL.toString());
+		this.ext = configurationBean.getValue(EConfigKeys.EXT.toString());
 	}
 	
-	protected Integer getNewFileNameNumber(Integer oldFileName) {
+	protected Long getLastFileNameNumber() {
+		return entityManager.createNamedQuery("Caps.findMaxId", Long.class).getSingleResult();
+	}
+	
+	protected Long getNewFileNameNumber(Long oldFileName) {
 		return oldFileName + 1;
 	}
 	
-	protected String generateFilePath(Integer newFileName, String country) {
-		return ImageFileHandler.PATH + File.separatorChar + country;
+	protected String generateFilePath(Long newFileName, String country) {
+		return this.path + File.separatorChar + country;
 	}
 
-	protected String generateFullFilePath(Integer newFileName, String country) {
-		return generateFilePath(newFileName, country) + File.separatorChar + newFileName + "." + ImageFileHandler.EXT;
+	protected String generateFullFilePath(String filePath, Long newFileName) {
+		return filePath + File.separatorChar + newFileName + "." + this.ext;
 	}
 	
 }

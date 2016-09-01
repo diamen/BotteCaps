@@ -45,7 +45,7 @@ angular.module('bcControllers')
 			var numberOfFiles = $scope.markedIds.length;
 			var i = 0;
 			var deleteFile = function(capId) {
-				restService.adminController().imageDelete($scope.country, capId).success(function() {
+				restService.adminController().deleteCap(capId).success(function() {
 
 					if(i + 1 < numberOfFiles) {
 						i += 1;

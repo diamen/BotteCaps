@@ -21,7 +21,7 @@ angular.module('bcControllers')
 
 		$scope.update = function(id, country, captext, capbrand, beer) {
 			var beerLabel = beer === 'Piwo' ? 1 : 0;
-			restService.adminController().updateCap(id, country, captext, capbrand, beerLabel)
+			restService.adminController().editCap(id, country, captext, capbrand, beerLabel)
 			.success(function() {
 				$scope.$parent.redirectToCountry($scope.country);
 			})
