@@ -7,26 +7,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
-import java.util.stream.Collectors;
 
-import javax.ejb.Lock;
-import javax.ejb.LockType;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 
 import org.imgscalr.Scalr;
 import org.jboss.logging.Logger;
 
-import com.stobinski.bottlecaps.ejb.entities.Caps;
-import com.stobinski.bottlecaps.ejb.entities.TradeCaps;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64TradeCap;
-
-@Stateless
 public class ImageManager {
 	
 	private final Logger log;
@@ -54,41 +41,13 @@ public class ImageManager {
 		
 		log.debug(String.format("File %d saved in %s", fileNameSequence, fullFilePath));
 	}
-	
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public List<Base64Cap> loadCapFiles(List<Caps> caps) {
-		return caps.stream().map(e -> new Base64Cap(e, Base64Service.fromByteArrayToBase64(retrieveImage(e.getPath(), e.getFile_name()))))
-				.collect(Collectors.toList());
-	}
-	
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public List<Base64TradeCap> loadTradeCapFiles(List<TradeCaps> caps) {
-		return caps.stream().map(e -> new Base64TradeCap(e, Base64Service.fromByteArrayToBase64(retrieveScaledImage(e.getPath(), e.getFile_name()))))
-				.collect(Collectors.toList());
-	}
-	
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Base64Cap loadCapFile(Caps cap) {
-		return new Base64Cap(cap, Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
-	}
 
-	@Lock(LockType.WRITE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Base64TradeCap loadTradeCapFile(TradeCaps cap) {
-		return new Base64TradeCap(cap, Base64Service.fromByteArrayToBase64(retrieveImage(cap.getPath(), cap.getFile_name())));
-	}
-	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void saveFile(byte[] base64, String path) throws IOException {
-		ImageIO.write(byteArrayToBufferedImage(base64), ext, new File(path));
-	}
-	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void saveFile(BufferedImage image, String path) throws IOException {
 		ImageIO.write(image, ext, new File(path));
+	}
+	
+	public void saveFile(byte[] base64, String path) throws IOException {
+		ImageIO.write(byteArrayToBufferedImage(base64), ext, new File(path));
 	}
 	
 	public String getExt() {
@@ -131,20 +90,7 @@ public class ImageManager {
 		
 		return image;
 	}
-	
-	private byte[] retrieveScaledImage(String path, String fileName) {
-		String filePath = path + File.separatorChar + fileName + '.' + ext;
-		try {
-			InputStream inputStream = new FileInputStream(new File(filePath));
-			BufferedImage bufferedImage = ImageIO.read(inputStream);
-			BufferedImage scaledImage = Scalr.resize(bufferedImage, 300);
-			return bufferedImageToByteArray(scaledImage);
-		} catch(IOException e) {
-			log.error(e);
-			throw new RuntimeException(e);
-		}	
-	}
-	
+
 	private byte[] bufferedImageToByteArray(BufferedImage bufferedImage) throws IOException {
 		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ImageIO.write(bufferedImage, ext, baos);
