@@ -34,12 +34,12 @@ class ImageFileHandler {
 		return oldFileName + 1;
 	}
 	
-	protected String generateFilePath(Long newFileName, String country) {
+	protected String generateFilePath(String country) {
 		return this.path + File.separatorChar + country;
 	}
 
-	protected String generateFullFilePath(String filePath, Long newFileName) {
-		return filePath + File.separatorChar + newFileName + "." + this.ext;
+	protected String generateFullFilePath(String filePath, Long fileNameSequence) {
+		return filePath + File.separatorChar + fileNameSequence + "." + this.ext;
 	}
 	
 }

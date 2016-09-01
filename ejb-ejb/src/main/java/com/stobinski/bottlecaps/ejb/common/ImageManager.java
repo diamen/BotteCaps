@@ -43,19 +43,19 @@ public class ImageManager {
 	}
 
 	public void saveFile(BufferedImage image, String path) throws IOException {
-		ImageIO.write(image, ext, new File(path));
+		ImageIO.write(image, getExt(), new File(path));
 	}
 	
 	public void saveFile(byte[] base64, String path) throws IOException {
-		ImageIO.write(byteArrayToBufferedImage(base64), ext, new File(path));
+		ImageIO.write(byteArrayToBufferedImage(base64), getExt(), new File(path));
 	}
 	
 	public String getExt() {
 		return ext;
 	}
 	
-	public String generateFilePath(Long fileNameSequence, String country) {
-		return fileHandler.generateFilePath(fileNameSequence, country);
+	public String generateFilePath(String country) {
+		return fileHandler.generateFilePath(country);
 	}
 	
 	public Long generateFileNameSequence() {
@@ -72,7 +72,7 @@ public class ImageManager {
 	}
 	
 	public byte[] retrieveImage(String path, String fileName) {
-		String filePath = path + File.separatorChar + fileName + '.' + ext;
+		String filePath = path + File.separatorChar + fileName + '.' + getExt();
 		try {
 			InputStream inputStream = new FileInputStream(new File(filePath));
 			BufferedImage bufferedImage = ImageIO.read(inputStream);
@@ -93,7 +93,7 @@ public class ImageManager {
 
 	private byte[] bufferedImageToByteArray(BufferedImage bufferedImage) throws IOException {
 		    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			ImageIO.write(bufferedImage, ext, baos);
+			ImageIO.write(bufferedImage, getExt(), baos);
 			baos.flush();
 			byte[] b = baos.toByteArray();
 			baos.close();

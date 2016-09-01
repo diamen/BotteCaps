@@ -44,7 +44,7 @@ public class CollectManager {
 	public void saveCap(byte[] b, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
 		
 		Long fileNameSequence = imageManager.generateFileNameSequence();
-		String filePath = imageManager.generateFilePath(fileNameSequence, country);
+		String filePath = imageManager.generateFilePath(country);
 		imageManager.saveImage(b, fileNameSequence, filePath);
 		
 		persistCap(captext, String.valueOf(fileNameSequence), filePath, imageManager.getExt(), getBrandId(capbrand), countriesManager.getCountryId(country), isBeer);
