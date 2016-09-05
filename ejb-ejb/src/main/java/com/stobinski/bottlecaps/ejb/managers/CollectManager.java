@@ -16,6 +16,7 @@ import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
+import com.stobinski.bottlecaps.ejb.common.SqlCacher;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
@@ -38,6 +39,9 @@ public class CollectManager {
 	private CountriesManager countriesManager;
 	
 	@Inject
+	private SqlCacher sqlCacher;
+	
+	@Inject
 	private Logger log;
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -48,6 +52,8 @@ public class CollectManager {
 		imageManager.saveImage(b, fileNameSequence, filePath);
 		
 		persistCap(captext, String.valueOf(fileNameSequence), filePath, imageManager.getExt(), getBrandId(capbrand), countriesManager.getCountryId(country), isBeer);
+		
+		sqlCacher.refreshCountriesWithAmount();
 		
 		log.debug(String.format("File %d saved in database", fileNameSequence));
 	}

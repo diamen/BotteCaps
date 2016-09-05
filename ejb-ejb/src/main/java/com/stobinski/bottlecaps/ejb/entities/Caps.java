@@ -27,7 +27,11 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="Caps.findCapsByCountryIdAndCapText",
 				query="SELECT e FROM Caps e " +
 					  "WHERE e.country_id = :country_id " +
-					  "AND e.cap_text = :cap_text")
+					  "AND e.cap_text = :cap_text"),
+	@NamedQuery(name="Caps.countCapsGroupByCountryId",
+				query="SELECT e.country_id, f.name, f.flag, COUNT(e.country_id) FROM Caps e, Countries f " +
+					  "WHERE e.country_id = f.id " +
+					  "GROUP BY e.country_id")
 })
 
 @Entity
