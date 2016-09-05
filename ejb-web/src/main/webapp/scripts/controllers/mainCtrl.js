@@ -8,6 +8,10 @@ angular.module('bcControllers', [])
 			$state.go(state);
 		};
 
+		$scope.redirectToEditNews = function(id) {
+			$state.go("news.edit", { id: id });
+		};
+
 		$scope.redirectToCountry = function(country) {
 			$state.go("collect.country", { country: country });
 		};
@@ -23,5 +27,5 @@ angular.module('bcControllers', [])
 		$scope.openEditCap = function(country, id) {
 			$state.go("collect.country.id.edit", { country: country, id: id });
 		};
-		
+
 });

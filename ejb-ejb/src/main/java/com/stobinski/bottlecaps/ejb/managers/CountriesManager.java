@@ -1,7 +1,6 @@
 package com.stobinski.bottlecaps.ejb.managers;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -9,7 +8,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.stobinski.bottlecaps.ejb.common.SqlCacher;
-import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
 @Stateless

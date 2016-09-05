@@ -118,15 +118,34 @@ public class AdminController {
 		return Response.ok().build();
 	}
 	
+	@PUT
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("news")
+	public Response editNews(@QueryParam("id") Integer id, @QueryParam("title") String title, @QueryParam("content") String content) {
+		newsManager.updateNews(id, title, content);
+		
+		return Response.ok().build();
+	}
+	
 	@POST
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news")
 	public Response addNews(@QueryParam("title") String title, @QueryParam("content") String content) {
 		
-		// TODO Przekierowanie na formatce po dodaniu nowego newsa
-		
 		newsManager.saveNews(title, content);
+		
+		return Response.ok().build();
+	}
+	
+	@DELETE
+//	@AuthToken
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("news")
+	public Response deleteNews(@QueryParam("ids") Integer ids) {
+		
+		// TODO Ekran i logika do usuwania newsów 
 		
 		return Response.ok().build();
 	}

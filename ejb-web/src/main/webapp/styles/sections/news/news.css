@@ -31,3 +31,10 @@
 .secnews article.news + div {
 	text-align: center;
 }
+
+.news > button:nth-child(2) {
+	float: right;
+	text-indent: 0px;
+	margin-bottom: 2px;
+	margin-left: 2px;
+}

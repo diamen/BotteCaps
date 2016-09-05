@@ -35,6 +35,13 @@ public class NewsManager {
 		log.debug(String.format("News with title: %s and content: %s added to database", title, content));
 	}
 	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void updateNews(Integer id, String title, String content) {
+		News news = entityManager.find(News.class, id);
+		news.setTitle(title);
+		news.setContent(content);
+	}
+	
 	public List<News> getNews() {
 		return entityManager.createNamedQuery("News.findNews", News.class).getResultList();
 	}

@@ -151,6 +151,14 @@ angular.module('bcServices', [])
 							params: { title: title, content: content }
 						});
 					},
+					editNews: function(id, title, content) {
+						return $http({
+							method: "PUT",
+							url: "./rest/admin/news",
+							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
+							params: { id: id, title: title, content: content }
+						});
+					},
 					addTrade: function(base64, filename) {
 						return $http({
 							method: "POST",

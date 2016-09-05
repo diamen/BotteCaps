@@ -30,6 +30,16 @@ angular.module('bcRouters', [])
 					}
 				})
 
+				.state("news.edit", {
+					url: "/edit/:id",
+					views: {
+						"newsView@news": {
+							controller: "editNewsCtrl",
+							templateUrl: "/ejb-web/views/news/editnews.html"
+							}
+					}
+				})
+				
 			/* COLLECT SECTION */
 			.state("collect", {
 				url: "/collect",

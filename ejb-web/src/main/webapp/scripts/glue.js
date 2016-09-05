@@ -27,6 +27,7 @@ head.load(
     { file: '/' + appName + '/scripts/controllers/collectCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/countriesCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/editCapCtrl.js' },
+    { file: '/' + appName + '/scripts/controllers/editNewsCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/loginCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/modalCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/newsCtrl.js' },
@@ -45,5 +46,6 @@ head.load(
 
     /* Services */
     { file: '/' + appName + '/scripts/services/services.js' },
-    { file: '/' + appName + '/scripts/services/markService.js' }
+    { file: '/' + appName + '/scripts/services/markService.js' },
+    { file: '/' + appName + '/scripts/services/modalService.js' }
 );
