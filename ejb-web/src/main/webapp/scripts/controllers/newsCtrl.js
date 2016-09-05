@@ -51,7 +51,7 @@ angular.module('bcControllers')
 		/* add cap */
 		$scope.submit = function(news) {
 			restService.adminController().addNews(news.title, news.content).success(function(data) {
-				console.log(data);
+				$scope.go('news');
 			});
 		};
 		
