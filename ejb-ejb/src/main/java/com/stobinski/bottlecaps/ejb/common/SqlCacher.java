@@ -47,12 +47,12 @@ public class SqlCacher {
 	
 	public List<CountriesWithAmount> refreshCountriesWithAmount() {
 		List<Object[]> list = entityManager.createNamedQuery("Caps.countCapsGroupByCountryId", Object[].class).getResultList();
-		List<CountriesWithAmount> countriesWithAmount = new ArrayList<>();
+		List<CountriesWithAmount> countries = new ArrayList<>();
 
 		for(Object[] elem : list)
-			countriesWithAmount.add(new CountriesWithAmount((Long) elem[0], (String) elem[1], (String) elem[2], (Long) elem[3]));
+			countries.add(new CountriesWithAmount((Long) elem[0], (String) elem[1], (String) elem[2], (Long) elem[3]));
 		
-		return countriesWithAmount;
+		return countries;
 	}
 	
 }

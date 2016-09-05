@@ -39,4 +39,9 @@ public class CountriesWithAmount {
 		this.amount = amount;
 	}
 	
+	@Override
+	public String toString() {
+		return String.format("[id: %d, name: %s, flag: %s, amount: %d]", id, name, flag, amount);
+	}
+	
 }
