@@ -31,12 +31,12 @@ angular.module('bcControllers')
 		};
 
 		restService.collectController().getSingleCap($scope.country, $scope.id).success(function(data) {
-			$scope.cap = data;
+			$scope.cap = data.entity;
 			$scope.capsrc = base64Service.base64ToUrl(data.base64);
 
-			$scope.beerLabel = data.beer === 1 ? 'Piwo' : 'Niepiwo';
+			$scope.beerLabel = data.entity.beer === 1 ? 'Piwo' : 'Niepiwo';
 
-			restService.collectController().getBrand(data.brand_id).success(function(data) {
+			restService.collectController().getBrand(data.entity.brand_id).success(function(data) {
 				$scope.brand = data;
 			});
 		});

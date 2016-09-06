@@ -22,7 +22,7 @@ query="SELECT e " +
 
 @Entity
 @Table(name="mini_trade_caps")
-public class MiniTradeCaps implements Serializable {
+public class MiniTradeCaps implements Serializable, IBase64 {
 
 	private static final long serialVersionUID = -8434576889436926419L;
 	

@@ -1,4 +1,4 @@
-package com.stobinski.bottlecaps.ejb.trade;
+package com.stobinski.bottlecaps.ejb.managers;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -32,7 +32,7 @@ import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.StringQuery;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.MiniTradeCaps;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64MiniTradeCap;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TradeCapsManagerTest {
@@ -76,7 +76,7 @@ public class TradeCapsManagerTest {
 		// when
 		doReturn(miniTestList).when(spyTrade).findMiniCaps();
 		when(imageManager.retrieveImage(any(), any())).thenReturn("test".getBytes());
-		List<Base64MiniTradeCap> returnedList = spyTrade.getMiniTradeCaps(); 
+		List<Base64Entity> returnedList = spyTrade.getMiniTradeCaps(); 
 		
 		// then
 		assertThat(returnedList.size()).isEqualTo(3);

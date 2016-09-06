@@ -15,13 +15,13 @@ import javax.persistence.PersistenceContext;
 import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
-import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.common.DatabaseCacher;
+import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
 @Stateless
 public class CollectManager {
@@ -89,32 +89,32 @@ public class CollectManager {
 		log.debug(String.format("File with id=%d removed from database", capId));
 	}
 	
-	public List<Base64Cap> getCaps(String country) {
+	public List<Base64Entity> getCaps(String country) {
 		return entityManager.createNamedQuery("Caps.findCapsByCountryId", Caps.class).setParameter("country_id", countriesManager.getCountryId(country)).getResultList()
 			.stream()
-			.map(e -> new Base64Cap(e, capToBase64(e)))
+			.map(e -> new Base64Entity(e, capToBase64(e)))
 			.collect(Collectors.toList());
 	}
 	
-	public List<Base64Cap> getCaps(String country, String searchText) {
+	public List<Base64Entity> getCaps(String country, String searchText) {
 		return entityManager.createNamedQuery("Caps.findCapsByCountryIdAndCapText", Caps.class)
 				.setParameter("cap_text", searchText).setParameter("country_id", countriesManager.getCountryId(country)).getResultList()
 				.stream()
-				.map(e -> new Base64Cap(e, capToBase64(e)))
+				.map(e -> new Base64Entity(e, capToBase64(e)))
 				.collect(Collectors.toList());		
 	}
 	
-	public List<Base64Cap> getCaps(Integer limit) {
+	public List<Base64Entity> getCaps(Integer limit) {
 		return entityManager.createNamedQuery("Caps.findCaps", Caps.class).setFirstResult(0).setMaxResults(limit).getResultList()
 				.stream()
-				.map(e -> new Base64Cap(e, capToBase64(e)))
+				.map(e -> new Base64Entity(e, capToBase64(e)))
 				.collect(Collectors.toList());
 	}
 	
-	public Base64Cap getCap(String country, Long id) {
+	public Base64Entity getCap(String country, Long id) {
 		Caps cap = entityManager.createNamedQuery("Caps.findCapByIdAndCountryId", Caps.class)
 				.setParameter("country_id", countriesManager.getCountryId(country)).setParameter("id", id).getSingleResult();
-		return new Base64Cap(cap, capToBase64(cap));
+		return new Base64Entity(cap, capToBase64(cap));
 	}
 	
 	public String getBrand(Long id) {

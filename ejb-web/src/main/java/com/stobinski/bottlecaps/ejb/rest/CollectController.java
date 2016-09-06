@@ -11,7 +11,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import com.stobinski.bottlecaps.ejb.managers.CollectManager;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64Cap;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
 @Path("/collect/")
 public class CollectController {
@@ -22,14 +22,14 @@ public class CollectController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("caps/{country}")
-	public List<Base64Cap> getCaps(@PathParam("country") String country) {
+	public List<Base64Entity> getCaps(@PathParam("country") String country) {
 		return collectManager.getCaps(country);
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("caps/{country}/{id}")
-	public Base64Cap getCap(@PathParam("country") String country, @PathParam("id") Long id) {
+	public Base64Entity getCap(@PathParam("country") String country, @PathParam("id") Long id) {
 		return collectManager.getCap(country, id);
 	}
 	
@@ -43,14 +43,14 @@ public class CollectController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("filtercaps/{country}")
-	public List<Base64Cap> getFilteredCaps(@PathParam("country") String country, @QueryParam("searchText") String searchText) {
+	public List<Base64Entity> getFilteredCaps(@PathParam("country") String country, @QueryParam("searchText") String searchText) {
 		return collectManager.getCaps(country, searchText);
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("newest")
-	public List<Base64Cap> getNewestCaps(@QueryParam("limit") Integer limit) {
+	public List<Base64Entity> getNewestCaps(@QueryParam("limit") Integer limit) {
 		return collectManager.getCaps(limit);
 	}
 	

@@ -18,7 +18,7 @@ angular.module('bcControllers')
 
 			for(var i = 0; i < data.length; i++) {
 				var src = base64Service.base64ToUrl(data[i].base64);
-				caps.push({src: src, id: data[i].id});
+				caps.push({src: src, id: data[i].entity.id});
 			}
 
 			$scope.caps = caps;

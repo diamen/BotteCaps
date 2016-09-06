@@ -8,7 +8,7 @@ angular.module('bcControllers')
 
 			for(var i = 0; i < data.length; i++) {
 				var src = base64Service.base64ToUrl(data[i].base64);
-				arr.push({src: src, id: data[i].id});
+				arr.push({src: src, id: data[i].entity.id});
 			}
 
 			return arr;

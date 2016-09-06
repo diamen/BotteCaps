@@ -35,7 +35,7 @@ import javax.persistence.NamedQuery;
 })
 
 @Entity
-public class Caps implements Serializable {
+public class Caps implements Serializable, IBase64 {
 
 	private static final long serialVersionUID = -4314012675133787319L;
 	

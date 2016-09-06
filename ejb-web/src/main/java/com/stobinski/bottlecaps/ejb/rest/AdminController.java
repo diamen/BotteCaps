@@ -23,7 +23,7 @@ import org.jboss.logging.Logger;
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.managers.CollectManager;
 import com.stobinski.bottlecaps.ejb.managers.NewsManager;
-import com.stobinski.bottlecaps.ejb.trade.TradeCapsManager;
+import com.stobinski.bottlecaps.ejb.managers.TradeCapsManager;
 
 @Path("/admin/")
 public class AdminController {

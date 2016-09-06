@@ -31,7 +31,7 @@ import org.codehaus.jackson.annotate.JsonManagedReference;
 
 @Entity
 @Table(name="trade_caps")
-public class TradeCaps implements Serializable {
+public class TradeCaps implements Serializable, IBase64 {
 
 	private static final long serialVersionUID = -8434576889436926419L;
 	

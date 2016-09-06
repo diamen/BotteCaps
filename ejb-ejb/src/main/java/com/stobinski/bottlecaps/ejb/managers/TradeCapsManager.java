@@ -1,4 +1,4 @@
-package com.stobinski.bottlecaps.ejb.trade;
+package com.stobinski.bottlecaps.ejb.managers;
 
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
@@ -27,8 +27,7 @@ import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.entities.MiniTradeCaps;
 import com.stobinski.bottlecaps.ejb.entities.TradeCaps;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64MiniTradeCap;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64TradeCap;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
 @Stateless
 public class TradeCapsManager {
@@ -89,15 +88,15 @@ public class TradeCapsManager {
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public Base64TradeCap getTradeCap(Long id) {
+	public Base64Entity getTradeCap(Long id) {
 		TradeCaps cap = entityManager.createNamedQuery("TradeCaps.findTradeCapById", TradeCaps.class).setParameter("id", id).getSingleResult();
-		return new Base64TradeCap(cap, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(cap.getPath(), cap.getFile_name())));
+		return new Base64Entity(cap, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(cap.getPath(), cap.getFile_name())));
 	}
 	
-	public List<Base64MiniTradeCap> getMiniTradeCaps() {
+	public List<Base64Entity> getMiniTradeCaps() {
 		return findMiniCaps()
 				.stream()
-				.map(e -> new Base64MiniTradeCap(e, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(e.getPath(), e.getFile_name()))))
+				.map(e -> new Base64Entity(e, Base64Service.fromByteArrayToBase64(imageManager.retrieveImage(e.getPath(), e.getFile_name()))))
 				.collect(Collectors.toList());
 	}
 	

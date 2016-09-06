@@ -9,9 +9,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.stobinski.bottlecaps.ejb.trade.TradeCapsManager;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64MiniTradeCap;
-import com.stobinski.bottlecaps.ejb.wrappers.Base64TradeCap;
+import com.stobinski.bottlecaps.ejb.managers.TradeCapsManager;
+import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
 @Path("/trade/")
 public class TradeContoller {
@@ -22,14 +21,14 @@ public class TradeContoller {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("minicaps")
-	public List<Base64MiniTradeCap> getMiniTradeCaps() {
+	public List<Base64Entity> getMiniTradeCaps() {
 		return tradeCapsManager.getMiniTradeCaps();
 	}
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("tradecap/{id}")
-	public Base64TradeCap getTradeCap(@PathParam("id") Long id) {
+	public Base64Entity getTradeCap(@PathParam("id") Long id) {
 		return tradeCapsManager.getTradeCap(id);
 	}
 	
