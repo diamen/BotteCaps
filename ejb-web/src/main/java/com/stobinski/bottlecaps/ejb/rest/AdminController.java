@@ -143,9 +143,8 @@ public class AdminController {
 //	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news")
-	public Response deleteNews(@QueryParam("ids") Integer ids) {
-		
-		// TODO Ekran i logika do usuwania newsów 
+	public Response deleteNews(@QueryParam("id") Integer id) {
+		newsManager.removeNews(id);
 		
 		return Response.ok().build();
 	}

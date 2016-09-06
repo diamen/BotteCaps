@@ -2,7 +2,9 @@
 <h1 class="stitle">Najnowsze wiadomosci</h1>
 
 <article ng-init="initExpand($index)" ng-repeat="news in newsarr" class="news">
-	<h3>{{news.title}}</h3><button class="btn btn-default" ng-click="redirectToEditNews(news.id)">Edytuj</button>
+	<h3>{{news.title}}</h3>
+	<button class="btn btn-default control" ng-click="openModal(news.id)">Usun</button>
+	<button class="btn btn-default control" ng-click="redirectToEditNews(news.id)">Edytuj</button>
 	<span>{{news.date | date:"dd MMM yy"}}</span>
 	<p ng-if="isExpanded($index)">{{news.doubleContent.fullContent}}</p>
 	<p ng-if="!isExpanded($index)">{{news.doubleContent.shortContent}}</p>

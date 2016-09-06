@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('newsCtrl', function($scope, restService) {
+	.controller('newsCtrl', function($scope, $window, modalService, restService) {
 
 		$scope.pagination = {
 			currentPage: 1,
@@ -48,9 +48,19 @@ angular.module('bcControllers')
 			$scope.newsarr[id].doubleContent = doubleContent;
 		};
 
+		var remove = function(id) {
+			restService.adminController().deleteNews(id).success(function() {
+				$window.location.reload();
+			});
+		};
+
+		$scope.openModal = function(id) {
+			modalService.execute(partial(remove, id), "Czy chcesz usunac newsa?");
+		};
+
 		/* add cap */
 		$scope.submit = function(news) {
-			restService.adminController().addNews(news.title, news.content).success(function(data) {
+			restService.adminController().addNews(news.title, news.content).success(function() {
 				$scope.go('news');
 			});
 		};

@@ -1,6 +1,6 @@
 <h1 class="stitle">Dodaj wiadomosc</h1>
 
-<form ng-submit="openModal('YES')">
+<form ng-submit="openSubmitModal()">
 	<div class="form-group">
 		<label for="inewstitle">Tytul</label>
 		<input type="text" ng-model="news.title" class="form-control" id="inewstitle" required>
@@ -10,5 +10,5 @@
 		<textarea ng-model="news.content" class="form-control" id="inewscontent" rows="18" required></textarea>
 	</div>
 	<input id="submit" type="submit" class="btn btn-primary" value="Edytuj">
-	<button type="button" class="btn btn-default" ng-click="openModal('NO')">Anuluj</button>
+	<button type="button" class="btn btn-default" ng-click="openCancelModal()">Anuluj</button>
 </form>

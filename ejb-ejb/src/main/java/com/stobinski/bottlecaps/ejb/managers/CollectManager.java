@@ -53,6 +53,8 @@ public class CollectManager {
 		
 		persistCap(captext, String.valueOf(fileNameSequence), filePath, imageManager.getExt(), getBrandId(capbrand), countriesManager.getCountryId(country), isBeer);
 		
+		entityManager.flush();
+		
 		dbCacher.refreshCountriesWithAmount();
 		
 		log.debug(String.format("File %d saved in database", fileNameSequence));
@@ -79,6 +81,8 @@ public class CollectManager {
 	public void removeCap(Long capId) {
 		Caps cap = entityManager.find(Caps.class, capId);
 		entityManager.remove(cap);
+		
+		entityManager.flush();
 		
 		dbCacher.refreshCountriesWithAmount();
 		

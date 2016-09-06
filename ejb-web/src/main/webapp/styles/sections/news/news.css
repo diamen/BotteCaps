@@ -32,7 +32,7 @@
 	text-align: center;
 }
 
-.news > button:nth-child(2) {
+.news > button.control {
 	float: right;
 	text-indent: 0px;
 	margin-bottom: 2px;

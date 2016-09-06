@@ -13,13 +13,12 @@ angular.module('bcControllers')
 			});
 		};
 
-		var config = {};
-		config.yes = { msg: "Czy chcesz edytowac newsa?", invoke: edit };
-		config.no = { msg: "Czy chcesz anulowac zmiany?", invoke: function() { $scope.$parent.go('news'); } };
-		var modalInstance = modalService.create(config);
+		$scope.openSubmitModal = function() {
+			modalService.execute(edit, "Czy chcesz zatwierdzic zmiany?");
+		};
 
-		$scope.openModal = function(type) {
-			modalInstance.execute(type);
+		$scope.openCancelModal = function() {
+			modalService.execute(function() { $scope.$parent.go('news'); }, "Czy chcesz anulowac zmiany?");
 		};
 
 });

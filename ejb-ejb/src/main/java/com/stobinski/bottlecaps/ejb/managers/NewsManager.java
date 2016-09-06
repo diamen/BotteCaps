@@ -37,6 +37,8 @@ public class NewsManager {
 		
 		entityManager.persist(news);
 		
+		entityManager.flush();
+		
 		dbCacher.refreshNews();
 		
 		log.debug(String.format("News with title: %s and content: %s added to database", title, content));
@@ -48,9 +50,23 @@ public class NewsManager {
 		news.setTitle(title);
 		news.setContent(content);
 		
+		entityManager.flush();
+		
 		dbCacher.refreshNews();
 		
 		log.debug(String.format("News with title: %s and content: %s updated in database", title, content));
+	}
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void removeNews(int newsId) {
+		News news = entityManager.find(News.class, newsId);
+		entityManager.remove(news);
+	
+		entityManager.flush();
+		
+		dbCacher.refreshNews();
+		
+		log.debug(String.format("News with id: %d removed from database", newsId));
 	}
 	
 	public List<News> getNews() {
