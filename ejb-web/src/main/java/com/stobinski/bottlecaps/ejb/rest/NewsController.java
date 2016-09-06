@@ -43,7 +43,7 @@ public class NewsController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("count")
-	public Long getNewsCount() {
+	public int getNewsCount() {
 		return newsManager.countNews();
 	}
 	

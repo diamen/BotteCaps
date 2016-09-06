@@ -2,6 +2,7 @@ package com.stobinski.bottlecaps.ejb.managers;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -12,6 +13,7 @@ import javax.persistence.PersistenceContext;
 
 import org.jboss.logging.Logger;
 
+import com.stobinski.bottlecaps.ejb.common.DatabaseCacher;
 import com.stobinski.bottlecaps.ejb.entities.News;
 
 @Stateless
@@ -19,6 +21,9 @@ public class NewsManager {
 
 	@PersistenceContext(unitName = "bottlecaps")
 	private EntityManager entityManager;
+	
+	@Inject
+	private DatabaseCacher dbCacher;
 	
 	@Inject
 	private Logger log;
@@ -32,6 +37,8 @@ public class NewsManager {
 		
 		entityManager.persist(news);
 		
+		dbCacher.refreshNews();
+		
 		log.debug(String.format("News with title: %s and content: %s added to database", title, content));
 	}
 	
@@ -40,26 +47,28 @@ public class NewsManager {
 		News news = entityManager.find(News.class, id);
 		news.setTitle(title);
 		news.setContent(content);
+		
+		dbCacher.refreshNews();
+		
+		log.debug(String.format("News with title: %s and content: %s updated in database", title, content));
 	}
 	
 	public List<News> getNews() {
-		return entityManager.createNamedQuery("News.findNews", News.class).getResultList();
+		return dbCacher.getNews();
 	}
 	
 	public List<News> getNews(int numberOfNews) {
 		int offset = (numberOfNews - 1) * 10;
 		
-		return entityManager.createNamedQuery("News.findNews", News.class)
-				.setFirstResult(offset).setMaxResults(10).getResultList();
+		return dbCacher.getNews().stream().skip(offset).limit(10).collect(Collectors.toList());
 	}
 	
 	public News getSingleNews(int id) {
-		return entityManager.createNamedQuery("News.findNewsById", News.class)
-				.setParameter("id", id).getSingleResult();
+		return dbCacher.getNews().stream().filter(e -> e.getId() == id).findFirst().get();
 	}
 	
-	public Long countNews() {
-		return entityManager.createNamedQuery("News.countNews", Long.class).getSingleResult();
+	public int countNews() {
+		return dbCacher.getNews().size();
 	}
 	
 }

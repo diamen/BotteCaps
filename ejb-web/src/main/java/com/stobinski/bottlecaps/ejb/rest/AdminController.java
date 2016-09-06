@@ -97,6 +97,7 @@ public class AdminController {
 			tradeManager.saveFile(baseimage, filename);
 		} catch (FileAlreadyExistsException e) {
 			log.error(e);
+			
 			Map<String, String> map = new HashMap<>();
 			map.put("message", "Plik już istnieje w bazie danych");
 			return Response.status(Response.Status.CONFLICT)
@@ -133,7 +134,6 @@ public class AdminController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news")
 	public Response addNews(@QueryParam("title") String title, @QueryParam("content") String content) {
-		
 		newsManager.saveNews(title, content);
 		
 		return Response.ok().build();

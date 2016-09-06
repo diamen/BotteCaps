@@ -16,7 +16,7 @@ import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.common.ImageManager;
-import com.stobinski.bottlecaps.ejb.common.SqlCacher;
+import com.stobinski.bottlecaps.ejb.common.DatabaseCacher;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
@@ -39,7 +39,7 @@ public class CollectManager {
 	private CountriesManager countriesManager;
 	
 	@Inject
-	private SqlCacher sqlCacher;
+	private DatabaseCacher dbCacher;
 	
 	@Inject
 	private Logger log;
@@ -53,7 +53,7 @@ public class CollectManager {
 		
 		persistCap(captext, String.valueOf(fileNameSequence), filePath, imageManager.getExt(), getBrandId(capbrand), countriesManager.getCountryId(country), isBeer);
 		
-		sqlCacher.refreshCountriesWithAmount();
+		dbCacher.refreshCountriesWithAmount();
 		
 		log.debug(String.format("File %d saved in database", fileNameSequence));
 	}
@@ -71,12 +71,18 @@ public class CollectManager {
 		} catch (QueryBuilderException e) {
 			log.error(e);
 		}
+		
+		log.debug(String.format("File with id=%d updated", id));
 	}
 	
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void removeCap(Long capId) {
 		Caps cap = entityManager.find(Caps.class, capId);
 		entityManager.remove(cap);
+		
+		dbCacher.refreshCountriesWithAmount();
+		
+		log.debug(String.format("File with id=%d removed from database", capId));
 	}
 	
 	public List<Base64Cap> getCaps(String country) {

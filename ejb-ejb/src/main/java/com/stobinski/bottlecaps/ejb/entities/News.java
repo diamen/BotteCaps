@@ -70,4 +70,11 @@ public class News implements Serializable {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("[id: %d, title: %s, content: %s, date: %s]", id, title, content, date.toString())
+				.replace('\r', '\0').replace('\n', '\0');
+	}
+	
 }

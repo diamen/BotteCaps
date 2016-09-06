@@ -14,11 +14,12 @@ import javax.persistence.PersistenceContext;
 
 import org.jboss.logging.Logger;
 
+import com.stobinski.bottlecaps.ejb.entities.News;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
 @Startup
 @Singleton
-public class SqlCacher {
+public class DatabaseCacher {
 
 	@PersistenceContext(unitName = "bottlecaps")
 	private EntityManager entityManager;
@@ -26,6 +27,7 @@ public class SqlCacher {
 	private Logger log = Logger.getLogger(getClass());
 	
 	private List<CountriesWithAmount> countriesWithAmount; 
+	private List<News> news;
 	
 	@PostConstruct
 	private void init() {
@@ -35,14 +37,21 @@ public class SqlCacher {
 	@Schedule(minute="30", hour="22")
 	private void refresh() {
 		this.countriesWithAmount = refreshCountriesWithAmount();
+		this.news = refreshNews();
 		
 		log.debug("Refresh SQL data executed");
-		log.debug(String.format("Countries with amount: %s", 
+		log.debug(String.format("Countries with amount after refresh: %s", 
 				countriesWithAmount.stream().map(Object::toString).collect(Collectors.joining(", "))));
+		log.debug(String.format("News after refresh: %s", 
+				news.stream().map(Object::toString).collect(Collectors.joining(", "))));
 	}
 
 	public List<CountriesWithAmount> getCountriesWithAmount() {
 		return Collections.unmodifiableList(countriesWithAmount);
+	}
+	
+	public List<News> getNews() {
+		return Collections.unmodifiableList(news);
 	}
 	
 	public List<CountriesWithAmount> refreshCountriesWithAmount() {
@@ -53,6 +62,10 @@ public class SqlCacher {
 			countries.add(new CountriesWithAmount((Long) elem[0], (String) elem[1], (String) elem[2], (Long) elem[3]));
 		
 		return countries;
+	}
+	
+	public List<News> refreshNews() {
+		return entityManager.createNamedQuery("News.findNews", News.class).getResultList();
 	}
 	
 }
