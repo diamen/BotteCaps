@@ -28,7 +28,7 @@
 		<div class="label infr">{{cap.added_date | date: 'dd/MM/yyyy'}}</div>
 </div>
 
-<div ng-hide="caps === undefined" class="capmover md-hidden">
+<div ng-hide="caps === undefined || caps.length < 5" class="capmover md-hidden">
 	<i ng-click="previousCap()" class="col-md-1 fa fa-chevron-left"></i>
 	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[0].id)" ng-src="{{fivecaps[0].src}}"></img>
 	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[1].id)" ng-src="{{fivecaps[1].src}}"></img>
