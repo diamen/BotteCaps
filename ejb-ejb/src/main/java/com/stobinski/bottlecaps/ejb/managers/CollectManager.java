@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.jboss.logging.Logger;
@@ -20,6 +21,7 @@ import com.stobinski.bottlecaps.ejb.common.ImageManager;
 import com.stobinski.bottlecaps.ejb.dao.DaoService;
 import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
+import com.stobinski.bottlecaps.ejb.entities.Brands;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
@@ -121,8 +123,20 @@ public class CollectManager {
 		return entityManager.createNamedQuery("Brands.findById", String.class).setParameter("id", id).getSingleResult();
 	}
 	
-	public Long getBrandId(String brand) {
-		return entityManager.createNamedQuery("Brands.findByName", Long.class).setParameter("name", brand).getSingleResult();
+	public Long getBrandId(String brandName) {
+		try {
+			return entityManager.createNamedQuery("Brands.findByName", Long.class).setParameter("name", brandName).getSingleResult();
+		} catch(NoResultException e) {
+			log.debug(e);
+			
+			Brands brand = new Brands();
+			brand.setName(brandName);
+			entityManager.persist(brand);
+			
+			entityManager.flush();
+			
+			return brand.getId();
+		}
 	}
 	
 	private void persistCap(String captext, String fileName, String filePath, String ext, Long brandId, Long countryId, boolean isBeer) {
