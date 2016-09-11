@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 import com.stobinski.bottlecaps.ejb.security.SessionCache;
+import com.stobinski.bottlecaps.ejb.security.CsrfSessionCacheBean;
 import com.stobinski.bottlecaps.ejb.security.ISessionCache;
 
 @WebFilter(filterName = "validateSaltFilter", urlPatterns = { "/rest/auth/*" } )
@@ -31,22 +32,19 @@ public class ValidateSaltFilter implements Filter  {
         if(!"application/x-www-form-urlencoded".equals(httpReq.getContentType())) {
         	chain.doFilter(request, response);
         } else {
-        	sessionCache.init(httpReq);
-        	String salt = (String) httpReq.getParameter("csrfPreventionSalt");
+        	String salt = (String) httpReq.getParameter(CsrfSessionCacheBean.SALT);
 
 	        if(sessionCache.match(salt, httpReq.getSession())) {
 	            chain.doFilter(request, response);
 	        } else {
-	            throw new ServletException("Potential CSRF detected!! Inform a scary sysadmin ASAP.");
+	            throw new ServletException("Potential CSRF detected!");
 	        }
         }
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 }

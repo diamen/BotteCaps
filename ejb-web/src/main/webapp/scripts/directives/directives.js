@@ -109,30 +109,30 @@ angular.module('bcDirectives', [])
         	}
     	};
 	})
-	
-	.directive("isAdmin", ['$http', '$sessionStorage', '$rootScope', function($http, $sessionStorage, $rootScope) {
+
+	.directive("isAdmin", ['$sessionStorage', '$rootScope', 'authCacheFactory', 'validateFactory', function($sessionStorage, $rootScope, authCacheFactory, validateFactory) {
 		return {
 			restrict: 'A',
-			link: function(scope, element, attrs) {
-				
+			link: function(scope, element) {
+
 				$rootScope.$watch('$storage.authToken', function() {
-					
+
 					if($sessionStorage.authToken === undefined) {
 						element.css('display', 'none');
 						return;
 					} else {
-						$http({
-		    				method: "GET",
-		    				url: "./rest/auth/validate",
-		    				headers: {'AUTH-TOKEN': $sessionStorage.authToken }
-		    				}).success(function(data) {
-		    					if(data)
-		    						element.css('display', 'initial');
-		    					else
-		    						element.css('display', 'none');
-		    			});	
+
+						if(authCacheFactory.get('AUTH')) {
+							element.css('display', 'initial');
+							return;
+						}
+
+						validateFactory.isValid($sessionStorage.authToken).then(function(data) {
+							data ? element.css('display', 'initial') : element.css('display', 'none');
+						});
+
 					}
-					
+
 				});
 
 			}

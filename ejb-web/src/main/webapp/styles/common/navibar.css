@@ -47,6 +47,10 @@ div.container {
 	margin-right: auto;
 }
 
+header div.container form {
+	margin: 7px 0;
+}
+
 .navi div div a {
 	display: block;
 	height: inherit;

@@ -4,9 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public interface ISessionCache {
-	void init(HttpServletRequest httpServletRequest);
-	void attachCacheToSession();
+	void attachCacheToSession(HttpSession httpSession);
 	boolean match(String value, HttpSession httpSession);
-	void updateCachedValue(String value);
+	void updateCachedValue(HttpServletRequest httpReq, String value);
 	void clearCache(HttpServletRequest httpReq);
 }

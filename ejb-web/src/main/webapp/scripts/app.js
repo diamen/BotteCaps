@@ -5,7 +5,8 @@ angular.module('bcApp',
         'ngAnimate',
         'ui.bootstrap',
         'ui.router',
-        
+
+        'bcFactories',
         'bcControllers',
         'bcDirectives',
         'bcRouters',

@@ -17,6 +17,10 @@
 	.md-hidden {
 		display: none !important;
 	}
+	
+	header div.container {
+		text-align: center;
+	}
 }
 
 @media (max-width: 1200px) {
@@ -28,6 +32,10 @@
 @media (min-width: 992px) {
 	.md-shown {
 		display: none !important;
+	}
+
+	header div.container form {
+		float: right;
 	}
 }
 

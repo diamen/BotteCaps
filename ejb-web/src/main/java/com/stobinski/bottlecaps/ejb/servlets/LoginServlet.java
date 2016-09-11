@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.stobinski.bottlecaps.ejb.security.CsrfSessionCacheBean;
+
 @WebServlet(name = "loginServlet", urlPatterns = { "/admin/login" })
 public class LoginServlet extends HttpServlet {
 
@@ -16,7 +18,7 @@ public class LoginServlet extends HttpServlet {
 	@Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-		String hash = (String) req.getAttribute("csrfPreventionSalt");
+		String hash = (String) req.getAttribute(CsrfSessionCacheBean.SALT);
 		resp.setHeader("XSRF-TOKEN", hash);
 		req.getRequestDispatcher("/views/login.html").forward(req, resp);
     }

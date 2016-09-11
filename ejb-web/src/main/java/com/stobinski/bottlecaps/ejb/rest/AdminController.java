@@ -24,6 +24,7 @@ import com.stobinski.bottlecaps.ejb.common.Base64Service;
 import com.stobinski.bottlecaps.ejb.managers.CollectManager;
 import com.stobinski.bottlecaps.ejb.managers.NewsManager;
 import com.stobinski.bottlecaps.ejb.managers.TradeCapsManager;
+import com.stobinski.bottlecaps.ejb.security.AuthToken;
 
 @Path("/admin/")
 public class AdminController {
@@ -41,7 +42,7 @@ public class AdminController {
 	private Logger log;
 	
 	@POST
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("collect")
 	public Response addCap(String baseimage, 
@@ -59,7 +60,7 @@ public class AdminController {
 	}
 
 	@PUT
-//  @AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("collect")
 	public Response editCap(@QueryParam("id") Long id,
@@ -74,7 +75,7 @@ public class AdminController {
 	}
 	
 	@DELETE
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("collect")
 	public Response deleteCap( @QueryParam("capId") Long capId) {
@@ -86,7 +87,7 @@ public class AdminController {
 	}
 	
 	@POST
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("trade/upload")
@@ -110,7 +111,7 @@ public class AdminController {
 	}
 	
 	@DELETE
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("tradecaps")
 	public Response deleteTrade(@QueryParam("ids") Set<Long> ids) {
@@ -120,7 +121,7 @@ public class AdminController {
 	}
 	
 	@PUT
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news")
 	public Response editNews(@QueryParam("id") Integer id, @QueryParam("title") String title, @QueryParam("content") String content) {
@@ -130,7 +131,7 @@ public class AdminController {
 	}
 	
 	@POST
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news")
 	public Response addNews(@QueryParam("title") String title, @QueryParam("content") String content) {
@@ -140,7 +141,7 @@ public class AdminController {
 	}
 	
 	@DELETE
-//	@AuthToken
+	@AuthToken
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("news")
 	public Response deleteNews(@QueryParam("id") Integer id) {

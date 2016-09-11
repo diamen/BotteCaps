@@ -17,6 +17,11 @@ head.load(
     /* Main */
     { file: '/' + appName + '/scripts/app.js' },
 
+    /* Factories */
+    { file: '/' + appName + '/scripts/factories/factories.js' },
+    { file: '/' + appName + '/scripts/factories/authCacheFactory.js' },
+    { file: '/' + appName + '/scripts/factories/validateFactory.js' },
+
     /* Controllers */
     { file: '/' + appName + '/scripts/controllers/mainCtrl.js' },
 
@@ -37,9 +42,6 @@ head.load(
     /* Directives */
     { file: '/' + appName + '/scripts/directives/directives.js' },
     { file: '/' + appName + '/scripts/directives/tradeImg.js' },
-
-    /* Factories */
-
 
     /* Routers */
     { file: '/' + appName + '/scripts/routers/routers.js' },

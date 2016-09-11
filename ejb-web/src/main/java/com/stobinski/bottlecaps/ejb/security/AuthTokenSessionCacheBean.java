@@ -15,49 +15,39 @@ public class AuthTokenSessionCacheBean implements Serializable, ISessionCache {
 
 	private static final long serialVersionUID = -8720325565573249407L;
 	private Cache<String, Boolean> authTokenSaltCache;
-	private HttpServletRequest httpReq;
-	private HttpSession httpSession;
+	public static final String SALT = "authTokenPreventionSalt";
+	public static final String SALT_CACHE = "authTokenPreventionSaltCache";
 	
 	@Override
-	public void init(HttpServletRequest httpServletRequest) {
-		this.httpReq = httpServletRequest;
-		this.httpSession = httpReq.getSession();
-	}
-	
-	@Override
-	public void attachCacheToSession() {
+	public void attachCacheToSession(HttpSession httpSession) {
         authTokenSaltCache = CacheBuilder.newBuilder()
                 .maximumSize(5000)
                 .expireAfterWrite(20, TimeUnit.MINUTES)
                 .build();
         
-        httpSession.setAttribute("authTokenPreventionSaltCache", authTokenSaltCache);
+        httpSession.setAttribute(SALT_CACHE, authTokenSaltCache);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean match(String value, HttpSession httpSession) {
         Cache<String, Boolean> authTokenPreventionSaltCache = (Cache<String, Boolean>)
-            httpSession.getAttribute("authTokenPreventionSaltCache");
+            httpSession.getAttribute(SALT_CACHE);
         
-        if(authTokenPreventionSaltCache != null && value != null &&
-                authTokenPreventionSaltCache.getIfPresent(value) != null) {
-        	return true;
-        } else {
-        	return false;
-        }
+        return (authTokenPreventionSaltCache != null && value != null &&
+                authTokenPreventionSaltCache.getIfPresent(value) != null);
 	}
 	
 	@Override
-	public void updateCachedValue(String value) {
+	public void updateCachedValue(HttpServletRequest httpReq, String value) {
 		authTokenSaltCache.put(value, Boolean.TRUE);
-		httpReq.setAttribute("authTokenPreventionSalt", value);
+		httpReq.setAttribute(SALT, value);
 	}
 
 	@Override
 	public void clearCache(HttpServletRequest httpReq) {
-		httpReq.getSession().setAttribute("authTokenPreventionSaltCache", null);
-		httpReq.setAttribute("authTokenPreventionSalt", null);
+		httpReq.getSession().setAttribute(SALT_CACHE, null);
+		httpReq.setAttribute(SALT, null);
 	}
 	
 }

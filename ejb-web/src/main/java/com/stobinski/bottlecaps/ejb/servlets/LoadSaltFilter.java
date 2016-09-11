@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import com.stobinski.bottlecaps.ejb.security.SessionCache;
+import com.stobinski.bottlecaps.ejb.security.CsrfSessionCacheBean;
 import com.stobinski.bottlecaps.ejb.security.ISessionCache;
 
-@WebFilter(filterName = "loadSaltFilter", urlPatterns = { "/admin/*" } )
+@WebFilter(filterName = "loadSaltFilter", urlPatterns = { "/admin/login" } )
 public class LoadSaltFilter implements Filter {
 
 	@Inject
@@ -31,24 +32,20 @@ public class LoadSaltFilter implements Filter {
 
 		HttpServletRequest httpReq = (HttpServletRequest) request;
 		
-		sessionCache.init(httpReq); 
-		
-        if(!(httpReq.getSession().getAttribute("csrfPreventionSaltCache") != null)) {
-        	sessionCache.attachCacheToSession();
+        if(!(httpReq.getSession().getAttribute(CsrfSessionCacheBean.SALT_CACHE) != null)) {
+        	sessionCache.attachCacheToSession(httpReq.getSession());
         }
 
         String salt = RandomStringUtils.random(20, 0, 0, true, true, null, new SecureRandom());
-        sessionCache.updateCachedValue(salt);;
+        sessionCache.updateCachedValue(httpReq, salt);
         
-        chain.doFilter(request, response);
+        chain.doFilter(httpReq, response);
     }
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
     @Override
-    public void destroy() {
-    }
+    public void destroy() {}
 
 }

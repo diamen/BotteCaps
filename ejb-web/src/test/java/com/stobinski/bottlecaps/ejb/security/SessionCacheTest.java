@@ -36,7 +36,7 @@ public class SessionCacheTest {
 	@Test
 	public void shouldAttachCacheToHttpSession() {
 		// when
-		sessionCacheBean.attachCacheToSession();
+		sessionCacheBean.attachCacheToSession(httpSession);
 		
 		// then
 		verify(httpSession, times(1)).setAttribute(any(String.class), any(Cache.class));
@@ -48,7 +48,7 @@ public class SessionCacheTest {
 		String salt = PasswordGenerator.generate();
 		
 		// when
-		when(httpSession.getAttribute("authTokenPreventionSaltCache")).thenReturn(authTokenSaltCache);
+		when(httpSession.getAttribute(AuthTokenSessionCacheBean.SALT_CACHE)).thenReturn(authTokenSaltCache);
 		when(authTokenSaltCache.getIfPresent(salt)).thenReturn(true);
 		boolean isMatch = sessionCacheBean.match(salt, httpSession);
 		
@@ -62,11 +62,11 @@ public class SessionCacheTest {
 		String salt = PasswordGenerator.generate();
 		
 		// when
-		sessionCacheBean.updateCachedValue(salt);
+		sessionCacheBean.updateCachedValue(httpRequest, salt);
 		
 		// then
 		verify(authTokenSaltCache, times(1)).put(salt, true);;
-		verify(httpRequest, times(1)).setAttribute("authTokenPreventionSalt", salt);
+		verify(httpRequest, times(1)).setAttribute(AuthTokenSessionCacheBean.SALT, salt);
 	}
 	
 	@Test

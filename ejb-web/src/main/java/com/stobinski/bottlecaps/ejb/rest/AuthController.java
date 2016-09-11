@@ -2,6 +2,8 @@ package com.stobinski.bottlecaps.ejb.rest;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.logging.Logger;
 import org.jboss.security.Base64Utils;
@@ -27,7 +30,7 @@ import com.stobinski.bottlecaps.ejb.wrappers.Login;
 public class AuthController {
 	
 	@Inject
-	private Logger logger;
+	private Logger log;
 	
 	@Inject 
 	private UserLoginValidator loginValidator;
@@ -39,18 +42,17 @@ public class AuthController {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("login")
-	public String login(
+	public Response login(
 			@FormParam("username") String username, 
 			@FormParam("password") String password,
-			@Context HttpServletRequest httpServletRequest) {
+			@Context HttpServletRequest httpRequest) {
 		
 		MessageDigest messageDigest = null;
-		sessionCache.init(httpServletRequest);
 		
 		try {
 			messageDigest = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
-			logger.error(e);
+			log.error(e);
 		}
 		
 		byte[] hash = messageDigest.digest(password.getBytes());
@@ -59,16 +61,17 @@ public class AuthController {
 		login.setUsername(username);
 		login.setPassword(passwordHash);
 		
+		Map<String, String> entity = new HashMap<>();
+		
 		if(loginValidator.validate(login)) {
 			String token = PasswordGenerator.generate();
-			sessionCache.attachCacheToSession();
-			sessionCache.updateCachedValue(token);
-			return token;
+			sessionCache.attachCacheToSession(httpRequest.getSession());
+			sessionCache.updateCachedValue(httpRequest, token);
+			entity.put("token", token);
+			return Response.ok().entity(entity).type(MediaType.APPLICATION_JSON).build();
 		} else {
-			String token = PasswordGenerator.generate();
-			sessionCache.attachCacheToSession();
-			sessionCache.updateCachedValue(token);
-			return token;
+			entity.put("message", "Wrong username or password");
+			return Response.status(Response.Status.UNAUTHORIZED).entity(entity).type(MediaType.APPLICATION_JSON).build();
 		}		
 	}
 	
@@ -76,6 +79,8 @@ public class AuthController {
 	@Path("validate")
 	public boolean validatePermissions(@Context HttpServletRequest httpReq) {
 		return sessionCache.match(httpReq.getHeader("AUTH-TOKEN"), httpReq.getSession());
+//		return sessionCache.match(httpReq.getHeader("AUTH-TOKEN"), httpReq.getSession()) ? 
+//				Response.ok().entity(true).build() : Response.status(Response.Status.UNAUTHORIZED).build();
 	}
 	
 	@POST
