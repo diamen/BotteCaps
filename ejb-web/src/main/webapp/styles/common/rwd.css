@@ -18,7 +18,7 @@
 		display: none !important;
 	}
 	
-	header div.container {
+	.logging {
 		text-align: center;
 	}
 }
@@ -34,7 +34,7 @@
 		display: none !important;
 	}
 
-	header div.container form {
+	.logging {
 		float: right;
 	}
 }

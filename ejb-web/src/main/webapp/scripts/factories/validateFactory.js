@@ -10,7 +10,7 @@ angular.module('bcFactories')
 				headers: { 'AUTH-TOKEN': authToken }
 			}).then(function(response) {
 				cache.remove('validateRequest');
-				authCacheFactory.put('AUTH', $sessionStorage.authToken);
+				authCacheFactory.put($sessionStorage.authToken);
 				return response.data;
 			});
 		};

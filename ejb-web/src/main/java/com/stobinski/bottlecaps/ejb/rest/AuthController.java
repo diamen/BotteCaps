@@ -79,8 +79,6 @@ public class AuthController {
 	@Path("validate")
 	public boolean validatePermissions(@Context HttpServletRequest httpReq) {
 		return sessionCache.match(httpReq.getHeader("AUTH-TOKEN"), httpReq.getSession());
-//		return sessionCache.match(httpReq.getHeader("AUTH-TOKEN"), httpReq.getSession()) ? 
-//				Response.ok().entity(true).build() : Response.status(Response.Status.UNAUTHORIZED).build();
 	}
 	
 	@POST

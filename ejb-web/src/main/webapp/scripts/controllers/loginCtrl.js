@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('loginCtrl', function($scope, $http, $sessionStorage, $rootScope) {
+	.controller('loginCtrl', function($scope, $http, $sessionStorage, $rootScope, restService, authCacheFactory) {
 
 		$http.get("./admin/login").success(function(data, status, headers, config, statusText) {
 			$scope.csrfPreventionSalt = headers()['xsrf-token'];
@@ -23,8 +23,21 @@ angular.module('bcControllers')
 			}).success(function(data) {
 				var token = angular.fromJson(data.data).token;
 				$rootScope.$storage.authToken = token;
+				$rootScope.$storage.loggedAs = user;
 			}).error(function(data) {
-				console.log(data.message);
+				console.log(data);
+			});
+		};
+
+		$scope.logout = function() {
+			restService.authController().logout().success(function() {
+				authCacheFactory.clearCache();
+				
+				$scope.uses = '';
+				$scope.password = '';
+				
+				delete $rootScope.$storage.authToken;
+				delete $rootScope.$storage.loggedAs;
 			});
 		};
 

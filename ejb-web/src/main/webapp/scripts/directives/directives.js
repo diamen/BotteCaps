@@ -122,7 +122,7 @@ angular.module('bcDirectives', [])
 						return;
 					} else {
 
-						if(authCacheFactory.get('AUTH')) {
+						if(authCacheFactory.getCache()) {
 							element.css('display', 'initial');
 							return;
 						}

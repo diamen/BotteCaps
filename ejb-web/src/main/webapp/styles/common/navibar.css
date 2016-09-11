@@ -47,8 +47,16 @@ div.container {
 	margin-right: auto;
 }
 
-header div.container form {
+.logging {
 	margin: 7px 0;
+}
+
+div.logging {
+	color: white;
+}
+
+div.logging a {
+	color: snow;
 }
 
 .navi div div a {
