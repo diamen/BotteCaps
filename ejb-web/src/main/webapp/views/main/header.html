@@ -12,6 +12,7 @@
 	    <input type="password" ng-model="password" class="form-control" placeholder="haslo" required>
 	  </div>
 	  <button type="submit" class="btn default">Loguj</button>
+	  <div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Niepoprawna nazwa uzytkownika lub haslo</div>
 	</form>
 
 	<div ng-show="$parent.$storage.authToken" class="logging">

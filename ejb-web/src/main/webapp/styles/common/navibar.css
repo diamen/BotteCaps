@@ -59,6 +59,12 @@ div.logging a {
 	color: snow;
 }
 
+.logging div.alert-danger {
+	margin-top: 7px;
+	margin-bottom: 7px;
+	padding: 4px 35px;
+}
+
 .navi div div a {
 	display: block;
 	height: inherit;
