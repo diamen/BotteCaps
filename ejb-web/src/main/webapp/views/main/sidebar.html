@@ -1,1 +1,3 @@
 <h4 class="stitle">Najnowsze kapsle</h4>
+
+<img ng-repeat="cap in caps" ng-src="{{cap.src}}" ng-click="openCap($index)" class="img-rounded" uib-tooltip="{{data[$index].entity.cap_text}}"></img>

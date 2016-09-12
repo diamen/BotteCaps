@@ -58,6 +58,7 @@ public class CollectManager {
 		entityManager.flush();
 		
 		dbCacher.refreshCountriesWithAmount();
+		dbCacher.refreshNewestCaps();
 		
 		log.debug(String.format("File %d saved in database", fileNameSequence));
 	}
@@ -87,6 +88,7 @@ public class CollectManager {
 		entityManager.flush();
 		
 		dbCacher.refreshCountriesWithAmount();
+		dbCacher.refreshNewestCaps();
 		
 		log.debug(String.format("File with id=%d removed from database", capId));
 	}
@@ -106,8 +108,8 @@ public class CollectManager {
 				.collect(Collectors.toList());		
 	}
 	
-	public List<Base64Entity> getCaps(Integer limit) {
-		return entityManager.createNamedQuery("Caps.findCaps", Caps.class).setFirstResult(0).setMaxResults(limit).getResultList()
+	public List<Base64Entity> getNewestCaps() {
+		return dbCacher.getNewestCaps()
 				.stream()
 				.map(e -> new Base64Entity(e, capToBase64(e)))
 				.collect(Collectors.toList());

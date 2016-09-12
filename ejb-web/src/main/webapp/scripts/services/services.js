@@ -1,5 +1,18 @@
 angular.module('bcServices', [])
 
+	.service("entityConverter", ['base64Service', function(base64Service) {
+		return function(data) {
+			var entities = [];
+
+			for(var i = 0; i < data.length; i++) {
+				var src = base64Service.base64ToUrl(data[i].base64);
+				entities.push({src: src, id: data[i].entity.id});
+			}
+
+			return entities;
+		};
+	}])
+
 	.service("capMover", [function() {
 
 		return {
@@ -188,6 +201,12 @@ angular.module('bcServices', [])
 			},
 			countriesController: function() {
 				return {
+					getCountry: function(countryId) {
+						return $http({
+							method: "GET",
+							url: "./rest/countries/" + countryId
+						});
+					},
 					getCountriesWithAmount: function() {
 						return $http({
 							method: "GET",
@@ -218,11 +237,10 @@ angular.module('bcServices', [])
 					getCaps: function(country) {
 						return $http.get("./rest/collect/caps/" + country);
 					},
-					getNewestCaps: function(limit) {
+					getNewestCaps: function() {
 						return $http({
 							method: "GET",
-							url: "./rest/collect/newest/",
-							params: { limit: limit }
+							url: "./rest/collect/newest/"
 						});
 					},
 					getFilteredCaps: function(country, searchText) {

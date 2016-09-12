@@ -31,7 +31,10 @@ import javax.persistence.NamedQuery;
 	@NamedQuery(name="Caps.countCapsGroupByCountryId",
 				query="SELECT e.country_id, f.name, f.flag, COUNT(e.country_id) FROM Caps e, Countries f " +
 					  "WHERE e.country_id = f.id " +
-					  "GROUP BY e.country_id")
+					  "GROUP BY e.country_id"),
+	@NamedQuery(name="Caps.findNewestCaps",
+				query="SELECT e FROM Caps e " +
+					  "ORDER BY e.added_date DESC")
 })
 
 @Entity
@@ -148,5 +151,12 @@ public class Caps implements Serializable, IBase64 {
 	public void setId(long id) {
 		this.id = id;
 	}
-
+	
+	@Override
+	public String toString() {
+		return String.format("[id: %d, cap_text: %s, file_name: %s, beer: %d, country_id: %d, brand_id: %d, added_date: %s]",
+				id, cap_text, file_name, beer, country_id, brand_id, added_date.toString())
+				.replace('\r', '\0').replace('\n', '\0');
+	}
+	
 }

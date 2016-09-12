@@ -1,7 +1,15 @@
 .sidebar {
 	height: inherit;
+	text-align: center;
 }
 
 .sidebar .stitle {
 	color: snow;
+}
+
+.sidebar > img {
+	width: 32%;
+	height: auto;
+	margin: 1px;
+	cursor: pointer;
 }

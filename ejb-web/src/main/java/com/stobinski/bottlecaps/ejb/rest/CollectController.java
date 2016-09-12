@@ -50,8 +50,8 @@ public class CollectController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("newest")
-	public List<Base64Entity> getNewestCaps(@QueryParam("limit") Integer limit) {
-		return collectManager.getCaps(limit);
+	public List<Base64Entity> getNewestCaps() {
+		return collectManager.getNewestCaps();
 	}
 	
 }

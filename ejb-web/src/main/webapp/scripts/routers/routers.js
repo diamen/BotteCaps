@@ -15,6 +15,7 @@ angular.module('bcRouters', [])
 						templateUrl: "/ejb-web/views/news/news.html"
 						},
 					 "sidebarView@news": {
+						controller: "sidebarCtrl",
 						templateUrl: "/ejb-web/views/main/sidebar.html"
 					 	}
 					}

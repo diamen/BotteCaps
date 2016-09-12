@@ -14,6 +14,7 @@ import javax.persistence.PersistenceContext;
 
 import org.jboss.logging.Logger;
 
+import com.stobinski.bottlecaps.ejb.entities.Caps;
 import com.stobinski.bottlecaps.ejb.entities.News;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
@@ -28,6 +29,7 @@ public class DatabaseCacher {
 	
 	private List<CountriesWithAmount> countriesWithAmount; 
 	private List<News> news;
+	private List<Caps> newestCaps;
 	
 	@PostConstruct
 	private void init() {
@@ -38,12 +40,15 @@ public class DatabaseCacher {
 	private void refresh() {
 		refreshCountriesWithAmount();
 		refreshNews();
+		refreshNewestCaps();
 		
 		log.debug("Refresh SQL data executed");
 		log.debug(String.format("Countries with amount after refresh: %s", 
 				countriesWithAmount.stream().map(Object::toString).collect(Collectors.joining(", "))));
 		log.debug(String.format("News after refresh: %s", 
 				news.stream().map(Object::toString).collect(Collectors.joining(", "))));
+		log.debug(String.format("Newest caps after refresh: %s",
+				newestCaps.stream().map(Object::toString).collect(Collectors.joining(", "))));
 	}
 
 	public List<CountriesWithAmount> getCountriesWithAmount() {
@@ -52,6 +57,10 @@ public class DatabaseCacher {
 	
 	public List<News> getNews() {
 		return Collections.unmodifiableList(news);
+	}
+	
+	public List<Caps> getNewestCaps() {
+		return Collections.unmodifiableList(newestCaps);
 	}
 	
 	public void refreshCountriesWithAmount() {
@@ -66,6 +75,10 @@ public class DatabaseCacher {
 	
 	public void refreshNews() {
 		this.news = entityManager.createNamedQuery("News.findNews", News.class).getResultList();
+	}
+	
+	public void refreshNewestCaps() {
+		this.newestCaps = entityManager.createNamedQuery("Caps.findNewestCaps", Caps.class).setMaxResults(12).getResultList();
 	}
 	
 }

@@ -31,4 +31,8 @@ public class CountriesManager {
 		return dbCacher.getCountriesWithAmount().stream().filter(e -> e.getName().equals(country)).findFirst().get().getId();
 	}
 	
+	public String getCountry(Long countryId) {
+		return dbCacher.getCountriesWithAmount().stream().filter(e -> e.getId() == countryId).findFirst().get().getName();
+	}	
+	
 }
