@@ -6,17 +6,17 @@
 
 	<form ng-hide="$parent.$storage.authToken" ng-submit="login(user, password)" class="form-inline logging">
 	  <div class="form-group">
-	    <input type="text" ng-model="user" class="form-control" placeholder="uzytkownik" required>
+	    <input type="text" ng-model="user" class="form-control" placeholder="użytkownik" required>
 	  </div>
 	  <div class="form-group">
-	    <input type="password" ng-model="password" class="form-control" placeholder="haslo" required>
+	    <input type="password" ng-model="password" class="form-control" placeholder="hasło" required>
 	  </div>
 	  <button type="submit" class="btn default">Loguj</button>
-	  <div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Niepoprawna nazwa uzytkownika lub haslo</div>
+	  <div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Niepoprawna nazwa użytkownika lub hasło</div>
 	</form>
 
 	<div ng-show="$parent.$storage.authToken" class="logging">
-		Jestes zalogowany jako <a href="javascript:void(0)" ng-click="logout()"><strong>{{$parent.$storage.loggedAs}}</strong></a>
+		Jesteś zalogowany jako <a href="javascript:void(0)" ng-click="logout()"><strong>{{$parent.$storage.loggedAs}}</strong></a>
 	</div>
 
 </div>

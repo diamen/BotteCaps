@@ -1,10 +1,10 @@
-<h5 class="stitle">Najnowsze kapsle</h5>
+﻿<h5 class="stitle">Najnowsze kapsle</h5>
 
 <img ng-repeat="cap in caps" ng-src="{{cap.src}}" ng-click="openCap($index)" class="img-rounded" uib-tooltip="{{data[$index].entity.cap_text}}"></img>
 
 <hr>
 
-<h5 class="stitle">Top panstw</h5>
+<h5 class="stitle">Top państw</h5>
 
 <div class="sidechart">
 	<canvas id="base" class="chart-horizontal-bar" chart-options="top.options" chart-data="top.chartData" chart-labels="top.labels"></canvas>
@@ -12,7 +12,7 @@
 
 <hr>
 
-<h5 class="stitle">Postep w zbieraniu</h5>
+<h5 class="stitle">Postęp w zbieraniu</h5>
 
 <div class="sidechart">
 	<canvas id="line" class="chart chart-line" chart-data="progress.chartData" chart-labels="progress.labels"></canvas>

@@ -28,6 +28,15 @@
 	.logging {
 		text-align: center;
 	}
+	
+	#countrytb img {
+		margin-left: 8px
+	}
+	
+	#countrytb td:last-child {
+		float: right;
+		margin-right: 8px;
+	}
 }
 
 @media (max-width: 1200px) {
