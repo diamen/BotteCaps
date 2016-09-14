@@ -261,6 +261,12 @@ angular.module('bcServices', [])
 							method: "GET",
 							url: "./rest/collect/brand/" + id
 						});
+					},
+					getCapsAmountProgress: function() {
+						return $http({
+							method: "GET",
+							url: "./rest/collect/progress"
+						});
 					}
 				};
 			},

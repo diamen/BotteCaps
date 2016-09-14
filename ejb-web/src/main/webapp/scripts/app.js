@@ -5,6 +5,7 @@ angular.module('bcApp',
         'ngAnimate',
         'ui.bootstrap',
         'ui.router',
+        'chart.js',
 
         'bcFactories',
         'bcControllers',

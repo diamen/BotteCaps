@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @NamedQueries({
 	@NamedQuery(name="Caps.findCaps",
@@ -34,7 +36,10 @@ import javax.persistence.NamedQuery;
 					  "GROUP BY e.country_id"),
 	@NamedQuery(name="Caps.findNewestCaps",
 				query="SELECT e FROM Caps e " +
-					  "ORDER BY e.added_date DESC")
+					  "ORDER BY e.added_date DESC"),
+	@NamedQuery(name="Caps.countCapsGroupByAddedDate",
+				query="SELECT COUNT(e.added_date), e.added_date, FUNCTION('MONTH', e.added_date) AS month, FUNCTION('YEAR', e.added_date) AS year FROM Caps e " +
+					  "GROUP BY month, year ORDER BY e.added_date DESC")
 })
 
 @Entity
@@ -64,6 +69,7 @@ public class Caps implements Serializable, IBase64 {
 	@Column(name=PATH_NAME, nullable=false)
 	private String path;
 	
+	@Temporal(TemporalType.DATE)
 	@Column(name=ADDED_DATE_NAME, nullable=false)
 	private Date added_date;
 	

@@ -3,6 +3,7 @@ package com.stobinski.bottlecaps.ejb.managers;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.ejb.Stateless;
@@ -113,6 +114,10 @@ public class CollectManager {
 				.stream()
 				.map(e -> new Base64Entity(e, capToBase64(e)))
 				.collect(Collectors.toList());
+	}
+	
+	public List<Map<String, String>> getCapsAmountProgress() {
+		return dbCacher.getCapsAmountProgress();
 	}
 	
 	public Base64Entity getCap(String country, Long id) {

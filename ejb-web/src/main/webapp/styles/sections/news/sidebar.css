@@ -1,6 +1,9 @@
 .sidebar {
-	height: inherit;
 	text-align: center;
+}
+
+.spread {
+	height: inherit;
 }
 
 .sidebar .stitle {
@@ -12,4 +15,15 @@
 	height: auto;
 	margin: 1px;
 	cursor: pointer;
+}
+
+sidebar hr {
+	opacity: 0.5;
+}
+
+.sidechart {
+	margin: 8px 0;
+	background-color: white;
+	border-radius: 4px;
+	padding: 10px 0;
 }

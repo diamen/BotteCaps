@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import com.stobinski.bottlecaps.ejb.managers.CollectManager;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
@@ -52,6 +53,13 @@ public class CollectController {
 	@Path("newest")
 	public List<Base64Entity> getNewestCaps() {
 		return collectManager.getNewestCaps();
+	}
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("progress")
+	public Response getCapsAmountProgress() {
+		return Response.ok().entity(collectManager.getCapsAmountProgress()).type(MediaType.APPLICATION_JSON).build();
 	}
 	
 }

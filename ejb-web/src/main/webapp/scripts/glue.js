@@ -7,6 +7,8 @@ head.load(
     { file: '/' + appName + '/libraries/angular-animate/angular-animate.min.js' },
     { file: '/' + appName + '/libraries/angular-cookies/angular-cookies.min.js' },
     { file: '/' + appName + '/libraries/angular-locale/angular-locale_pl-pl.js' },
+    { file: '/' + appName + '/libraries/chart/Chart.min.js' },
+    { file: '/' + appName + '/libraries/angular-chart/angular-chart.min.js' },
     { file: '/' + appName + '/libraries/ngStorage-master/ngStorage.js' },
     { file: '/' + appName + '/libraries/ui-bootstrap/ui-bootstrap-tpls-2.0.0.min.js' },
     { file: '/' + appName + '/libraries/ui-router/angular-ui-router.min.js' },
