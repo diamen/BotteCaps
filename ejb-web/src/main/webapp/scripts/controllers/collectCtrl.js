@@ -1,10 +1,39 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $window, $state, $stateParams, $uibModal, restService, base64Service, markService, shareData) {
+	.controller('collectCtrl', function($scope, $window, $state, $stateParams, restService, base64Service, markService, modalService, entityConverter, shareData) {
 
 		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
 		$scope.orderCaps = $scope.orderCapsOptions[0].value;
+
+		$scope.pagination = {
+			currentPage: 1,
+			totalItems: 0,
+			maxPerPage: 49
+		};
+
+		var getAmountFromArr = function(arr, country) {
+			return arr.filter(function(elem) {
+				return elem.name === country;
+			})[0].amount;
+		};
+
+		$scope.$on('$stateChangeSuccess',
+				function(event, toState, toParams, fromState, fromParams) {
+			var arr = $scope.$parent.retrieve('countryAmount');
+
+			if(arr) {
+				$scope.pagination.totalItems = getAmountFromArr(arr, toParams.country);
+				$scope.getPageData();
+			}
+		});
+
+		$scope.$on('countryAmountEvent', function(event, data) {
+			$scope.$parent.persist('countryAmount', data);
+			$scope.pagination.totalItems = getAmountFromArr(data, $scope.country);
+
+			$scope.getPageData();
+		});
 
 		restService.countriesController().getFlag($scope.country).success(function(data) {
 			$scope.flag = data.flag;
@@ -13,21 +42,14 @@ angular.module('bcControllers')
 		if($scope.country === undefined)
 			$scope.country = 'Albania';
 
-		$scope.convertPhotos = function(data) {
-			var caps = [];
+		$scope.getPageData = function() {
+			var page = Math.ceil(($scope.pagination.maxPerPage * $scope.pagination.currentPage) / $scope.pagination.maxPerPage);
 
-			for(var i = 0; i < data.length; i++) {
-				var src = base64Service.base64ToUrl(data[i].base64);
-				caps.push({src: src, id: data[i].entity.id});
-			}
-
-			$scope.caps = caps;
+			restService.collectController().getCaps($scope.country, page, $scope.pagination.maxPerPage).success(function(data) {
+				$scope.caps = entityConverter(data);
+				shareData.addData($scope.caps);
+			});
 		};
-
-		restService.collectController().getCaps($scope.country).success(function(data) {
-			$scope.convertPhotos(data);
-			shareData.addData($scope.caps);
-		});
 
 		$scope.filterCaps = function(searchText) {
 			restService.collectController().getFilteredCaps($scope.country, searchText).success(function(data) {
@@ -60,26 +82,8 @@ angular.module('bcControllers')
 
 		};
 
-		/* modal */
-		$scope.open = function() {
-
-			var modalInstance = $uibModal.open({
-			      animation: true,
-			      templateUrl: '/ejb-web/views/templates/modal.html',
-			      controller: 'modalCtrl',
-			      size: 'sm',
-			      resolve: {
-			        msg: function () {
-			          return "Czy chcesz usunac zaznaczone kapsle?";
-			        }
-			      }
-			    });
-
-			modalInstance.result.then(function () {
-			      $scope.deleteFiles();
-			    }, function () {
-			      console.log('dismissed');
-			    });
+		$scope.openModal = function() {
+			modalService.execute($scope.deleteFiles, "Czy chcesz usunąć zaznaczone kapsle?");
 		};
 
 	});

@@ -94,8 +94,11 @@ public class CollectManager {
 		log.debug(String.format("File with id=%d removed from database", capId));
 	}
 	
-	public List<Base64Entity> getCaps(String country) {
-		return entityManager.createNamedQuery("Caps.findCapsByCountryId", Caps.class).setParameter("country_id", countriesManager.getCountryId(country)).getResultList()
+	public List<Base64Entity> getCaps(String country, Integer no, Integer max) {
+		int offset = (no - 1) * max;
+		
+		return entityManager.createNamedQuery("Caps.findCapsByCountryId", Caps.class)
+			.setParameter("country_id", countriesManager.getCountryId(country)).setFirstResult(offset).setMaxResults(max).getResultList()
 			.stream()
 			.map(e -> new Base64Entity(e, capToBase64(e)))
 			.collect(Collectors.toList());

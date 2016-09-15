@@ -36,10 +36,15 @@
 
 <div class="row" style="margin-left: 0px !important; margin-right: 0px !important;">
 	<button ng-click="addCapRedirect(country)" type="button" class="btn btn-default btn-sm">Dodaj</button>
-	<button ng-click="open()" ng-class="markedIds.length === undefined || markedIds.length === 0 ? 'disabled' : 'enabled'" type="button" class="btn btn-default btn-sm">Usun</button>
+	<button ng-click="openModal()" ng-class="markedIds.length === undefined || markedIds.length === 0 ? 'disabled' : 'enabled'" type="button" class="btn btn-default btn-sm">Usuń</button>
 </div>
 
 <span style="width: 100px; display: inline-block; margin: 1px" ng-repeat="cap in caps">
 	<img ng-src="{{cap.src}}" ng-click="openCap(country, caps[$index].id)" class="imgcap img-rounded"></img>
 	<mark-button ng-click="markCap(cap.id)"></mark-button>
 </span>
+
+<div ng-hide="pagination.totalItems < pagination.maxPerPage + 1">
+	<ul uib-pagination ng-change="getPageData()" boundary-links="true" total-items="pagination.totalItems" items-per-page="pagination.maxPerPage"
+	ng-model="pagination.currentPage" class="pagination-md" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
+</div>

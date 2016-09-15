@@ -234,8 +234,12 @@ angular.module('bcServices', [])
 			},
 			collectController: function() {
 				return {
-					getCaps: function(country) {
-						return $http.get("./rest/collect/caps/" + country);
+					getCaps: function(country, page, maxPerPage) {
+						return $http({
+							method: "GET",
+							url: "./rest/collect/caps/" + country,
+							params: { page: page, max : maxPerPage }
+						});
 					},
 					getNewestCaps: function() {
 						return $http({

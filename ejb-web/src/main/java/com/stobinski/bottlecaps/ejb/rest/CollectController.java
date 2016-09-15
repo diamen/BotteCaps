@@ -23,8 +23,8 @@ public class CollectController {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("caps/{country}")
-	public List<Base64Entity> getCaps(@PathParam("country") String country) {
-		return collectManager.getCaps(country);
+	public List<Base64Entity> getCaps(@PathParam("country") String country, @QueryParam("page") Integer page, @QueryParam("max") Integer max) {
+		return collectManager.getCaps(country, page, max);
 	}
 	
 	@GET

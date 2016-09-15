@@ -1,9 +1,6 @@
 .sidebar {
 	text-align: center;
-}
-
-.spread {
-	height: inherit;
+	padding-bottom: 20px;
 }
 
 .sidebar .stitle {
