@@ -106,7 +106,7 @@ public class CollectManager {
 	
 	public List<Base64Entity> getCaps(String country, String searchText) {
 		return entityManager.createNamedQuery("Caps.findCapsByCountryIdAndCapText", Caps.class)
-				.setParameter("cap_text", searchText).setParameter("country_id", countriesManager.getCountryId(country)).getResultList()
+				.setParameter("cap_text", "%" + searchText + "%").setParameter("country_id", countriesManager.getCountryId(country)).getResultList()
 				.stream()
 				.map(e -> new Base64Entity(e, capToBase64(e)))
 				.collect(Collectors.toList());		

@@ -40,7 +40,7 @@
 </div>
 
 <span style="width: 100px; display: inline-block; margin: 1px" ng-repeat="cap in caps">
-	<img ng-src="{{cap.src}}" ng-click="openCap(country, caps[$index].id)" class="imgcap img-rounded"></img>
+	<img ng-src="{{cap.src}}" ng-click="openCap(country, caps[$index].entity.id)" class="imgcap img-rounded"></img>
 	<mark-button ng-click="markCap(cap.id)"></mark-button>
 </span>
 

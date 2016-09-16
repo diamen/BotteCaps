@@ -13,7 +13,7 @@ angular.module('bcControllers')
 			var countryId = $scope.data[index].entity.country_id;
 
 			restService.countriesController().getCountry(countryId).success(function(country) {
-				$scope.$parent.openCap(country, $scope.caps[index].id);
+				$scope.$parent.openCap(country, $scope.caps[index].entity.id);
 			});
 		};
 

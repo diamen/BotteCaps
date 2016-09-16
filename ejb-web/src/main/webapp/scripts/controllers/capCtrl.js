@@ -25,13 +25,11 @@ angular.module('bcControllers')
 
 		$scope.selectFiveCaps = function(capId) {
 
-			// TODO Nie działa gdy wchodzi się na przedostatni / ostatni kapsel
-			
 			if($scope.caps === undefined)
 				return;
 
 			var fivecaps = [];
-			var capIndex = $scope.caps.map(function(e) { return e.id; }).indexOf(capId);
+			var capIndex = $scope.caps.map(function(e) { return e.entity.id; }).indexOf(capId);
 
 			var mover = capMover.capMover($scope.caps);
 
@@ -56,11 +54,11 @@ angular.module('bcControllers')
 		$scope.selectFiveCaps(parseInt($scope.id));
 
 		$scope.previousCap = function() {
-			$scope.selectFiveCaps(parseInt($scope.fivecaps[1].id));
+			$scope.selectFiveCaps(parseInt($scope.fivecaps[1].entity.id));
 		};
 
 		$scope.nextCap = function() {
-			$scope.selectFiveCaps($scope.fivecaps[3].id);
+			$scope.selectFiveCaps($scope.fivecaps[3].entity.id);
 		};
 
 });

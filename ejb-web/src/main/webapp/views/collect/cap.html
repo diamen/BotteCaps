@@ -30,10 +30,10 @@
 
 <div ng-hide="caps === undefined || caps.length < 5" class="capmover md-hidden">
 	<i ng-click="previousCap()" class="col-md-1 fa fa-chevron-left"></i>
-	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[0].id)" ng-src="{{fivecaps[0].src}}"></img>
-	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[1].id)" ng-src="{{fivecaps[1].src}}"></img>
-	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[2].id)" ng-src="{{mainsrc}}"></img>
-	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[3].id)" ng-src="{{fivecaps[3].src}}"></img>
-	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[4].id)" ng-src="{{fivecaps[4].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[0].entity.id)" ng-src="{{fivecaps[0].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[1].entity.id)" ng-src="{{fivecaps[1].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[2].entity.id)" ng-src="{{mainsrc}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[3].entity.id)" ng-src="{{fivecaps[3].src}}"></img>
+	<img fade-in class="col-md-2" ng-click="openCap(country, fivecaps[4].entity.id)" ng-src="{{fivecaps[4].src}}"></img>
 	<i ng-click="nextCap()" class="col-md-1 fa fa-chevron-right"></i>
 </div>

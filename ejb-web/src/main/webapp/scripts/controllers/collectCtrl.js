@@ -1,6 +1,7 @@
 angular.module('bcControllers')
 	.controller('collectCtrl', function($scope, $window, $state, $stateParams, restService, base64Service, markService, modalService, entityConverter, shareData) {
 
+		$scope.isMoreThanPage = false;
 		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';
 		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
@@ -20,10 +21,12 @@ angular.module('bcControllers')
 
 		$scope.$on('$stateChangeSuccess',
 				function(event, toState, toParams, fromState, fromParams) {
+			var country = $scope.country || toParams.country;
 			var arr = $scope.$parent.retrieve('countryAmount');
 
 			if(arr) {
-				$scope.pagination.totalItems = getAmountFromArr(arr, toParams.country);
+				$scope.pagination.totalItems = getAmountFromArr(arr, country);
+				$scope.isMoreThanPage = $scope.pagination.totalItems > $scope.pagination.maxPerPage;
 				$scope.getPageData();
 			}
 		});
@@ -31,7 +34,7 @@ angular.module('bcControllers')
 		$scope.$on('countryAmountEvent', function(event, data) {
 			$scope.$parent.persist('countryAmount', data);
 			$scope.pagination.totalItems = getAmountFromArr(data, $scope.country);
-
+			$scope.isMoreThanPage = $scope.pagination.totalItems > $scope.pagination.maxPerPage;
 			$scope.getPageData();
 		});
 
@@ -48,12 +51,6 @@ angular.module('bcControllers')
 			restService.collectController().getCaps($scope.country, page, $scope.pagination.maxPerPage).success(function(data) {
 				$scope.caps = entityConverter(data);
 				shareData.addData($scope.caps);
-			});
-		};
-
-		$scope.filterCaps = function(searchText) {
-			restService.collectController().getFilteredCaps($scope.country, searchText).success(function(data) {
-				$scope.convertPhotos(data);
 			});
 		};
 
@@ -80,6 +77,24 @@ angular.module('bcControllers')
 
 			deleteFile($scope.markedIds[0]);
 
+		};
+
+		$scope.filterCaps = function(captext) {
+			captext = captext.toLowerCase();
+			$scope.capsTemp = $scope.capsTemp === undefined ? $scope.caps : $scope.capsTemp;
+			$scope.caps = [];
+
+			if($scope.isMoreThanPage) {
+				restService.collectController().getFilteredCaps($scope.country, captext).success(function(data) {
+					$scope.caps = entityConverter(data);
+				});
+			} else {
+				$scope.capsTemp.filter(function(elem) {
+					if(elem.entity.cap_text.toLowerCase().includes(captext))
+						$scope.caps.push(elem);
+				});
+
+			}
 		};
 
 		$scope.openModal = function() {

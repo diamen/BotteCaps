@@ -6,7 +6,7 @@ angular.module('bcServices', [])
 
 			for(var i = 0; i < data.length; i++) {
 				var src = base64Service.base64ToUrl(data[i].base64);
-				entities.push({src: src, id: data[i].entity.id});
+				entities.push({src: src, entity: data[i].entity});
 			}
 
 			return entities;
@@ -48,7 +48,7 @@ angular.module('bcServices', [])
 				
 				var updateOthers = function(fivecaps, capId) {
 					for(var i = 0; i < capsLength; i++) {
-						if(caps[i].id - 2 <= capId && caps[i].id + 2 >= capId) {
+						if(caps[i].entity.id - 2 <= capId && caps[i].entity.id + 2 >= capId) {
 							fivecaps.push(caps[i]);
 						}
 					}
