@@ -4,8 +4,18 @@ angular.module('bcControllers')
 		$scope.isMoreThanPage = false;
 		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';
-		$scope.orderCapsOptions = [{name: 'Alfabetycznie', value: 'cap_text'}, {name: 'Najstarsze', value: '-added_date'}, {name: 'Najnowsze', value: 'added_date'}];
-		$scope.orderCaps = $scope.orderCapsOptions[0].value;
+		$scope.countryInfo = {};
+
+		if($scope.country === undefined)
+			$scope.country = 'Albania';
+
+		$scope.kind = {
+			NOBEER: {value: 0, name: "Nobeer"},
+			BEER: {value: 1, name: "Beer"},
+			AMOUNT: {value: 2, name: "Amount"}
+		};
+
+		$scope.chosenKind = $scope.kind.AMOUNT;
 
 		$scope.pagination = {
 			currentPage: 1,
@@ -13,10 +23,10 @@ angular.module('bcControllers')
 			maxPerPage: 49
 		};
 
-		var getAmountFromArr = function(arr, country) {
+		var getCountryInfo = function(arr, country) {
 			return arr.filter(function(elem) {
 				return elem.name === country;
-			})[0].amount;
+			})[0];
 		};
 
 		$scope.$on('$stateChangeSuccess',
@@ -25,34 +35,18 @@ angular.module('bcControllers')
 			var arr = $scope.$parent.retrieve('countryAmount');
 
 			if(arr) {
-				$scope.pagination.totalItems = getAmountFromArr(arr, country);
-				$scope.isMoreThanPage = $scope.pagination.totalItems > $scope.pagination.maxPerPage;
-				$scope.getPageData();
+				$scope.countryInfo = getCountryInfo(arr, country);
+				$scope.flag = $scope.countryInfo.flag;
+				$scope.getCaps();
 			}
 		});
 
 		$scope.$on('countryAmountEvent', function(event, data) {
 			$scope.$parent.persist('countryAmount', data);
-			$scope.pagination.totalItems = getAmountFromArr(data, $scope.country);
-			$scope.isMoreThanPage = $scope.pagination.totalItems > $scope.pagination.maxPerPage;
-			$scope.getPageData();
+			$scope.countryInfo = getCountryInfo(data, $scope.country);
+			$scope.flag = $scope.countryInfo.flag;
+			$scope.getCaps();
 		});
-
-		restService.countriesController().getFlag($scope.country).success(function(data) {
-			$scope.flag = data.flag;
-		});
-
-		if($scope.country === undefined)
-			$scope.country = 'Albania';
-
-		$scope.getPageData = function() {
-			var page = Math.ceil(($scope.pagination.maxPerPage * $scope.pagination.currentPage) / $scope.pagination.maxPerPage);
-
-			restService.collectController().getCaps($scope.country, page, $scope.pagination.maxPerPage).success(function(data) {
-				$scope.caps = entityConverter(data);
-				shareData.addData($scope.caps);
-			});
-		};
 
 		$scope.markCap = function(capId) {
 			$scope.markedIds = markService($scope.markedIds, capId);
@@ -76,24 +70,53 @@ angular.module('bcControllers')
 			};
 
 			deleteFile($scope.markedIds[0]);
-
 		};
 
-		$scope.filterCaps = function(captext) {
-			captext = captext.toLowerCase();
+		$scope.getCaps = function(captext, kind) {
+			var isStopped = false;
+			$scope.captext = captext === '' ? undefined : captext;
+			var page = angular.isDefined($scope.captext) ? 1 : Math.ceil(($scope.pagination.maxPerPage * $scope.pagination.currentPage) / $scope.pagination.maxPerPage);
+			$scope.pagination.currentPage = page;
+
+			$scope.chosenKind = angular.isDefined(kind) ? kind : $scope.chosenKind;
 			$scope.capsTemp = $scope.capsTemp === undefined ? $scope.caps : $scope.capsTemp;
 			$scope.caps = [];
 
-			if($scope.isMoreThanPage) {
-				restService.collectController().getFilteredCaps($scope.country, captext).success(function(data) {
-					$scope.caps = entityConverter(data);
+			if(angular.isUndefined($scope.capsTemp)) {
+				isStopped = true;
+				restService.collectController().getCaps($scope.country, $scope.chosenKind.value, page, $scope.pagination.maxPerPage, $scope.captext).success(function(data) {
+					$scope.capsTemp = entityConverter(data);
+					$scope.getCaps(captext, kind);
 				});
-			} else {
-				$scope.capsTemp.filter(function(elem) {
-					if(elem.entity.cap_text.toLowerCase().includes(captext))
-						$scope.caps.push(elem);
-				});
+			}
 
+			if(!isStopped) {
+				$scope.pagination.totalItems = $scope.countryInfo.amount;
+				$scope.isMoreThanPage = $scope.pagination.totalItems > $scope.pagination.maxPerPage;
+
+				if($scope.isMoreThanPage) {
+					$scope.captext = angular.isUndefined($scope.captext) ? undefined : $scope.captext.toLowerCase().trim();
+					restService.collectController().getCaps($scope.country, $scope.chosenKind.value, page, $scope.pagination.maxPerPage, $scope.captext).success(function(data) {
+						$scope.caps = entityConverter(data);
+						$scope.pagination.totalItems = angular.isDefined($scope.captext) ? $scope.caps.length : $scope.countryInfo[$scope.chosenKind.name.toLowerCase()];
+						$scope.isMoreThanPage = $scope.pagination.totalItems > $scope.pagination.maxPerPage;
+						shareData.addData($scope.caps);
+					});
+				} else {
+					$scope.capsTemp.filter(function(elem) {
+						$scope.captext = angular.isUndefined($scope.captext) ? '' : $scope.captext.toLowerCase().trim();
+
+						var belongs = function(kind) {
+							return $scope.chosenKind.value === 2 ? true : kind === $scope.chosenKind.value;
+						};
+
+						if(elem.entity.cap_text.toLowerCase().includes($scope.captext) && belongs(elem.entity.beer))
+							$scope.caps.push(elem);
+
+						shareData.addData($scope.caps);
+					});
+
+				}
 			}
 		};
 

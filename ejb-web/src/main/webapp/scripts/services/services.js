@@ -234,11 +234,11 @@ angular.module('bcServices', [])
 			},
 			collectController: function() {
 				return {
-					getCaps: function(country, page, maxPerPage) {
+					getCaps: function(country, beer, page, maxPerPage, searchText) {
 						return $http({
 							method: "GET",
-							url: "./rest/collect/caps/" + country,
-							params: { page: page, max : maxPerPage }
+							url: "./rest/collect/caps/" + country + "/" + beer,
+							params: { page: page, max : maxPerPage, searchText: searchText }
 						});
 					},
 					getNewestCaps: function() {
@@ -247,17 +247,10 @@ angular.module('bcServices', [])
 							url: "./rest/collect/newest/"
 						});
 					},
-					getFilteredCaps: function(country, searchText) {
-						return $http({
-							method: "GET",
-							url: "./rest/collect/filtercaps/" + country + "/",
-							params: { searchText : searchText }
-						});
-					},
 					getSingleCap: function(country, capId) {
 						return $http({
 							method: "GET",
-							url: "./rest/collect/caps/" + country + "/" + capId
+							url: "./rest/collect/cap/" + country + "/" + capId
 						});
 					},
 					getBrand: function(id) {

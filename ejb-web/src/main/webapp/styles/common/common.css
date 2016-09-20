@@ -45,3 +45,10 @@ a.black:hover {
 .flag {
 	height: 24px;
 }
+
+.imgcap {
+	width: 100px;
+	height: 100px;
+	margin: 1px;
+	cursor: pointer;
+}

@@ -4,29 +4,20 @@
 			<a class="navbar-brand" ui-sref="collect.country({country: country})">{{country}}</a>
 			<img class="img-rounded" ng-src="{{flag}}"></img>
 		</div>
-					
-		<form class="navbar-form navbar-right" role="select">
-			<div>
-				<label for="sortCaps">Sortuj:</label>
-				<select class="form-control" id="sortCaps"
-					ng-model="orderCaps"
-					ng-options="option.value as option.name for option in orderCapsOptions track by option.value">
-				</select>
-			</div>
-		</form>
 		
 		<form class="navbar-form navbar-right" role="search">
 			<div>
 				<input id="capsSearcher" class="form-control" ng-model="searchText"/>
-				<button type="submit" class="btn btn-primary sm-btn" ng-click="filterCaps(searchText)">Wyszukaj</button>
+				<button type="submit" class="btn btn-primary sm-btn" ng-click="getCaps(searchText, $scope.chosenKind)" ng-dblclick="return">Wyszukaj</button>
 			</div>
 		</form>
 	
 		<form class="bg-hidden navbar-left">
 			<div>
 				<ul class="nav navbar-nav">
-	       			<li><a href="#" class="counttext">Piwne [0]</a></li>
-	       			<li><a href="#" class="counttext">Niepiwne [0]</a></li>
+	       			<li><a href="javascript:void(0)" ng-click="getCaps($scope.captext, kind.BEER)" ng-class="chosenKind === kind.BEER ? 'choscounttext' : 'counttext'">Piwne [{{countryInfo.beer}}]</a></li>
+	       			<li><a href="javascript:void(0)" ng-click="getCaps($scope.captext, kind.NOBEER)" ng-class="chosenKind === kind.NOBEER ? 'choscounttext' : 'counttext'">Niepiwne [{{countryInfo.nobeer}}]</a></li>
+	       			<li><a href="javascript:void(0)" ng-click="getCaps($scope.captext, kind.AMOUNT)" ng-class="chosenKind === kind.AMOUNT ? 'choscounttext' : 'counttext'">Suma [{{countryInfo.amount}}]</a></li>
 	       		</ul>
 			</div>
 		</form>
@@ -45,6 +36,6 @@
 </span>
 
 <div ng-hide="pagination.totalItems < pagination.maxPerPage + 1">
-	<ul uib-pagination ng-change="getPageData()" boundary-links="true" total-items="pagination.totalItems" items-per-page="pagination.maxPerPage"
+	<ul uib-pagination ng-change="getCaps()" boundary-links="true" total-items="pagination.totalItems" items-per-page="pagination.maxPerPage"
 	ng-model="pagination.currentPage" class="pagination-md" previous-text="&lsaquo;" next-text="&rsaquo;" first-text="&laquo;" last-text="&raquo;"></ul>
 </div>

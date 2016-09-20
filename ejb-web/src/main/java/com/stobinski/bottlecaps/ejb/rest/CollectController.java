@@ -22,14 +22,7 @@ public class CollectController {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("caps/{country}")
-	public List<Base64Entity> getCaps(@PathParam("country") String country, @QueryParam("page") Integer page, @QueryParam("max") Integer max) {
-		return collectManager.getCaps(country, page, max);
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	@Path("caps/{country}/{id}")
+	@Path("cap/{country}/{id}")
 	public Base64Entity getCap(@PathParam("country") String country, @PathParam("id") Long id) {
 		return collectManager.getCap(country, id);
 	}
@@ -43,10 +36,15 @@ public class CollectController {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("filtercaps/{country}")
-	public List<Base64Entity> getFilteredCaps(@PathParam("country") String country, @QueryParam("searchText") String searchText) {
-		return collectManager.getCaps(country, searchText);
-	}
+	@Path("caps/{country}/{beer: \\d+}")
+	public List<Base64Entity> getCaps(@PathParam("country") String country, @PathParam("beer") Integer beer, 
+			@QueryParam("page") Integer page, @QueryParam("max") Integer max, @QueryParam("searchText") String searchText) {
+		
+		return (searchText == null && beer == 2) ? collectManager.getCaps(country, page, max) :
+				(searchText == null && beer != 2) ? collectManager.getCaps(country, beer, page, max) :
+				(searchText != null && beer == 2) ? collectManager.getCaps(country, searchText, page, max) :
+				collectManager.getCaps(country, searchText, beer, page, max);
+	}	
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

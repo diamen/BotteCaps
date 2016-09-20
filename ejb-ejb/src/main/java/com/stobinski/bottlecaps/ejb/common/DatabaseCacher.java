@@ -78,7 +78,7 @@ public class DatabaseCacher {
 		List<CountriesWithAmount> countries = new ArrayList<>();
 
 		for(Object[] elem : list)
-			countries.add(new CountriesWithAmount((Long) elem[0], (String) elem[1], (String) elem[2], (Long) elem[3]));
+			countries.add(new CountriesWithAmount((Long) elem[0], (String) elem[1], (String) elem[2], (Long) elem[3], (Long) elem[4], (Long) elem[5]));
 		
 		this.countriesWithAmount = countries;
 	}

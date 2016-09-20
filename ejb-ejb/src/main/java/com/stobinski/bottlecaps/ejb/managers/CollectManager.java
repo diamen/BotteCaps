@@ -104,12 +104,39 @@ public class CollectManager {
 			.collect(Collectors.toList());
 	}
 	
-	public List<Base64Entity> getCaps(String country, String searchText) {
+	public List<Base64Entity> getCaps(String country, String searchText, Integer no, Integer max) {
+		int offset = (no - 1) * max;
+		
 		return entityManager.createNamedQuery("Caps.findCapsByCountryIdAndCapText", Caps.class)
-				.setParameter("cap_text", "%" + searchText + "%").setParameter("country_id", countriesManager.getCountryId(country)).getResultList()
+				.setParameter("cap_text", "%" + searchText + "%").setParameter("country_id", countriesManager.getCountryId(country))
+				.setFirstResult(offset).setMaxResults(max).getResultList()
 				.stream()
 				.map(e -> new Base64Entity(e, capToBase64(e)))
-				.collect(Collectors.toList());		
+				.collect(Collectors.toList());	
+	}
+	
+	public List<Base64Entity> getCaps(String country, Integer beer, Integer no, Integer max) {
+		int offset = (no - 1) * max;
+		
+		return entityManager.createNamedQuery("Caps.findCapsByCountryIdAndBeer", Caps.class)
+				.setParameter("beer", beer).setParameter("country_id", countriesManager.getCountryId(country))
+				.setFirstResult(offset).setMaxResults(max).getResultList()
+				.stream()
+				.map(e -> new Base64Entity(e, capToBase64(e)))
+				.collect(Collectors.toList());	
+	}
+	
+	public List<Base64Entity> getCaps(String country, String searchText, Integer beer, Integer no, Integer max) {
+		int offset = (no - 1) * max;
+		
+		return entityManager.createNamedQuery("Caps.findCapsByCountryIdBeerAndSearchText", Caps.class)
+			.setParameter("country_id", countriesManager.getCountryId(country))
+			.setParameter("beer", beer)
+			.setParameter("cap_text", "%" + searchText + "%")
+			.setFirstResult(offset).setMaxResults(max).getResultList()
+			.stream()
+			.map(e -> new Base64Entity(e, capToBase64(e)))
+			.collect(Collectors.toList());
 	}
 	
 	public List<Base64Entity> getNewestCaps() {

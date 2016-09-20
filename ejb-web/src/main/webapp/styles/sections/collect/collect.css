@@ -168,3 +168,12 @@ select.infr {
 	margin-top: 25px;
 	margin-bottom: 8px;
 }
+
+.counttext {
+	font-size: 85%;
+}
+
+.choscounttext {
+	font-size: 85%;
+	font-weight: bold;
+}
