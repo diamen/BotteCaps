@@ -1,6 +1,7 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $window, $state, $stateParams, restService, base64Service, markService, modalService, entityConverter, shareData) {
+	.controller('collectCtrl', function($scope, $window, $state, $stateParams, restService, base64Service, markService, modalService, entityConverter, shareData, language) {
 
+		$scope.language = language;
 		$scope.isMoreThanPage = false;
 		$scope.markedIds = [];
 		$scope.country = $stateParams.country || 'Albania';

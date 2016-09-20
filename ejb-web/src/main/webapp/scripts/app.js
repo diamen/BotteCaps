@@ -8,6 +8,7 @@ angular.module('bcApp',
         'chart.js',
 
         'bcFactories',
+        'bcFilters',
         'bcControllers',
         'bcDirectives',
         'bcRouters',

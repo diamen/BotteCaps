@@ -1,7 +1,7 @@
 <uib-accordion class="md-shown">
-	<div uib-accordion-group heading="Lista panstw">
+	<div uib-accordion-group heading="Lista państw">
 		<table id="countrytb" class="seccollect">
-			<tr ng-repeat="country in countries" ng-click="redirectToCountry(country.name)">
+			<tr ng-repeat="country in countries | orderBy: 'name'" ng-click="redirectToCountry(country.name)">
 				<td><img class="flag" ng-src="{{country.flag}}"></img></td><td>{{country.name}}</td><td>[{{country.amount}}]</td>
 			</tr>
 		</table>
@@ -10,7 +10,7 @@
 
 
 <table id="countrytb" class="seccollect md-hidden">
-	<tr ng-repeat="country in countries" ng-click="redirectToCountry(country.name)">
+	<tr ng-repeat="country in countries | orderBy:'name'" ng-click="redirectToCountry(country.name)">
 		<td><img class="flag" ng-src="{{country.flag}}"></img></td><td>{{country.name}}</td><td>[{{country.amount}}]</td>
 	</tr>
 </table>

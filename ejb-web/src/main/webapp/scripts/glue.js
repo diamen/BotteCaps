@@ -24,6 +24,9 @@ head.load(
     { file: '/' + appName + '/scripts/factories/authCacheFactory.js' },
     { file: '/' + appName + '/scripts/factories/validateFactory.js' },
 
+    /* Filters */
+    { file: '/' + appName + '/scripts/filters/filters.js' },
+
     /* Controllers */
     { file: '/' + appName + '/scripts/controllers/mainCtrl.js' },
 
