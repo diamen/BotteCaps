@@ -13,11 +13,13 @@
 
 	<body ng-controller="mainCtrl">
 
-		<header class="sclaret" ng-include src="'/ejb-web/views/main/header.html'"></header>
-		
-		<div class="navi" ng-include src="'/ejb-web/views/main/navbar.html'"></div>
-		
-		<div class="main" ui-view></div>
+			<header class="sclaret" ng-include src="'/ejb-web/views/main/header.html'"></header>
+			
+			<div class="navi" ng-include src="'/ejb-web/views/main/navbar.html'"></div>
+			
+			<div class="main" ui-view></div>
+
+			<div loading class="loader"><img src="/ejb-web/resources/gfx/loading.gif"></div>
 		
 	</body>
 

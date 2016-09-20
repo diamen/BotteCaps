@@ -44,6 +44,7 @@ head.load(
 
     /* Directives */
     { file: '/' + appName + '/scripts/directives/directives.js' },
+    { file: '/' + appName + '/scripts/directives/loading.js' },
     { file: '/' + appName + '/scripts/directives/tradeImg.js' },
 
     /* Routers */
