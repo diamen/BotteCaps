@@ -43,7 +43,7 @@ angular.module('bcControllers')
 		});
 
 		$scope.$on('countryAmountEvent', function(event, data) {
-			$scope.$parent.persist('countryAmount', data);
+			persistFactory.put('countryAmount', data);
 			$scope.countryInfo = getCountryInfo(data, $scope.country);
 			$scope.flag = $scope.countryInfo.flag;
 			$scope.getCaps();
@@ -111,7 +111,7 @@ angular.module('bcControllers')
 							return $scope.chosenKind.value === 2 ? true : kind === $scope.chosenKind.value;
 						};
 
-						if(elem.entity.cap_text.toLowerCase().includes($scope.captext) && belongs(elem.entity.beer))
+						if(elem.entity.cap_text.toLowerCase().indexOf($scope.captext) > -1 && belongs(elem.entity.beer))
 							$scope.caps.push(elem);
 
 						shareData.addData($scope.caps);

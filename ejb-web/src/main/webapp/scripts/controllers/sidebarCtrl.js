@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('sidebarCtrl', function($scope, restService, entityConverter) {
+	.controller('sidebarCtrl', function($scope, restService, entityConverter, language) {
 
 		$scope.top = {};
 		$scope.progress = {};
@@ -24,7 +24,7 @@ angular.module('bcControllers')
 			    			return '';
 			    		  },
 			    		  label: function(tooltipItem, data) {
-			    			  return $scope.top.fullLabel[tooltipItem.index] + " = " + data.datasets[0].data[tooltipItem.index];
+			    			  return language.countryToPL($scope.top.fullLabel[tooltipItem.index]) + " = " + data.datasets[0].data[tooltipItem.index];
 			    		  }
 			    	  }
 			      }

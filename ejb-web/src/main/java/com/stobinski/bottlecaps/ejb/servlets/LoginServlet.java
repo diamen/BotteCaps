@@ -20,7 +20,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
 		String hash = (String) req.getAttribute(CsrfSessionCacheBean.SALT);
 		resp.setHeader("XSRF-TOKEN", hash);
-		req.getRequestDispatcher("/views/login.html").forward(req, resp);
+		req.getRequestDispatcher("/index.html").forward(req, resp);
     }
 	
 }

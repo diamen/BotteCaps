@@ -50,7 +50,7 @@ public class AuthController {
 		MessageDigest messageDigest = null;
 		
 		try {
-			messageDigest = MessageDigest.getInstance("SHA-256");
+			messageDigest = MessageDigest.getInstance("MD5");
 		} catch (NoSuchAlgorithmException e) {
 			log.error(e);
 		}

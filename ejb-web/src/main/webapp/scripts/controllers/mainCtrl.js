@@ -3,6 +3,11 @@ angular.module('bcControllers', [])
 
 		$rootScope.$storage = $sessionStorage;
 
+		/* Events */
+		$scope.fire = function(event, data) {
+			$scope.$broadcast(event, data);
+		};
+
 		/* Redirect */
 		$scope.go = function(state) {
 			$state.go(state);
