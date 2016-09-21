@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('collectCtrl', function($scope, $window, $state, $stateParams, restService, base64Service, markService, modalService, entityConverter, shareData, language) {
+	.controller('collectCtrl', function($scope, $window, $state, $stateParams, restService, base64Service, markService, modalService, entityConverter, shareData, persistFactory, language) {
 
 		$scope.language = language;
 		$scope.isMoreThanPage = false;
@@ -33,7 +33,7 @@ angular.module('bcControllers')
 		$scope.$on('$stateChangeSuccess',
 				function(event, toState, toParams, fromState, fromParams) {
 			var country = $scope.country || toParams.country;
-			var arr = $scope.$parent.retrieve('countryAmount');
+			var arr = persistFactory.retrieve('countryAmount');
 
 			if(arr) {
 				$scope.countryInfo = getCountryInfo(arr, country);

@@ -22,6 +22,7 @@ head.load(
     /* Factories */
     { file: '/' + appName + '/scripts/factories/factories.js' },
     { file: '/' + appName + '/scripts/factories/authCacheFactory.js' },
+    { file: '/' + appName + '/scripts/factories/persistFactory.js' },
     { file: '/' + appName + '/scripts/factories/validateFactory.js' },
 
     /* Filters */

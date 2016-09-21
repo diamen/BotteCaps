@@ -3,21 +3,6 @@ angular.module('bcControllers', [])
 
 		$rootScope.$storage = $sessionStorage;
 
-		$scope.persistedData = {};
-
-		/* Event handlers */
-		$scope.passData = function(event, data) {
-			$scope.$broadcast(event, data);
-		};
-
-		$scope.persist = function(key, data) {
-			$scope.persistedData[key] = data;
-		};
-
-		$scope.retrieve = function(key) {
-			return $scope.persistedData[key];
-		};
-
 		/* Redirect */
 		$scope.go = function(state) {
 			$state.go(state);
