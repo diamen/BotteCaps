@@ -7,7 +7,8 @@ angular.module('bcFilters', [])
 				return;
 
 			for(var i = 0; i < input.length; i++){
-				input[i].name = language.countryToPL(input[i].name);
+				input[i].namepl = language.countryToPL(input[i].name);
+				input[i].nameen = input[i].name;
 				out.push(input[i]);
 			}
 
