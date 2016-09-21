@@ -1,8 +1,9 @@
 angular.module('bcControllers')
-	.controller('capCtrl', function($scope, $stateParams, restService, base64Service, shareData, capMover) {
+	.controller('capCtrl', function($scope, $stateParams, restService, base64Service, shareData, capMover, language) {
 
 		angular.element(document.querySelector('.sidebar')).removeClass("sidebar");
 
+		$scope.language = language;
 		$scope.country = $stateParams.country;
 		$scope.id = $stateParams.id;
 
