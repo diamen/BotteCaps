@@ -49,6 +49,10 @@ angular.module('bcControllers')
 				fivecaps = mover.updateLast(fivecaps);
 
 			$scope.fivecaps = fivecaps;
+
+			if(angular.isUndefined($scope.fivecaps))
+				return;
+
 			$scope.mainsrc = fivecaps[2].src;
 		};
 

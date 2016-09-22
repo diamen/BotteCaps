@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('tradeCtrl', function($scope, $window, $uibModal, base64Service, restService, markService) {
+	.controller('tradeCtrl', function($scope, $window, modalService, base64Service, restService, markService) {
 
 		$scope.markedIds = [];
 
@@ -16,7 +16,6 @@ angular.module('bcControllers')
 
 		$scope.mark = function(id) {
 			$scope.markedIds = markService($scope.markedIds, id);
-			console.log($scope.markedIds);
 		};
 
 		$scope.delete = function(ids) {
@@ -37,26 +36,12 @@ angular.module('bcControllers')
 			$scope.files = convertPhotos(data);
 		});
 
-		/* modal */
-		$scope.open = function() {
-
-			var modalInstance = $uibModal.open({
-			      animation: true,
-			      templateUrl: '/ejb-web/views/templates/modal.html',
-			      controller: 'modalCtrl',
-			      size: 'sm',
-			      resolve: {
-			        msg: function () {
-			          return "Czy chcesz usunac zaznaczone kapsle?";
-			        }
-			      }
-			    });
-
-			modalInstance.result.then(function () {
-			      $scope.delete($scope.markedIds);
-			    }, function () {
-			      console.log('dismissed');
-			    });
+		$scope.openModal = function() {
+			modalService.execute(function() {
+				restService.adminController().deleteTrade($scope.markedIds).success(function() {
+					$window.location.reload();
+				});
+			}, "Czy chcesz usunąć zaznaczone zdjęcia?");
 		};
-		
-	});
+
+});

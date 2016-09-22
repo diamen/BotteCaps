@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('addCapCtrl', function($scope, $stateParams, $uibModal, base64Service, restService) {
+	.controller('addCapCtrl', function($scope, $stateParams, modalService, base64Service, restService) {
 
 		$scope.country = $stateParams.country;
 
@@ -30,7 +30,7 @@ angular.module('bcControllers')
 
 			base64Service.imgToBase64($scope.files[i].src, 'image/jpeg', function(base64) {
 				restService.adminController().addCap(base64, $scope.files[i].captext, $scope.files[i].capbrand, $scope.files[i].beer, $scope.country)
-					.success(function(data) {
+					.success(function() {
 						if(i + 1 < numberOfFiles) {
 							i += 1;
 							$scope.uploadFiles(i);
@@ -44,37 +44,15 @@ angular.module('bcControllers')
 		$scope.closeAlert = function() {
 			$scope.showAlert = false;
 		};
-		
-		/* modal */
-		$scope.openModal = function(type) {
-			
-			if(type === 'CLR') {
-				$scope.msg = "Czy chcesz wycofac zmiany?";
-				$scope.invoke = $scope.clear;
-			}
 
-			if(type === 'UPL') {
-				$scope.msg = "Czy chcesz dodac kapsle do kolekcji?";
-				$scope.invoke = $scope.uploadFiles;
-			}
-			
-			var modalInstance = $uibModal.open({
-			      animation: true,
-			      templateUrl: '/ejb-web/views/templates/modal.html',
-			      controller: 'modalCtrl',
-			      size: 'sm',
-			      resolve: {
-			        msg: function () {
-			          return $scope.msg;
-			        }
-			      }
-			    });
-	
-			modalInstance.result.then(function () {
-			      $scope.invoke();
-			    }, function () {
-			      console.log('dismissed');
-			    });
+		$scope.openModalOk = function() {
+			modalService.execute($scope.uploadFiles, "Czy chcesz dodać kapsle do kolekcji?");
 		};
-		
+
+		$scope.openModalCancel = function() {
+			modalService.execute(function() {
+				$scope.files.length = 0;
+			}, "Czy chcesz wycofać zmiany?");
+		};
+
 });

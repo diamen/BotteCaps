@@ -1,5 +1,5 @@
 <button is-admin class="btn btn-default" ng-click="go('trade.add')">Dodaj</button>
-<button is-admin class="btn btn-default" ng-click="open()">Usun</button>
+<button is-admin ng-disabled="markedIds.length === 0" class="btn btn-default" ng-click="openModal()">Usuń</button>
 
 <div class="tradegallery">
 	<span ng-repeat="file in files">

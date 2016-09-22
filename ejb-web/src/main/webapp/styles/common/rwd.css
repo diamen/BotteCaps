@@ -40,6 +40,19 @@
 }
 
 @media (max-width: 1200px) {
+	form.navbar-form {
+		float: none !important;
+		margin-right: 0;
+	}
+	
+	form.navbar-form input {
+		width: 100% !important;
+	}
+	
+	form.navbar-form button.btn-primary {
+		margin-top: 5px;
+	}
+	
 	.bg-hidden {
 		display: none !important;
 	}

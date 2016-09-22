@@ -2,8 +2,8 @@
 	<label ng-class="files.length === undefined || files.length === 0 ? 'enabled' : 'disabled'" class="btn btn-default btn-sm btn-file">
 		Dodaj <input uploadfile="img" type="file" style="display: none;" accept="image/*" multiple>
 	</label>
-	<button ng-class="files.length === undefined || files.length === 0 ? 'disabled' : 'enabled'" ng-click="openModal('CLR')" type="button" class="btn btn-default btn-sm">Czyść</button>
-	<button ng-class="files.length === undefined || files.length === 0 ? 'disabled' : 'enabled'" ng-click="openModal('UPL')" type="button" class="btn btn-default btn-sm">Załaduj</button>
+	<button ng-class="files.length === undefined || files.length === 0 ? 'disabled' : 'enabled'" ng-click="openModalCancel()" type="button" class="btn btn-default btn-sm">Czyść</button>
+	<button ng-class="files.length === undefined || files.length === 0 ? 'disabled' : 'enabled'" ng-click="openModalOk()" type="button" class="btn btn-default btn-sm">Załaduj</button>
 </div>
 	
 <div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Musisz wybrać rodzaj kapsla!</div>	

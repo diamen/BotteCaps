@@ -9,7 +9,7 @@ angular.module('bcControllers')
 			$scope.showAlert = false;
 		};
 
-		$http.get("./admin/login").success(function(data, status, headers, config, statusText) {
+		$http.get("./admin/login").success(function(data, status, headers) {
 			$scope.csrfPreventionSalt = headers()['xsrf-token'];
 		});
 

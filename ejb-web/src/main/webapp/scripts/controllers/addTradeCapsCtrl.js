@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('addTradeCapsCtrl', function($scope, $uibModal, base64Service, restService) {
+	.controller('addTradeCapsCtrl', function($scope, modalService, base64Service, restService) {
 
 		$scope.clear = function() {
 			$scope.files.length = 0;
@@ -36,36 +36,14 @@ angular.module('bcControllers')
 			});
 		};
 
-		/* modal */
-		$scope.openModal = function(type) {
-
-			if(type === 'CLR') {
-				$scope.msg = "Czy chcesz wycofac zmiany?";
-				$scope.invoke = $scope.clear;
-			}
-
-			if(type === 'UPL') {
-				$scope.msg = "Czy chcesz dodac kapsle do sekcji wymiany?";
-				$scope.invoke = $scope.uploadFiles;
-			}
-
-			var modalInstance = $uibModal.open({
-			      animation: true,
-			      templateUrl: '/ejb-web/views/templates/modal.html',
-			      controller: 'modalCtrl',
-			      size: 'sm',
-			      resolve: {
-			        msg: function () {
-			          return $scope.msg;
-			        }
-			      }
-			    });
-
-			modalInstance.result.then(function () {
-			      $scope.invoke();
-			    }, function () {
-			      console.log('dismissed');
-			    });
+		$scope.openModalOk = function() {
+			modalService.execute($scope.uploadFiles, "Czy chcesz dodać kapsle do kolekcji?");
 		};
 
-	});
+		$scope.openModalCancel = function() {
+			modalService.execute(function() {
+				$scope.files.length = 0;
+			}, "Czy chcesz wycofać zmiany?");
+		};
+
+});

@@ -45,7 +45,6 @@ head.load(
     { file: '/' + appName + '/scripts/controllers/newsCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/sidebarCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/tradeCtrl.js' },
-    { file: '/' + appName + '/scripts/controllers/userStripCtrl.js' },
 
     /* Directives */
     { file: '/' + appName + '/scripts/directives/directives.js' },
