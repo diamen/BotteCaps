@@ -1,9 +1,9 @@
-<button class="btn btn-default" ng-click="go('trade.add')">Dodaj</button>
-<button class="btn btn-default" ng-click="open()">Usun</button>
+<button is-admin class="btn btn-default" ng-click="go('trade.add')">Dodaj</button>
+<button is-admin class="btn btn-default" ng-click="open()">Usun</button>
 
 <div class="tradegallery">
 	<span ng-repeat="file in files">
 		<trade-img source="{{file.src}}" ng-click="fullOpen(file.id)"></trade-img>
-		<mark-button ng-click="mark(file.id)"></mark-button>
+		<mark-button is-admin ng-click="mark(file.id)"></mark-button>
 	</span>
 </div>

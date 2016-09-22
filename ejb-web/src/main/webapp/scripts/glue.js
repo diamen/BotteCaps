@@ -27,6 +27,7 @@ head.load(
 
     /* Filters */
     { file: '/' + appName + '/scripts/filters/filters.js' },
+    { file: '/' + appName + '/scripts/filters/toPlCountry.js' },
 
     /* Controllers */
     { file: '/' + appName + '/scripts/controllers/mainCtrl.js' },
@@ -50,6 +51,11 @@ head.load(
     { file: '/' + appName + '/scripts/directives/directives.js' },
     { file: '/' + appName + '/scripts/directives/loading.js' },
     { file: '/' + appName + '/scripts/directives/tradeImg.js' },
+    { file: '/' + appName + '/scripts/directives/uploadFile.js' },
+    { file: '/' + appName + '/scripts/directives/fileread.js' },
+    { file: '/' + appName + '/scripts/directives/markButton.js' },
+    { file: '/' + appName + '/scripts/directives/fadeIn.js' },
+    { file: '/' + appName + '/scripts/directives/isAdmin.js' },
 
     /* Routers */
     { file: '/' + appName + '/scripts/routers/routers.js' },
@@ -57,5 +63,12 @@ head.load(
     /* Services */
     { file: '/' + appName + '/scripts/services/services.js' },
     { file: '/' + appName + '/scripts/services/markService.js' },
-    { file: '/' + appName + '/scripts/services/modalService.js' }
+    { file: '/' + appName + '/scripts/services/modalService.js' },
+    { file: '/' + appName + '/scripts/services/entityConverter.js' },
+    { file: '/' + appName + '/scripts/services/language.js' },
+    { file: '/' + appName + '/scripts/services/capMover.js' },
+    { file: '/' + appName + '/scripts/services/shareData.js' },
+    { file: '/' + appName + '/scripts/services/base64Service.js' },
+    { file: '/' + appName + '/scripts/services/restService.js' },
+    { file: '/' + appName + '/scripts/services/ngsrcConvertService.js' }
 );

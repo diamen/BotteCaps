@@ -7,8 +7,8 @@
 <div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Nie udało się zaktualizować informacji.</div>	
 
 <div class="capview">
-	<button class="btn btn-default" ng-click="openModal('OK')">Zatwierdź</button>
-	<button class="btn btn-default" ng-click="openModal('CAN')">Anuluj</button>
+	<button class="btn btn-default" ng-click="openModalOk()">Zatwierdź</button>
+	<button class="btn btn-default" ng-click="openModalCancel()">Anuluj</button>
 	<button class="btn btn-default">Zatwierdź</button>
 	<button class="btn btn-default">Anuluj</button>
 	<img class="img-rounded" ng-src="{{capsrc}}"></img>

@@ -1,5 +1,5 @@
 angular.module('bcControllers')
-	.controller('editCapCtrl', function($scope, $window, $stateParams, $uibModal, restService, base64Service) {
+	.controller('editCapCtrl', function($scope, $window, $stateParams, modalService, restService, base64Service) {
 
 		$scope.country = $stateParams.country;
 		$scope.id = $stateParams.id;
@@ -9,10 +9,6 @@ angular.module('bcControllers')
 
 		$scope.closeAlert = function() {
 			$scope.showAlert = false;
-		};
-
-		$scope.cancel = function() {
-			$window.location.reload();
 		};
 
 		restService.countriesController().getFlag($scope.country).success(function(data) {
@@ -41,36 +37,16 @@ angular.module('bcControllers')
 			});
 		});
 
-		/* modal */
-		$scope.openModal = function(type) {
+		$scope.openModalOk = function() {
+			modalService.execute(
+					partial($scope.update, $scope.id, $scope.country, $scope.cap.cap_text, $scope.brand, $scope.beerLabel),
+					"Czy chcesz zatwierdzić zmiany?");
+		};
 
-			if(type === 'CAN') {
-				$scope.msg = "Czy chcesz wycofac zmiany?";
-				$scope.invoke = $scope.cancel;
-			}
-
-			if(type === 'OK') {
-				$scope.msg = "Czy chcesz zatwierdzic zmiany?";
-				$scope.invoke = partial($scope.update, $scope.id, $scope.country, $scope.cap.cap_text, $scope.brand, $scope.beerLabel);
-			}
-
-			var modalInstance = $uibModal.open({
-			      animation: true,
-			      templateUrl: '/ejb-web/views/templates/modal.html',
-			      controller: 'modalCtrl',
-			      size: 'sm',
-			      resolve: {
-			        msg: function () {
-			          return $scope.msg;
-			        }
-			      }
-			    });
-
-			modalInstance.result.then(function () {
-			      $scope.invoke();
-			    }, function () {
-			      console.log('dismissed');
-			    });
+		$scope.openModalCancel = function() {
+			modalService.execute(function() {
+				$scope.$parent.openCap($scope.country, $scope.id);
+			}, "Czy chcesz wycofać zmiany?");
 		};
 
 	});
