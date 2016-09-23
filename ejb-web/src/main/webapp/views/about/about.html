@@ -1,6 +1,28 @@
 <div class="container">
-	<div class="ssilver">
-		<h2>O mnie</h2>
-		<article>bla bla</article>
+	<div class="ssilver about">
+		<div class="col-md-6">
+			<article>
+				<h1 class="stitle">O mnie</h1>
+				<p>Nazwywam się Michał Stobiński i jestem kolekcjonerem kapsli z Polski. W 2010 zacząłem
+				oficjalnie zbierać kapsle. W kolekcjonowanie wkręciłem się przypadkowo. W pewnym momencie zacząłem
+				zbierać kapsle na różnych koncertach, a następnie znalazłem w internecie forum kapslarzy, na którym
+				zobaczyłem, że kolekcjonowaniem kapsli zajmuje się większa liczba osób. Też postanowiłem spróbować.</p>
+				<p>Obecnie zbieram kapsle z Europy Wschodniej i Południowej oraz z krajów byłego ZSRR.
+				Zbieram kapsle piwne i niepiwne.</p>
+			</article>
+		
+		<h3 class="stitle">Państwa, które zbieram</h3>
+		<table id="countrytb" class="secabout" style="width: 100%; text-align: center;">
+			<tr><td style="width: 10%;"><strong>Flaga</strong></td><td style="width: 50%;"><strong>Państwo</strong></td><td style="width: 20%;"><strong>Piwne</strong></td><td style="width: 20%;"><strong>Niepiwne</strong></td></tr>
+			<tr ng-repeat="country in countries | orderBy:'namepl'">
+				<td style="width: 20%;"><img class="flag" ng-src="{{country.flag}}"></img></td><td style="width: 20%;">{{country.namepl}}</td><td style="width: 20%;">Tak</td><td style="width: 20%;">Tak</td>
+			</tr>
+		</table>
+		
+		</div>
+		<div class="col-md-6">
+			<img src="/ejb-web/resources/gfx/20151018163702.jpg">
+			<img src="/ejb-web/resources/gfx/20151018163907.jpg">
+		</div>
 	</div>
 </div>

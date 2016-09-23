@@ -125,7 +125,10 @@ angular.module('bcRouters', [])
 			.state("about", {
 				url: "/about",
 				views: {
-					'': { templateUrl: "/ejb-web/views/about/about.html" }
+					'': {
+						controller: "aboutCtrl",
+						templateUrl: "/ejb-web/views/about/about.html"
+					}
 				}
 			});
 

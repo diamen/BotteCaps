@@ -1,0 +1,58 @@
+.about {
+	height: inherit;
+	overflow: auto;
+}
+
+.about p {
+	text-align: justify;
+	text-indent: 6px;
+}
+
+.about div > img {
+	width: 100%;
+	margin: 15px 8px;
+}
+
+.secabout {
+	width: 100%;
+	text-align: center;
+}
+
+.secabout * table {
+	margin: 10px auto;
+	width: 100%;
+}
+
+.secabout table {
+	margin: 10px auto;
+	width: 100%;
+}
+
+.secabout * tr td {
+	padding: 4px 2px;
+}
+
+.secabout * td:nth-child(1) {
+	width: 10%;
+}
+
+.secabout * td:nth-child(2) {
+	width: 50%;
+}
+
+.secabout * td:nth-child(3) {
+	width: 20%;
+}
+
+.secabout * td:nth-child(4) {
+	width: 20%;
+}
+
+.secabout * tr:nth-child(odd) {
+	background-color: #D8D8D8;
+}
+
+.secabout * tr:hover {
+	background-color: khaki;
+	transition: background 1.5s ease;
+}

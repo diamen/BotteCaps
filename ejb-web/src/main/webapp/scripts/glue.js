@@ -33,6 +33,7 @@ head.load(
     { file: '/' + appName + '/scripts/controllers/mainCtrl.js' },
 
     { file: '/' + appName + '/scripts/controllers/addCapCtrl.js' },
+    { file: '/' + appName + '/scripts/controllers/aboutCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/addTradeCapsCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/adminCtrl.js' },
     { file: '/' + appName + '/scripts/controllers/capCtrl.js' },
