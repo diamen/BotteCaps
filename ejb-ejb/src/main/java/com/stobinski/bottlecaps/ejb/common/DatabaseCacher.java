@@ -48,7 +48,7 @@ public class DatabaseCacher {
 		refreshCapsAmountProgress();
 		
 		log.debug("Refresh SQL data executed");
-		log.debug(String.format("Countries with amount a5fter refresh: %s", 
+		log.debug(String.format("Countries with amount after refresh: %s", 
 				countriesWithAmount.stream().map(Object::toString).collect(Collectors.joining(", "))));
 		log.debug(String.format("News after refresh: %s", 
 				news.stream().map(Object::toString).collect(Collectors.joining(", "))));
