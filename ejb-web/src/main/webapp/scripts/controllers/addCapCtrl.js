@@ -3,11 +3,19 @@ angular.module('bcControllers')
 
 		$scope.country = $stateParams.country;
 
+		restService.countriesController().getCountries().success(function(data) {
+			var country = data.filter(function(elem) {
+				return elem.name === $scope.country;
+			})[0];
+			$scope.countries = data;
+			$scope.selectedCountry = Array(data.length).fill(country);
+		});
+
 		$scope.beerOptions =
 		[ {key: "Niepiwo", value: 0},
 		  {key: "Piwo", value: 1} ];
 
-		$scope.selected = [];
+		$scope.selectedBeer = [];
 
 		$scope.clear = function() {
 			$scope.files.length = 0;
@@ -21,15 +29,15 @@ angular.module('bcControllers')
 			var numberOfFiles = $scope.files.length;
 			var i = idx;
 
-			if($scope.selected[i] === undefined) {
+			if($scope.selectedBeer[i] === undefined) {
 				$scope.showAlert = true;
 				return;
 			}
 
-			$scope.files[i].beer = $scope.selected[i].value;
+			$scope.files[i].beer = $scope.selectedBeer[i].value;
 
 			base64Service.imgToBase64($scope.files[i].src, 'image/jpeg', function(base64) {
-				restService.adminController().addCap(base64, $scope.files[i].captext, $scope.files[i].capbrand, $scope.files[i].beer, $scope.country)
+				restService.adminController().addCap(base64, $scope.files[i].captext, $scope.files[i].capbrand, $scope.files[i].beer, $scope.selectedCountry[i].id, $scope.selectedCountry[i].name)
 					.success(function() {
 						if(i + 1 < numberOfFiles) {
 							i += 1;

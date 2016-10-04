@@ -9,8 +9,9 @@
 <div uib-alert ng-show="showAlert" class="alert-danger" close="closeAlert()">Musisz wybrać rodzaj kapsla!</div>	
 	
 <div class="addcap" ng-repeat="file in files">
-	<img style="display: inherit !important;" ng-src="{{file.src}}" class="imgcap img-rounded"></img>
-	<input ng-model="files[$index].captext" style="width: 100px !important; margin-left: 1px !important;" placeholder="Tekst" type="text" class="form-control">
-	<input ng-model="files[$index].capbrand" style="width: 100px !important; margin-left: 1px !important;" placeholder="Marka" type="text" class="form-control">
-	<select style="width: 100px !important; margin-left: 1px !important;" class="form-control" ng-model="selected[$index]" ng-options="item.key for item in beerOptions"></select>
+	<img ng-src="{{file.src}}" class="imgcap img-rounded"></img>
+	<input ng-model="files[$index].captext" placeholder="Tekst" type="text" class="form-control">
+	<input ng-model="files[$index].capbrand" placeholder="Marka" type="text" class="form-control">
+	<select class="form-control" ng-model="selectedBeer[$index]" ng-options="item.key for item in beerOptions"></select>
+	<select class="form-control" ng-options="c.name for c in countries" ng-model="selectedCountry[$index]"></select>
 </div>

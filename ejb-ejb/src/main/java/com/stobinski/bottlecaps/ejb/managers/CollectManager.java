@@ -24,6 +24,7 @@ import com.stobinski.bottlecaps.ejb.dao.QueryBuilder;
 import com.stobinski.bottlecaps.ejb.dao.exceptions.QueryBuilderException;
 import com.stobinski.bottlecaps.ejb.entities.Brands;
 import com.stobinski.bottlecaps.ejb.entities.Caps;
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.wrappers.Base64Entity;
 
 @Stateless
@@ -47,19 +48,19 @@ public class CollectManager {
 	@Inject
 	private Logger log;
 	
-	@TransactionAttribute(TransactionAttributeType.REQUIRED)
-	public void saveCap(byte[] b, String captext, String capbrand, Boolean isBeer, String country) throws IOException {
-		
-		Long fileNameSequence = imageManager.generateFileNameSequence();
-		String filePath = imageManager.generateFilePath(country);
-		imageManager.saveImage(b, fileNameSequence, filePath);
-		
-		persistCap(captext, String.valueOf(fileNameSequence), filePath, imageManager.getExt(), getBrandId(capbrand), countriesManager.getCountryId(country), isBeer);
-		
-		entityManager.flush();
-		
+	public void refresh() {
 		dbCacher.refreshCountriesWithAmount();
 		dbCacher.refreshNewestCaps();
+	}
+	
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void saveCap(byte[] b, String captext, String capbrand, Boolean isBeer, Countries country) throws IOException {
+		
+		Long fileNameSequence = imageManager.generateFileNameSequence();
+		String filePath = imageManager.generateFilePath(country.getName());
+		imageManager.saveImage(b, fileNameSequence, filePath);
+		
+		persistCap(captext, String.valueOf(fileNameSequence), filePath, imageManager.getExt(), getBrandId(capbrand), country.getId(), isBeer);
 		
 		log.debug(String.format("File %d saved in database", fileNameSequence));
 	}

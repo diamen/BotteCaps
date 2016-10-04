@@ -6,13 +6,13 @@ angular.module('bcServices')
 					csrfPrevent: function() {
 						return $http.get("./admin/login");
 					},
-					addCap: function(base64, capt, capb, beer, country) {
+					addCap: function(base64, capt, capb, beer, countryId, countryName) {
 						return $http({
 							method: "POST",
 							url: "./rest/admin/collect",
 							headers: { 'AUTH-TOKEN': $sessionStorage.authToken },
 							data: {baseimage: base64},
-							params: { captext: capt, capbrand: capb, beer: beer, country: country }
+							params: { captext: capt, capbrand: capb, beer: beer, countryId: countryId, countryName: countryName }
 						});
 					},
 					deleteCap: function(capId) {
@@ -83,6 +83,12 @@ angular.module('bcServices')
 						});
 					},
 					getCountriesWithAmount: function() {
+						return $http({
+							method: "GET",
+							url: "./rest/countries/amount"
+						});
+					},
+					getCountries: function() {
 						return $http({
 							method: "GET",
 							url: "./rest/countries/all"

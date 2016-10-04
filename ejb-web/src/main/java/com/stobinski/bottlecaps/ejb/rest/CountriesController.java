@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.managers.CountriesManager;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
@@ -23,11 +24,18 @@ public class CountriesController {
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("all")
-	public List<CountriesWithAmount> getCountries() {
+	@Path("amount")
+	public List<CountriesWithAmount> getCountriesWithAmount() {
 		return countriesManager.getCountriesWithAmount();
 	}
 
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("all")
+	public List<Countries> getCountries() {
+		return countriesManager.getCountries();
+	}
+	
 	@GET
 	@Produces(MediaType.TEXT_PLAIN)
 	@Path("/{id : \\d+}")

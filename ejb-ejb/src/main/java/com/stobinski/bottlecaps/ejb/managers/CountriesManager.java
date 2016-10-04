@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.stobinski.bottlecaps.ejb.common.DatabaseCacher;
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
 @Stateless
@@ -34,5 +35,9 @@ public class CountriesManager {
 	public String getCountry(Long countryId) {
 		return dbCacher.getCountriesWithAmount().stream().filter(e -> e.getId() == countryId).findFirst().get().getName();
 	}	
+	
+	public List<Countries> getCountries() {
+		return dbCacher.getCountries();
+	}
 	
 }

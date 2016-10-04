@@ -29,12 +29,12 @@ angular.module('bcServices')
 		lang.slovenia = "Słowenia";
 		lang.turkey = "Turcja";
 		lang.turkmenistan = "Turkemenistan";
-		lang.Ukraine = "Ukraina";
+		lang.ukraine = "Ukraina";
 		lang.uzbekistan = "Uzbekistan";
 
 		return {
 			countryToPL: function(countryName) {
-				return lang[countryName.toLowerCase().trim()];
+				return lang[countryName.toLowerCase().replace(/ /g, '')];
 			}
 		};
 	}])

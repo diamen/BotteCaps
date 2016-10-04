@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
@@ -36,6 +38,11 @@ public class ImageManager {
 	}
 	
 	public void saveImage(byte[] b, Long fileNameSequence, String filePath) throws IOException {
+		if(Files.notExists(Paths.get(filePath))) {
+			File dir = new File(filePath);
+			dir.mkdir();
+		}
+		
 		String fullFilePath = fileHandler.generateFullFilePath(filePath, fileNameSequence);
 		saveFile(b, fullFilePath);
 		

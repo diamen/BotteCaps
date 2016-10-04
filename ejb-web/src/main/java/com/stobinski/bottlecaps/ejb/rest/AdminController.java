@@ -21,6 +21,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.common.Base64Service;
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.managers.CollectManager;
 import com.stobinski.bottlecaps.ejb.managers.NewsManager;
 import com.stobinski.bottlecaps.ejb.managers.TradeCapsManager;
@@ -49,9 +50,14 @@ public class AdminController {
 			@QueryParam("captext") String captext, 
 			@QueryParam("capbrand") String capbrand,
 			@QueryParam("beer") Integer beer,
-			@QueryParam("country") String country) {
+			@QueryParam("countryName") String countryName,
+			@QueryParam("countryId") Long countryId) {
 		try {
+			Countries country = new Countries();
+			country.setId(countryId);
+			country.setName(countryName);
 			collectManager.saveCap(Base64Service.fromBase64JsonToByteArray(baseimage), captext, capbrand, beer == 1, country);
+			collectManager.refresh();
 		} catch (IOException e) {
 			log.error(e);
 			return Response.serverError().status(Status.INTERNAL_SERVER_ERROR).build();
@@ -79,8 +85,6 @@ public class AdminController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("collect")
 	public Response deleteCap( @QueryParam("capId") Long capId) {
-		// TODO Plik nie jest usuwany z lokalizacji
-		
 		collectManager.removeCap(capId);
 		
 		return Response.ok().build();

@@ -177,3 +177,17 @@ select.infr {
 	font-size: 85%;
 	font-weight: bold;
 }
+
+.addcap img {
+	display: inherit !important;
+}
+
+.addcap input {
+	width: 100px !important;
+	margin-left: 1px !important;
+}
+
+.addcap select {
+	width: 100px !important;
+	margin-left: 1px !important;	
+}

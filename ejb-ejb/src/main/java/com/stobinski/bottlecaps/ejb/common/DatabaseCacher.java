@@ -18,6 +18,7 @@ import javax.persistence.PersistenceContext;
 import org.jboss.logging.Logger;
 
 import com.stobinski.bottlecaps.ejb.entities.Caps;
+import com.stobinski.bottlecaps.ejb.entities.Countries;
 import com.stobinski.bottlecaps.ejb.entities.News;
 import com.stobinski.bottlecaps.ejb.wrappers.CountriesWithAmount;
 
@@ -34,6 +35,7 @@ public class DatabaseCacher {
 	private List<News> news;
 	private List<Caps> newestCaps;
 	private List<Map<String, String>> capsAmountProgress;
+	private List<Countries> countries;
 	
 	@PostConstruct
 	private void init() {
@@ -46,6 +48,7 @@ public class DatabaseCacher {
 		refreshNews();
 		refreshNewestCaps();
 		refreshCapsAmountProgress();
+		refreshCountries();
 		
 		log.debug("Refresh SQL data executed");
 		log.debug(String.format("Countries with amount after refresh: %s", 
@@ -55,6 +58,8 @@ public class DatabaseCacher {
 		log.debug(String.format("Newest caps after refresh: %s",
 				newestCaps.stream().map(Object::toString).collect(Collectors.joining(", "))));
 		log.debug(String.format("Caps amount progress after refresh: %s", capsAmountProgress.toString()));
+		log.debug(String.format("Countries after refresh: %s",
+				countries.stream().map(Object::toString).collect(Collectors.joining(", "))));
 	}
 
 	public List<CountriesWithAmount> getCountriesWithAmount() {
@@ -71,6 +76,10 @@ public class DatabaseCacher {
 	
 	public List<Map<String, String>> getCapsAmountProgress() {
 		return Collections.unmodifiableList(capsAmountProgress);
+	}
+	
+	public List<Countries> getCountries() {
+		return Collections.unmodifiableList(countries);
 	}
 	
 	public void refreshCountriesWithAmount() {
@@ -94,7 +103,7 @@ public class DatabaseCacher {
 	@SuppressWarnings("unchecked")
 	public void refreshCapsAmountProgress() {
 		
-		String query = "select count(caps.added_date), added_date from caps group by month(caps.added_date), year(caps.added_date) ORDER BY caps.added_date DESC LIMIT 12;";
+		String query = "select count(Caps.added_date), added_date from Caps group by month(Caps.added_date), year(Caps.added_date) ORDER BY Caps.added_date DESC LIMIT 12;";
 		
 		List<Object[]> list = entityManager.createNativeQuery(query).getResultList();
 		List<Map<String, String>> top = new ArrayList<>();
@@ -109,6 +118,10 @@ public class DatabaseCacher {
 		Collections.reverse(top);
 		
 		this.capsAmountProgress = top;
+	}
+	
+	public void refreshCountries() {
+		this.countries = entityManager.createNamedQuery("Countries.findCountries", Countries.class).getResultList();
 	}
 	
 }

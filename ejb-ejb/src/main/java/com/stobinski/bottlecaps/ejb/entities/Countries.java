@@ -57,4 +57,10 @@ public class Countries implements Serializable {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return String.format("[id: %d, name: %s]",
+				id, name);
+	}
+	
 }

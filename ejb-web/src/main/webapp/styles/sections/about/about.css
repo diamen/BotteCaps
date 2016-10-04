@@ -1,6 +1,15 @@
 .about {
 	height: inherit;
+}
+
+.about div:first-child {
+	height: inherit;
 	overflow: auto;
+}
+
+.about div:last-child {
+	text-align: center;
+	height: inherit;
 }
 
 .about p {
@@ -9,8 +18,9 @@
 }
 
 .about div > img {
-	width: 100%;
-	margin: 15px 8px;
+	padding: 5px 0;
+	height: inherit;
+	margin: 0 0;
 }
 
 .secabout {
