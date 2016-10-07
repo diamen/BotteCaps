@@ -41,7 +41,7 @@ import javax.persistence.TemporalType;
 					  "AND e.beer = :beer"),
 	@NamedQuery(name="Caps.countCapsGroupByCountryId",
 				query="SELECT e.country_id, f.name, f.flag, COUNT(e.country_id), " +
-					  "(SELECT COUNT(g) FROM Caps g WHERE g.country_id = f.id AND g.beer = 1 GROUP BY g.country_id), " +
+					  "COALESCE((SELECT COUNT(g) FROM Caps g WHERE g.country_id = f.id AND g.beer = 1 GROUP BY g.country_id), 0), " +
 					  "COALESCE((SELECT COUNT(h) FROM Caps h WHERE h.country_id = f.id AND h.beer = 0 GROUP BY h.country_id), 0) " +
 					  "FROM Caps e, Countries f " +
 					  "WHERE e.country_id = f.id " +

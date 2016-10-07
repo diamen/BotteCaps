@@ -15,10 +15,13 @@ angular.module('bcControllers')
 			$scope.cap = data.entity;
 			$scope.capsrc = base64Service.base64ToUrl(data.base64);
 
+			if($scope.cap.cap_text === '')
+				$scope.cap.cap_text = 'brak';
+
 			$scope.beerLabel = data.entity.beer === 1 ? 'Piwo' : 'Niepiwo';
 
 			restService.collectController().getBrand(data.entity.brand_id).success(function(data) {
-				$scope.brand = data;
+				$scope.brand = data === '' ? 'nieznana' : data;
 			});
 		});
 

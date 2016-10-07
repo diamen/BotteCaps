@@ -129,7 +129,7 @@ div.container-fluid div.navbar-header a.navbar-brand {
 .infl {
 	width: 34%;
 	float: left;
-	font-size: 1em !important;
+	font-size: .99em !important;
 	margin-bottom: 3px;
 	background-color: #6F6F6F;
 	color: white !important;
@@ -176,6 +176,10 @@ select.infr {
 .choscounttext {
 	font-size: 85%;
 	font-weight: bold;
+}
+
+.addcap {
+	float: left;
 }
 
 .addcap img {
